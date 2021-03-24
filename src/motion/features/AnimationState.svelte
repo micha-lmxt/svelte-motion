@@ -1,0 +1,20 @@
+<script>
+import { tick } from "svelte";
+
+    import { createAnimationState } from "../../render/utils/animation-state"
+    export let visualElement,
+        animate;
+    /**
+     * We dynamically generate the AnimationState manager as it contains a reference
+     * to the underlying animation library. We only want to load that if we load this,
+     * so people can optionally code split it out using the `m` component.
+     */
+        $: (visualElement.animationState = visualElement.animationState || createAnimationState(visualElement));
+
+        /**
+     * Subscribe any provided AnimationControls to the component's VisualElement
+     */
+        $: if (isAnimationControls(animate)) {
+        tick.then(() => animate.subscribe(visualElement), [animate])
+    }
+</script>
