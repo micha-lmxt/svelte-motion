@@ -1,3 +1,4 @@
+import { gestureProps } from '../../gestures/types';
 import GestureComponent from './Gestures.svelte';
 /**
  * @public

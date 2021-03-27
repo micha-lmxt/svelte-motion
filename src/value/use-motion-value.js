@@ -1,1 +1,2 @@
-export { default as useMotionValue } from './UseMotionValue.svelte';
+
+export { default as UseMotionValue } from './UseMotionValue.svelte';

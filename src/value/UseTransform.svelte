@@ -165,7 +165,7 @@ export let input,
     $: (_transformer = Array.isArray(input) ? transformer : 
         ([latest]) =>
               transformer(latest));
-    let latest = ()=>[];
+    let latest = [];
 </script>
 <UseCombineMotionValues {values} combineValues={
     ()=>{

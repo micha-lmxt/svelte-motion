@@ -1,5 +1,10 @@
 <script context="module">
 import {UseDomEvent} from "./use-dom-event"
+import {
+    supportsPointerEvents,
+    supportsTouchEvents,
+    supportsMouseEvents,
+} from "./utils"
 
     const mouseEventNames = {
     pointerdown: "mousedown",
@@ -45,6 +50,7 @@ export function addPointerEvent(
 </script>
 <script>
 import { wrapHandler } from "./event-info";
+import { addDomEvent } from "./use-dom-event";
 
     export let ref,
         eventName,

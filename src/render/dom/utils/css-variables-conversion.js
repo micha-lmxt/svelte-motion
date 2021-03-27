@@ -1,5 +1,5 @@
 import { __rest, __assign, __read } from 'tslib';
-import { invariant } from 'hey-listen';
+//import { invariant } from 'hey-listen';
 
 function isCSSVariable(value) {
     return typeof value === "string" && value.startsWith("var(--");
@@ -24,7 +24,7 @@ function parseCSSVariable(current) {
 var maxDepth = 4;
 function getVariableValue(current, element, depth) {
     if (depth === void 0) { depth = 1; }
-    invariant(depth <= maxDepth, "Max CSS variable fallback depth detected in property \"" + current + "\". This may indicate a circular fallback dependency.");
+    //invariant(depth <= maxDepth, "Max CSS variable fallback depth detected in property \"" + current + "\". This may indicate a circular fallback dependency.");
     var _a = __read(parseCSSVariable(current), 2), token = _a[0], fallback = _a[1];
     // No CSS variable detected
     if (!token)

@@ -20,18 +20,18 @@
             event,
             info
         ) => {
-            panSession.current = null
+            panSession = null
             onPanEnd && onPanEnd(event, info)
         },
     });
     function onPointerDown(event) {
-        panSession.current = new PanSession(event, handlers, {
+        panSession = new PanSession(event, handlers, {
             transformPagePoint,
         })
     }
     afterUpdate(()=>{
-        if (panSession.current !== null) {
-            panSession.current.updateHandlers(handlers)
+        if (panSession !== null) {
+            panSession.updateHandlers(handlers)
         }
     })
     onDestroy(() => panSession && panSession.end())

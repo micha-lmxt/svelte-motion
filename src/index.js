@@ -35,6 +35,6 @@ export { UseSpring } from './value/use-spring.js';
 export { UseElementScroll } from './value/scroll/use-element-scroll.js';
 export { UseViewportScroll } from './value/scroll/use-viewport-scroll.js';
 export { UseReducedMotion } from './utils/use-reduced-motion.js';
-export { UseAnimation } from './animation/use-animation.js';
+export { UseAnimation, useAnimation } from './animation/use-animation.js';
 export { UseCycle } from './utils/use-cycle.js';
 export { DragControls, UseDragControls } from './gestures/drag/use-drag-controls.js';

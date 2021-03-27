@@ -1,6 +1,6 @@
 import { __assign, __rest, __spread } from 'tslib';
 import { inertia, animate } from 'popmotion';
-import { warning } from 'hey-listen';
+//import { warning } from 'hey-listen';
 import { secondsToMilliseconds } from '../../utils/time-conversion.js';
 import { isEasingArray, easingDefinitionToFunction } from './easing.js';
 import { isAnimatable } from './is-animatable.js';
@@ -49,7 +49,7 @@ function convertTransitionToAnimationOptions(_a) {
      * TODO: These options are officially removed from the API.
      */
     if (yoyo || loop || flip) {
-        warning(!legacyRepeatWarning, "yoyo, loop and flip have been removed from the API. Replace with repeat and repeatType options.");
+        //warning(!legacyRepeatWarning, "yoyo, loop and flip have been removed from the API. Replace with repeat and repeatType options.");
         legacyRepeatWarning = true;
         if (yoyo) {
             options.repeatType = "reverse";
@@ -115,7 +115,7 @@ function getAnimation(key, value, target, transition, onComplete) {
         origin = getAnimatableNone(key, target);
     }
     var isOriginAnimatable = isAnimatable(key, origin);
-    warning(isOriginAnimatable === isTargetAnimatable, "You are trying to animate " + key + " from \"" + origin + "\" to \"" + target + "\". " + origin + " is not an animatable value - to enable this animation set " + origin + " to a value animatable to " + target + " via the `style` property.");
+    //warning(isOriginAnimatable === isTargetAnimatable, "You are trying to animate " + key + " from \"" + origin + "\" to \"" + target + "\". " + origin + " is not an animatable value - to enable this animation set " + origin + " to a value animatable to " + target + " via the `style` property.");
     function start() {
         var options = {
             from: origin,

@@ -7,10 +7,10 @@
     import PresenceChild from "./PresenceChild.svelte";
 
     export let list = [],
-        custom,
+        custom=undefined,
         initial = true,
-        onExitComplete,
-        exitBeforeEnter,
+        onExitComplete=undefined,
+        exitBeforeEnter=undefined,
         presenceAffectsLayout = true;
 
     const layoutContext =
@@ -29,7 +29,9 @@
     }
 
     let isInitialRender = true;
-    $: filteredChildren = list;
+    let filteredChildren = list;
+    $: (filteredChildren = list);
+    
     let presentChildren = filteredChildren;
     let allChildren = new Map();
     let exiting = new Set();
@@ -40,7 +42,7 @@
         });
     };
     $: updateChildLookup(filteredChildren, allChildren);
-
+    
     let childrenToRender = [
         ...filteredChildren.map((v) => ({
             present: true,
@@ -49,6 +51,7 @@
         })),
     ];
     $: if (!isInitialRender) {
+        
         // If this is a subsequent render, deal with entering and exiting children
         childrenToRender = [
             ...filteredChildren.map((v) => ({
@@ -135,6 +138,9 @@
         });
         */
        presentChildren = childrenToRender;
+       console.log(childrenToRender)
+    }else{
+        isInitialRender=false;
     }
 </script>
 

@@ -2,8 +2,9 @@ import { __rest } from 'tslib';
 import { axisBox, delta } from '../../utils/geometry/index.js';
 import { isMotionValue } from '../../value/utils/is-motion-value.js';
 import { checkIfControllingVariants, resolveVariantFromProps } from './variants.js';
-import { isAnimationControls } from '../../animation/animation-controls.js';
+
 import { isForcedMotionValue } from '../../motion/utils/is-forced-motion-value.js';
+import { isAnimationControls } from '../../animation/utils/is-animation-controls.js';
 
 var createProjectionState = function () { return ({
     isEnabled: false,

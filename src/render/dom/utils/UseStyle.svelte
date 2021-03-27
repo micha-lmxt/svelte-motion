@@ -1,8 +1,9 @@
 <script>
     import { isMotionValue } from "../../../value/utils/is-motion-value";
     import { isForcedMotionValue } from "../../../motion/utils/is-forced-motion-value";
-import UseInitialMotionValues from "./UseInitialMotionValues.svelte";
-    export let visualElement, props;
+    import UseInitialMotionValues from "./UseInitialMotionValues.svelte";
+    export let visualElement, 
+        props;
     $: styleProp = props.style || {};
     let style = {};
     /**
@@ -19,12 +20,14 @@ import UseInitialMotionValues from "./UseInitialMotionValues.svelte";
                 style[key] = styleProp[key];
             }
         }
+        
     }
     const toStyle=(s1,s2,props)=>{
         const s3 = {...s1,...s2};
         if (props.transformValues){
             return props.transformValues(s3)
         }
+        
         return s3;
     }
 </script>

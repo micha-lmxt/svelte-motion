@@ -64,7 +64,7 @@ import {
         createScrollMotionValues,
         createScrollUpdater,
     } from "./utils";
-    import { invariant } from "hey-listen"
+    //import { invariant } from "hey-listen"
     import { addDomEvent } from "../../events/use-dom-event"
     
     export let ref;
@@ -73,10 +73,10 @@ import {
 <UseIsomorphicLayoutEffect callback={()=>{
     const element = ref;
 
-    invariant(
-        !!element,
-        "ref provided to useScroll must be passed into a HTML element."
-    )
+    //invariant(
+    //    !!element,
+    //    "ref provided to useScroll must be passed into a HTML element."
+    //)
     if (!element) return
 
     const updateScrollValues = createScrollUpdater(

@@ -1,6 +1,6 @@
 <script>
     import { isMotionValue } from "../../../value/utils/is-motion-value"
-    import { UseConstant } from "../../../utils/use-constant";
+
 
     export let visualElement,
         props;
@@ -16,12 +16,10 @@
 
         return { ...attrs, ...resolvedMotionValueProps };
     };
-    
+    let svgProps = createAttrs(visualElement,props);
+    $: if (visualElement.isStatic){
+        svgProps = createAttrs(visualElement,props);
+    }
 </script>
-{#if visualElement.isStatic}
-    <slot svgProps={createAttrs(visualElement,props)}/>
-{:else}
-    <UseConstant init={createAttrs} let:ref>
-        <slot svgProps={ref}/>
-    </UseConstant>
-{/if}
+
+<slot {svgProps}/>

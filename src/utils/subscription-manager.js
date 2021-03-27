@@ -5,6 +5,7 @@ function subscriptionManager() {
     return {
         add: function (handler) {
             addUniqueItem(subscriptions, handler);
+            
             return function () { return removeItem(subscriptions, handler); };
         },
         notify: function (a, b, c) {
@@ -18,6 +19,7 @@ function subscriptionManager() {
                 subscriptions[0](a, b, c);
             }
             else {
+                
                 for (var i = 0; i < numSubscriptions; i++) {
                     /**
                      * Check whether the handler exists before firing as it's possible
@@ -30,6 +32,7 @@ function subscriptionManager() {
         },
         getSize: function () { return subscriptions.length; },
         clear: function () {
+            
             subscriptions.length = 0;
         },
     };

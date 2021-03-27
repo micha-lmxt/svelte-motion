@@ -4,7 +4,7 @@ import { eachAxis } from '../../utils/each-axis.js';
 import { axisBox, convertAxisBoxToBoundingBox, convertBoundingBoxToAxisBox } from '../../utils/geometry/index.js';
 import { calcOrigin } from '../../utils/geometry/delta-calc.js';
 import { isRefObject } from '../../utils/is-ref-object.js';
-import { invariant } from 'hey-listen';
+//import { invariant } from 'hey-listen';
 import { startAnimation } from '../../animation/utils/transitions.js';
 import { AnimationType } from '../../render/utils/types.js';
 import { getBoundingBox } from '../../render/dom/projection/measure.js';
@@ -231,7 +231,7 @@ var VisualElementDragControls = /** @class */ (function () {
     VisualElementDragControls.prototype.resolveRefConstraints = function (layoutBox, constraints) {
         var _a = this.props, onMeasureDragConstraints = _a.onMeasureDragConstraints, transformPagePoint = _a.transformPagePoint;
         var constraintsElement = constraints.current;
-        invariant(constraintsElement !== null, "If `dragConstraints` is set as a React ref, that ref must be passed to another component's `ref` prop.");
+        //invariant(constraintsElement !== null, "If `dragConstraints` is set as a React ref, that ref must be passed to another component's `ref` prop.");
         this.constraintsBox = getBoundingBox(constraintsElement, transformPagePoint);
         var measuredConstraints = calcViewportConstraints(layoutBox, this.constraintsBox);
         /**

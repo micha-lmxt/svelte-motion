@@ -28,6 +28,7 @@ function createMotionProxy(defaultFeatures) {
             forwardMotionProps,
             Component,
         };
+        
         return createMotionComponent(config);
     }
     /*function deprecatedCustom(Component) {
@@ -62,6 +63,7 @@ function createMotionProxy(defaultFeatures) {
             if (!componentCache.has(type)) {
                 componentCache.set(type, custom(type));
             }
+            
             return componentCache.get(type);
         },
     });

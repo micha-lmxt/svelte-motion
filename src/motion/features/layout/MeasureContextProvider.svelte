@@ -10,10 +10,12 @@
 
     const syncLayout = getContext(SharedLayoutContext) || SharedLayoutContext();
     const framerSyncLayout =
-        getContext(FramerTreeLayoutContext) || FramerTreeLayoutContext;
+        getContext(FramerTreeLayoutContext) || FramerTreeLayoutContext();
 </script>
 
 <Measure
     syncLayout={$syncLayout}
     framerSyncLayout={$framerSyncLayout}
-    {visualElement} />
+    {visualElement} >
+<slot/>
+</Measure>

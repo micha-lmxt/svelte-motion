@@ -1,4 +1,5 @@
-
+import { tick } from "svelte";
+import { animationControls } from "./animation-controls"
 
 /**
  * Creates `AnimationControls`, which can be used to manually start, stop
@@ -49,6 +50,10 @@
  *
  * @public
  */
-
+export const useAnimation = ()=>{
+    let controls = animationControls();
+    tick().then(controls.mount);
+    return controls;
+}
 
 export { default as UseAnimation } from "./UseAnimation.svelte";

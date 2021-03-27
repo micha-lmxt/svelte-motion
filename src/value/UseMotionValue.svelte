@@ -32,5 +32,6 @@
      */
     export let initial;
     let value = motionValue(initial);
+    
 </script>
 <slot {value}/>

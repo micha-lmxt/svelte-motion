@@ -20,6 +20,7 @@ var MotionValue = /** @class */ (function () {
      * @internal
      */
     function MotionValue(init) {
+        console.log(init)
         var _this = this;
         /**
          * Duration, in milliseconds, since last updating frame.
@@ -181,6 +182,7 @@ var MotionValue = /** @class */ (function () {
         return this.updateSubscribers.add(subscription);
     };
     MotionValue.prototype.clearListeners = function () {
+        
         this.updateSubscribers.clear();
     };
     /**

@@ -6,7 +6,8 @@ import { Exit } from '../../motion/features/exit.js';
 import { Animation } from '../../motion/features/animation.js';
 import { AnimateLayout } from '../../motion/features/layout/Animate.js';
 import { MeasureLayout } from '../../motion/features/layout/Measure.js';
-import { createMotionProxy } from './motion-proxy.js';
+import {createMotionClass} from './create-motion-class.js';
+//import { createMotionProxy } from './motion-proxy.js';
 
 var allMotionFeatures = [
     MeasureLayout,
@@ -16,13 +17,15 @@ var allMotionFeatures = [
     Exit,
     AnimateLayout,
 ];
+
 /**
  * HTML & SVG components, optimised for use with gestures and animation. These can be used as
  * drop-in replacements for any HTML & SVG component, all CSS & SVG properties are supported.
  *
  * @public
  */
-var motion = /*@__PURE__*/ createMotionProxy(allMotionFeatures);
+var motion = /*@__PURE__*/ //createMotionProxy(allMotionFeatures);
+    createMotionClass(allMotionFeatures)
 /**
  * Create a DOM `motion` component with the provided string. This is primarily intended
  * as a full alternative to `motion` for consumers who have to support environments that don't

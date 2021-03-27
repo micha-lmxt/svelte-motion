@@ -7,12 +7,15 @@
     return (event, info) => {
         if (!isMouseEvent(event) || !visualElement.isHoverEventsEnabled) return
         callback?.(event, info)
+
         visualElement.animationState?.setActive(AnimationType.Hover, isActive)
     }
 }
 </script>
 <script>
 import { UsePointerEvent } from "../events/use-pointer-event"
+import { AnimationType } from "../render/utils/types";
+import { isMouseEvent } from "./utils/event-type";
 
     export let props,
         visualElement;

@@ -92,6 +92,7 @@
         //inherit = undefined,
         safeToRemove;
 
+    
     let frameTarget = {
         x: { min: 0, max: 0 },
         y: { min: 0, max: 0 },

@@ -2,9 +2,10 @@ import { __spread, __assign, __rest } from 'tslib';
 import { isKeyframesTarget } from '../../animation/utils/is-keyframes-target.js';
 import { isVariantLabels, resolveVariant, isVariantLabel } from './variants.js';
 import { animateVisualElement } from './animation.js';
-import { isAnimationControls } from '../../animation/animation-controls.js';
+
 import { shallowCompare } from '../../utils/shallow-compare.js';
 import { AnimationType } from './types.js';
+import { isAnimationControls } from '../../animation/utils/is-animation-controls.js';
 
 var variantPriorityOrder = [
     AnimationType.Animate,

@@ -1,5 +1,5 @@
 import { __spread } from 'tslib';
-import { invariant } from 'hey-listen';
+//import { invariant } from 'hey-listen';
 import { setValues } from '../render/utils/setters.js';
 import { stopAnimation, animateVisualElement } from '../render/utils/animation.js';
 
@@ -29,7 +29,9 @@ function animationControls() {
              * isn't behaviour concurrent-safe so when we make Framer concurrent-safe
              * we can ditch this.
              */
+            
             if (hasMounted) {
+                
                 var animations_1 = [];
                 subscribers.forEach(function (visualElement) {
                     animations_1.push(animateVisualElement(visualElement, definition, {
@@ -48,7 +50,7 @@ function animationControls() {
             }
         },
         set: function (definition) {
-            invariant(hasMounted, "controls.set() should only be called after a component has mounted. Consider calling within a useEffect hook.");
+            //invariant(hasMounted, "controls.set() should only be called after a component has mounted. Consider calling within a useEffect hook.");
             return subscribers.forEach(function (visualElement) {
                 setValues(visualElement, definition);
             });
@@ -72,8 +74,6 @@ function animationControls() {
     };
     return controls;
 }
-function isAnimationControls(v) {
-    return typeof v === "object" && typeof v.start === "function";
-}
 
-export { animationControls, isAnimationControls };
+
+export { animationControls };

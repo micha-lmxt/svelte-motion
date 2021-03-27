@@ -18,7 +18,7 @@ import {isSharedLayout} from "../../../components/AnimateSharedLayout/SharedLayo
      *
      * If it is stand-alone component, add it to the batcher.
      */
-     const getSnapshotBeforeUpdate = () => {
+     export const getSnapshotBeforeUpdate = () => {
         
         if (isSharedLayout(syncLayout)) {
             syncLayout.syncUpdate()
@@ -32,7 +32,7 @@ import {isSharedLayout} from "../../../components/AnimateSharedLayout/SharedLayo
 
     afterUpdate(()=>{
         
-
+        
         if (!isSharedLayout(syncLayout)) syncLayout.flush()
 
         /**

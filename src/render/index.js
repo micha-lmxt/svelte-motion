@@ -118,6 +118,7 @@ var visualElement = function (_a) {
         /**
          *
          */
+        
         function mount() {
             element.pointTo(element);
             removeFromMotionTree = parent === null || parent === void 0 ? void 0 : parent.addChild(element);
@@ -494,6 +495,7 @@ var visualElement = function (_a) {
                     externalRef.current = mountingElement;
                 }
             },
+            
             /**
              * Build the renderer state based on the latest visual state.
              */

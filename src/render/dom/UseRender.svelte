@@ -5,14 +5,18 @@
 
     export let props,
         visualElement,
-        type,
+        componentType,
         forwardMotionProps = false;
+    
 </script>
 
 <svelte:component
-    this={type === 'SVG' ? UseSVGProps : UseHTMLProps}
+    this={componentType === 'SVG' ? UseSVGProps : UseHTMLProps}
+    {visualElement}
+    {props}
     let:visualProps>
     <slot
-        motion={visualElement.action}
-        props={{ ...filterProps(props, type === 'DOM' || type === 'SVG', forwardMotionProps), ...visualProps }} />
+        motion={visualElement.ref}
+        props={{ ...filterProps(props, componentType === 'DOM' || componentType === 'SVG', forwardMotionProps), ...visualProps }} />
 </svelte:component>
+

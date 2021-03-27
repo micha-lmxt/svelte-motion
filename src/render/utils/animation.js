@@ -19,8 +19,15 @@ function animateVisualElement(visualElement, definition, options) {
         animation = animateVariant(visualElement, definition, options);
     }
     else {
-        // TODO: Remove any and handle TargetResolver
-        animation = animateTarget(visualElement, definition, options);
+        const resolvedDefinition =
+            typeof definition === "function"
+                ? (resolveVariant(
+                      visualElement,
+                      definition,
+                      options.custom
+                  ))
+                : definition
+        animation = animateTarget(visualElement, resolvedDefinition, options)
     }
     return animation.then(function () {
         return visualElement.notifyAnimationComplete(definition);

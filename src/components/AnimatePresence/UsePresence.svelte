@@ -8,7 +8,7 @@ const incrementId = () => counter++
     import { PresenceContext } from "./PresenceContext";
     const context = getContext(PresenceContext)||PresenceContext();
     
-    $: ( { isPresent, onExitComplete, register } = $context)
+    $: ( { isPresent, onExitComplete, register } = $context||{})
     
     // It's safe to call the following hooks conditionally (after an early return) because the context will always
     // either be null or non-null for the lifespan of the component.
@@ -17,18 +17,16 @@ const incrementId = () => counter++
     const id = $context===null?undefined:incrementId();
 
     onMount(()=>{
+        
         if ($context!==null)
             register(id);
     })
 
-    const safeToRemove = saveToRemove=()=>onExitComplete?.(id);
-
+    const safeToRemove = ()=>onExitComplete?.(id);
+    
 </script>
 {#if $context === null}
     <slot presence={[true,null]}/>
 {:else}
-
-
-        <slot presence={(!isPresent && onExitComplete) ? [false, safeToRemove] : [true]}/>
-
+    <slot presence={(!isPresent && onExitComplete) ? [false, safeToRemove] : [true]}/>
 {/if}

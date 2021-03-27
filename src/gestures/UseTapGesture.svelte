@@ -3,7 +3,8 @@
     import { pipe } from "popmotion";
     import { isDragActive } from "./drag/utils/lock";
     import { onDestroy } from "svelte";
-    import UsePointerEvent from "../events/UsePointerEvent.svelte";
+    import {UsePointerEvent, addPointerEvent } from "../events/use-pointer-event";
+    import { AnimationType } from "../render/utils/types";
     export let props, visualElement;
 
     $: ({ onTap, onTapStart, onTapCancel, whileTap } = props);
@@ -25,6 +26,7 @@
     }
 
     function onPointerUp(event, info) {
+        
         if (!checkPointerEnd()) return;
 
         /**
@@ -43,9 +45,11 @@
     }
 
     function onPointerDown(event, info) {
-        removePointerEndListener();
+        
+        
 
         if (isPressing) return;
+        removePointerEndListener();
         isPressing = true;
 
         cancelPointerEndListeners = pipe(

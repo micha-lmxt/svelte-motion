@@ -1,6 +1,6 @@
 import { __assign, __read } from 'tslib';
 import { transformProps } from './transform.js';
-import { invariant } from 'hey-listen';
+//import { invariant } from 'hey-listen';
 import { number, px } from 'style-value-types';
 import { isKeyframesTarget } from '../../../animation/utils/is-keyframes-target.js';
 import { findDimensionValueType } from './value-types.js';
@@ -157,12 +157,12 @@ var checkAndConvertChangedValueTypes = function (visualElement, target, origin, 
             for (var i = to[0] === null ? 1 : 0; i < numKeyframes; i++) {
                 if (!toType) {
                     toType = findDimensionValueType(to[i]);
-                    invariant(toType === fromType ||
-                        (isNumOrPxType(fromType) && isNumOrPxType(toType)), "Keyframes must be of the same dimension as the current value");
+                    //invariant(toType === fromType ||
+                    //    (isNumOrPxType(fromType) && isNumOrPxType(toType)), "Keyframes must be of the same dimension as the current value");
                 }
-                else {
-                    invariant(findDimensionValueType(to[i]) === toType, "All keyframes must be of the same type");
-                }
+                //else {
+                //    invariant(findDimensionValueType(to[i]) === toType, "All keyframes must be of the same type");
+                //}
             }
         }
         else {

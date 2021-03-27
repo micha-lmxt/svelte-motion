@@ -1,5 +1,6 @@
 <script context="module">
     export function addDomEvent(target, eventName, handler, options) {
+        
         target.addEventListener(eventName, handler, options);
         return function () {
             return target.removeEventListener(eventName, handler, options);
@@ -34,6 +35,9 @@
             handler=undefined,
             options=undefined;
     const effect = ()=>{
+        if (!ref){
+            return;
+        }
         const element = ref.current
 
         if (handler && element) {
