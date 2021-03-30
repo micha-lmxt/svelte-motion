@@ -1,4 +1,6 @@
 <script context="module">
+    const progressTarget = 1000
+
     function hasMoved(a, b) {
         return (
             !isZeroBox(a) &&
@@ -24,11 +26,13 @@
 
 <script>
     import { onDestroy, onMount } from "svelte";
-
+    import { axisBox } from "../../../utils/geometry"
     import { eachAxis } from "../../../utils/each-axis";
     import { startAnimation } from "../../../animation/utils/transitions";
     import { tweenAxis } from "./utils";
-    
+    import { addScaleCorrection } from "../../../render/dom/projection/scale-correction"
+    import { defaultScaleCorrectors } from "../../../render/dom/projection/default-scale-correctors"
+
     export let visualElement,
         //initial = undefined,
         //style = undefined,
@@ -92,23 +96,40 @@
         //inherit = undefined,
         safeToRemove;
 
-    
-    let frameTarget = {
-        x: { min: 0, max: 0 },
-        y: { min: 0, max: 0 },
-    };
+        /**
+     * A mutable object that tracks the target viewport box
+     * for the current animation frame.
+     */
+    let frameTarget = axisBox();
+     /**
+     * The current animation target, we use this to check whether to start
+     * a new animation or continue the existing one.
+     */
+    let currentAnimationTarget = axisBox()
+    /**
+     * Track whether we're animating this axis.
+     */
+     let isAnimating = {
+        x: false,
+        y: false,
+    }
     let stopAxisAnimation = {
         x: undefined,
         y: undefined,
     };
-    let unsubLayoutReady;
-    let isAnimatingTree = false;
 
+    let unsubLayoutReady;
+
+    let isAnimatingTree = false;
+    
     onMount(() => {
+        
         visualElement.animateMotionValue = startAnimation;
         visualElement.enableLayoutProjection();
         unsubLayoutReady = visualElement.onLayoutUpdate(animateF);
         visualElement.layoutSafeToRemove = () => safeToRemove();
+
+        addScaleCorrection(defaultScaleCorrectors)
     });
 
     onDestroy(() => {
@@ -207,6 +228,18 @@
      */
     const animateAxis = (axis, target, origin, { transition:_transition } = {}) => {
         stopAxisAnimation[axis]?.();
+/**
+         * If we're not animating to a new target, don't run this animation
+         */
+        if (
+            isAnimating[axis] &&
+            axisIsEqual(target, currentAnimationTarget[axis])
+        ) {
+            return
+        }
+
+        stopAxisAnimation[axis]?.()
+        isAnimating[axis] = true
 
         const _frameTarget = frameTarget[axis];
         const layoutProgress = visualElement.getProjectionAnimationProgress()[
@@ -247,18 +280,23 @@
         // Create a function to stop animation on this specific axis
         const unsubscribeProgress = layoutProgress.onChange(frame);
 
+        stopAxisAnimation[axis] = () => {
+            isAnimating[axis] = false;
+            layoutProgress.stop();
+            unsubscribeProgress();
+        };
+
+        currentAnimationTarget[axis] = target
+
         // Start the animation on this axis
         const animation = startAnimation(
             axis === "x" ? "layoutX" : "layoutY",
             layoutProgress,
             progressTarget,
             _transition || transition || defaultTransition
-        ).then(unsubscribeProgress);
+        ).then(stopAxisAnimation[axis]);
 
-        stopAxisAnimation[axis] = () => {
-            layoutProgress.stop();
-            unsubscribeProgress();
-        };
+        
 
         return animation;
     };

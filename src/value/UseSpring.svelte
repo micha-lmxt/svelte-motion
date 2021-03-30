@@ -1,6 +1,7 @@
 <script>
 import { afterUpdate, getContext } from "svelte";
 import {motionValue} from '.';
+import { MotionConfigContext } from "../context/MotionConfigContext"
 
 
 /**

@@ -1,44 +1,37 @@
 <script>
-    import { getContext } from "svelte";
-    import {MotionConfigContext} from "../context/MotionConfigContext.js";
+    import { featureDefinitions } from "./definitions";
+    const featureNames = Object.keys(featureDefinitions);
+    const numFeatures = featureNames.length;
+    export let visualElement, props;
 
-    export let defaultFeatures, isStatic, visualElement, props;
-    const plugins = getContext(MotionConfigContext) || MotionConfigContext();
-    let features;
-    
+
+    let features = [];
+
     // If this is a static component, or we're rendering on the server, we don't load
     // any feature components
-    $: if (isStatic || typeof window === "undefined") {
-        
+    // Decide which features we should render and add them to the returned array
+    $: {
         features = [];
-    } else {
-        const allFeatures = [...defaultFeatures, ...$plugins.features];
-        const numFeatures = allFeatures.length;
-        features = [];
-        // Decide which features we should render and add them to the returned array
         for (let i = 0; i < numFeatures; i++) {
-            
-            const { shouldRender, key, getComponent } = allFeatures[i];
-            
-            
-            if (shouldRender(props)) {
-                const Component = getComponent(props);
-                
-                Component &&
-                    features.push({
-                        Component,
-                        key,
-                        props: {
-                            key,
-                            ...props,
-                            visualElement,
-                        },
-                    });
+            const name = featureNames[i];
+            const { isEnabled, Component } = featureDefinitions[name];
+            /**
+             * It might be possible in the future to use this moment to
+             * dynamically request functionality. In initial tests this
+             * was producing a lot of duplication amongst bundles.
+             */
+            if (isEnabled(props) && Component) {
+                features.push({
+                    Component: Component,
+                    key: name,
+                    props,
+                    visualElement
+                });
             }
-            
         }
     }
-
 </script>
 
-<slot {features} />
+{#if visualElement}
+    <slot {features} />
+{/if}

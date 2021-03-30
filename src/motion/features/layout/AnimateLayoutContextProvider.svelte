@@ -1,32 +1,34 @@
+
 <script>
     import { UsePresence } from "../../../components/AnimatePresence/use-presence";
     import  Animate  from "./Animate.svelte";
     export let visualElement,
-        initial = undefined,
+        props;
+        /*initial = undefined,
         style = undefined,
         transformTemplate = undefined,
-        transformValues = undefined,
+        transformValues = undefined,*/
         //AnimationProps
-        animate = undefined,
+        /*animate = undefined,
         exit = undefined,
-        variants = undefined,
-        transition = undefined,
+        variants = undefined,*/
+        //transition = undefined,
         //VisualElementLifecycles
-        onViewportBoxUpdate = undefined,
+        /*onViewportBoxUpdate = undefined,
         onBeforeLayoutMeasure = undefined,
         onLayoutMeasure = undefined,
         onUpdate = undefined,
         onAnimationStart = undefined,
         onAnimationComplete = undefined,
-        onLayoutAnimationComplete = undefined,
+        onLayoutAnimationComplete = undefined,*/
         //GestureHandlers
         // PanHandlers
-        onPan = undefined,
+        /*onPan = undefined,
         onPanStart = undefined,
         onPanSessionStart = undefined,
-        onPanEnd = undefined,
+        onPanEnd = undefined,*/
         // TapHandlers
-        onTap = undefined,
+        /*onTap = undefined,
         onTapStart = undefined,
         onTapCancel = undefined,
         whileTap = undefined,
@@ -35,9 +37,9 @@
         onHoverStart = undefined,
         onHoverEnd = undefined,
         //FocusHandlers
-        whileFocus = undefined,
+        whileFocus = undefined,*/
         //DraggableProps
-        drag = undefined,
+        /*drag = undefined,
         whileDrag = undefined,
         dragDirectionLock = undefined,
         dragPropagation = undefined,
@@ -55,66 +57,21 @@
         onDragEnd = undefined,
         onDrag = undefined,
         onDirectionLock = undefined,
-        onDragTransitionEnd = undefined,
+        onDragTransitionEnd = undefined,*/
         // LayoutProps
-        layout = undefined,
+        //layout = undefined
+        /*,
         layoutId = undefined,
         //MotionAdvancedProps
         custom = undefined,
-        inherit = undefined;
+        inherit = undefined*/;
+    $: ({transition,layout} = props);
 </script>
 
 <UsePresence let:presence>
     <Animate
         {visualElement}
-        {initial}
-        {style}
-        {transformTemplate}
-        {transformValues}
-        {animate}
-        {exit}
-        {variants}
         {transition}
-        {onViewportBoxUpdate}
-        {onBeforeLayoutMeasure}
-        {onLayoutMeasure}
-        {onUpdate}
-        {onAnimationStart}
-        {onAnimationComplete}
-        {onLayoutAnimationComplete}
-        {onPan}
-        {onPanStart}
-        {onPanSessionStart}
-        {onPanEnd}
-        {onTap}
-        {onTapStart}
-        {onTapCancel}
-        {whileTap}
-        {whileHover}
-        {onHoverStart}
-        {onHoverEnd}
-        {whileFocus}
-        {drag}
-        {whileDrag}
-        {dragDirectionLock}
-        {dragPropagation}
-        {dragConstraints}
-        {dragElastic}
-        {dragMomentum}
-        {dragTransition}
-        {dragControls}
-        {dragListener}
-        {onMeasureDragConstraints}
-        {_dragX}
-        {_dragY}
-        {onDragStart}
-        {onDragEnd}
-        {onDrag}
-        {onDirectionLock}
-        {onDragTransitionEnd}
         {layout}
-        {layoutId}
-        {custom}
-        {inherit}
         safeToRemove={presence[1]} />
 </UsePresence>

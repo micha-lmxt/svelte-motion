@@ -1,4 +1,4 @@
-import { __assign, __spread } from 'tslib';
+import { __assign, __spreadArray, __read } from 'tslib';
 import sync, { cancelSync } from 'framesync';
 import { pipe } from 'popmotion';
 import { Presence } from '../components/AnimateSharedLayout/types.js';
@@ -6,22 +6,23 @@ import { eachAxis } from '../utils/each-axis.js';
 import { copyAxisBox } from '../utils/geometry/index.js';
 import { removeBoxTransforms, applyBoxTransforms } from '../utils/geometry/delta-apply.js';
 import { updateBoxDelta } from '../utils/geometry/delta-calc.js';
-import { isRefObject } from '../utils/is-ref-object.js';
 import { motionValue } from '../value/index.js';
 import { isMotionValue } from '../value/utils/is-motion-value.js';
-import { checkIfControllingVariants, isVariantLabel } from './utils/variants.js';
-import { createVisualState, createLayoutState, createProjectionState } from './utils/state.js';
-import { buildLayoutProjectionTransform } from './dom/utils/build-transform.js';
+import { buildLayoutProjectionTransform } from './html/utils/build-projection-transform.js';
 import { variantPriorityOrder } from './utils/animation-state.js';
 import { createLifecycles } from './utils/lifecycles.js';
 import { updateMotionValuesFromProps } from './utils/motion-values.js';
 import { updateLayoutDeltas } from './utils/projection.js';
+import { createLayoutState, createProjectionState } from './utils/state.js';
+import { FlatTree } from './utils/flat-tree.js';
+import { checkIfControllingVariants, checkIfVariantNode, isVariantLabel } from './utils/variants.js';
 
 var visualElement = function (_a) {
-    var _b = _a.treeType, treeType = _b === void 0 ? "" : _b, createRenderState = _a.createRenderState, build = _a.build, getBaseTarget = _a.getBaseTarget, makeTargetAnimatable = _a.makeTargetAnimatable, measureViewportBox = _a.measureViewportBox, onMount = _a.onMount, renderInstance = _a.render, readValueFromInstance = _a.readValueFromInstance, resetTransform = _a.resetTransform, restoreTransform = _a.restoreTransform, removeValueFromMutableState = _a.removeValueFromMutableState, sortNodePosition = _a.sortNodePosition, scrapeMotionValuesFromProps = _a.scrapeMotionValuesFromProps;
+    var _b = _a.treeType, treeType = _b === void 0 ? "" : _b, build = _a.build, getBaseTarget = _a.getBaseTarget, makeTargetAnimatable = _a.makeTargetAnimatable, measureViewportBox = _a.measureViewportBox, renderInstance = _a.render, readValueFromInstance = _a.readValueFromInstance, resetTransform = _a.resetTransform, restoreTransform = _a.restoreTransform, removeValueFromRenderState = _a.removeValueFromRenderState, sortNodePosition = _a.sortNodePosition, scrapeMotionValuesFromProps = _a.scrapeMotionValuesFromProps;
     return function (_a, options) {
-        var parent = _a.parent, externalRef = _a.ref, props = _a.props, isStatic = _a.isStatic, presenceId = _a.presenceId, blockInitialAnimation = _a.blockInitialAnimation;
+        var parent = _a.parent, props = _a.props, presenceId = _a.presenceId, blockInitialAnimation = _a.blockInitialAnimation, visualState = _a.visualState;
         if (options === void 0) { options = {}; }
+        var latestValues = visualState.latestValues, renderState = visualState.renderState;
         /**
          * The instance of the render-specific node that will be hydrated by the
          * exposed React ref. So for example, this visual element can host a
@@ -29,11 +30,6 @@ var visualElement = function (_a) {
          * in VisualElementConfig allow us to interface with this instance.
          */
         var instance;
-        /**
-         * A set of all children of this visual element. We use this to traverse
-         * the tree when updating layout projections.
-         */
-        var children = new Set();
         /**
          * Manages the subscriptions for a visual element's lifecycle, for instance
          * onRender and onViewportBoxUpdate.
@@ -43,10 +39,6 @@ var visualElement = function (_a) {
          *
          */
         var projection = createProjectionState();
-        /**
-         * The latest resolved motion values.
-         */
-        var latestValues = createVisualState(props, parent, blockInitialAnimation);
         /**
          * This is a reference to the visual state of the "lead" visual element.
          * Usually, this will be this visual element. But if it shares a layoutId
@@ -65,11 +57,6 @@ var visualElement = function (_a) {
          * projection calculations needed to project into the same viewport box.
          */
         var layoutState = createLayoutState();
-        /**
-         * Each visual element creates a pool of renderer-specific mutable state
-         * which allows renderer-specific calculations to occur while reducing GC.
-         */
-        var renderState = createRenderState();
         /**
          *
          */
@@ -113,34 +100,7 @@ var visualElement = function (_a) {
          * On mount, this will be hydrated with a callback to disconnect
          * this visual element from its parent on unmount.
          */
-        var removeFromMotionTree;
         var removeFromVariantTree;
-        /**
-         *
-         */
-        
-        function mount() {
-            element.pointTo(element);
-            removeFromMotionTree = parent === null || parent === void 0 ? void 0 : parent.addChild(element);
-            if (isVariantNode && parent && !isControllingVariants) {
-                removeFromVariantTree = parent === null || parent === void 0 ? void 0 : parent.addVariantChild(element);
-            }
-            onMount === null || onMount === void 0 ? void 0 : onMount(element, instance, renderState);
-        }
-        /**
-         *
-         */
-        function unmount() {
-            cancelSync.update(update);
-            cancelSync.render(render);
-            cancelSync.preRender(element.updateLayoutProjection);
-            valueSubscriptions.forEach(function (remove) { return remove(); });
-            element.stopLayoutAnimation();
-            removeFromMotionTree === null || removeFromMotionTree === void 0 ? void 0 : removeFromMotionTree();
-            removeFromVariantTree === null || removeFromVariantTree === void 0 ? void 0 : removeFromVariantTree();
-            unsubscribeFromLeadVisualElement === null || unsubscribeFromLeadVisualElement === void 0 ? void 0 : unsubscribeFromLeadVisualElement();
-            lifecycles.clearAllListeners();
-        }
         /**
          *
          */
@@ -151,8 +111,10 @@ var visualElement = function (_a) {
          *
          */
         function render() {
+            
             if (!instance)
                 return;
+            
             if (isProjecting()) {
                 /**
                  * Apply the latest user-set transforms to the targetBox to produce the targetBoxFinal.
@@ -169,6 +131,7 @@ var visualElement = function (_a) {
                 updateBoxDelta(layoutState.deltaFinal, layoutState.layoutCorrected, leadProjection.targetFinal, latestValues);
             }
             triggerBuild();
+            
             renderInstance(instance, renderState);
         }
         function triggerBuild() {
@@ -178,9 +141,11 @@ var visualElement = function (_a) {
                 if (crossfadedValues)
                     valuesToRender = crossfadedValues;
             }
+            
             build(element, renderState, valuesToRender, leadProjection, layoutState, options, props);
         }
         function update() {
+            console.log("UPDATE")
             lifecycles.notifyUpdate(latestValues);
         }
         function updateLayoutProjection() {
@@ -236,8 +201,7 @@ var visualElement = function (_a) {
          * Determine what role this visual element should take in the variant tree.
          */
         var isControllingVariants = checkIfControllingVariants(props);
-        var definesInitialVariant = isVariantLabel(props.initial);
-        var isVariantNode = Boolean(definesInitialVariant || isControllingVariants || props.variants);
+        var isVariantNode = checkIfVariantNode(props);
         var element = __assign(__assign({ treeType: treeType, 
             /**
              * This is a mirror of the internal instance prop, which keeps
@@ -252,7 +216,7 @@ var visualElement = function (_a) {
              * An ancestor path back to the root visual element. This is used
              * by layout projection to quickly recurse back up the tree.
              */
-            path: parent ? __spread(parent.path, [parent]) : [], 
+            path: parent ? __spreadArray(__spreadArray([], __read(parent.path)), [parent]) : [], layoutTree: parent ? parent.layoutTree : new FlatTree(), 
             /**
              *
              */
@@ -284,13 +248,7 @@ var visualElement = function (_a) {
              * This can be set by AnimatePresence to force components that mount
              * at the same time as it to mount as if they have initial={false} set.
              */
-            blockInitialAnimation: blockInitialAnimation,
-            /**
-             * If a visual element is static, it's essentially in "pure" mode with
-             * no additional functionality like animations or gestures loaded in.
-             * This can be considered Framer canvas mode.
-             */
-            isStatic: isStatic, 
+            blockInitialAnimation: blockInitialAnimation, 
             /**
              * A boolean that can be used to determine whether to respect hover events.
              * For layout measurements we often have to reposition the instance by
@@ -303,13 +261,26 @@ var visualElement = function (_a) {
              * by variant children to determine whether they need to trigger their
              * own animations on mount.
              */
-            isMounted: function () { return Boolean(instance); }, 
+            isMounted: function () { return Boolean(instance); }, mount: function (newInstance) {
+                instance = element.current = newInstance;
+                element.pointTo(element);
+                if (isVariantNode && parent && !isControllingVariants) {
+                    removeFromVariantTree = parent === null || parent === void 0 ? void 0 : parent.addVariantChild(element);
+                }
+            },
             /**
-             * Add a child visual element to our set of children.
+             *
              */
-            addChild: function (child) {
-                children.add(child);
-                return function () { return children.delete(child); };
+            unmount: function () {
+                cancelSync.update(update);
+                cancelSync.render(render);
+                cancelSync.preRender(element.updateLayoutProjection);
+                valueSubscriptions.forEach(function (remove) { return remove(); });
+                element.stopLayoutAnimation();
+                element.layoutTree.remove(element);
+                removeFromVariantTree === null || removeFromVariantTree === void 0 ? void 0 : removeFromVariantTree();
+                unsubscribeFromLeadVisualElement === null || unsubscribeFromLeadVisualElement === void 0 ? void 0 : unsubscribeFromLeadVisualElement();
+                lifecycles.clearAllListeners();
             },
             /**
              * Add a child visual element to our set of children.
@@ -344,7 +315,9 @@ var visualElement = function (_a) {
              */
             scheduleUpdateLayoutProjection: parent
                 ? parent.scheduleUpdateLayoutProjection
-                : function () { return sync.preRender(element.updateLayoutProjection, false, true); }, 
+                : function () {
+                    return sync.preRender(element.updateTreeLayoutProjection, false, true);
+                }, 
             /**
              * Expose the latest layoutId prop.
              */
@@ -363,17 +336,6 @@ var visualElement = function (_a) {
              * visual state
              */
             getLatestValues: function () { return latestValues; }, 
-            /**
-             * Replaces the current mutable states with fresh ones. This is used
-             * in static mode where rather than creating a new visual element every
-             * render we can just make fresh state.
-             */
-            clearState: function (newProps) {
-                values.clear();
-                props = newProps;
-                leadLatestValues = latestValues = createVisualState(props, parent, blockInitialAnimation);
-                renderState = createRenderState();
-            },
             /**
              * Set the visiblity of the visual element. If it's changed, schedule
              * a render to reflect these changes.
@@ -432,7 +394,7 @@ var visualElement = function (_a) {
                 (_a = valueSubscriptions.get(key)) === null || _a === void 0 ? void 0 : _a();
                 valueSubscriptions.delete(key);
                 delete latestValues[key];
-                removeValueFromMutableState(key, renderState);
+                removeValueFromRenderState(key, renderState);
             }, 
             /**
              * Check whether we have a motion value for this key
@@ -479,23 +441,6 @@ var visualElement = function (_a) {
                 }
                 return baseTarget[key];
             } }, lifecycles), { 
-            /**
-             * A ref function to be provided to the mounting React component.
-             * This is used to hydrated the instance and run mount/unmount lifecycles.
-             */
-            ref: function (mountingElement) {
-                instance = element.current = mountingElement;
-                mountingElement ? mount() : unmount();
-                if (!externalRef)
-                    return;
-                if (typeof externalRef === "function") {
-                    externalRef(mountingElement);
-                }
-                else if (isRefObject(externalRef)) {
-                    externalRef.current = mountingElement;
-                }
-            },
-            
             /**
              * Build the renderer state based on the latest visual state.
              */
@@ -565,6 +510,7 @@ var visualElement = function (_a) {
              */
             enableLayoutProjection: function () {
                 projection.isEnabled = true;
+                element.layoutTree.add(element);
             },
             /**
              * Lock the projection target, for instance when dragging, so
@@ -655,7 +601,9 @@ var visualElement = function (_a) {
              * the tree layout projection.
              */
             setProjectionTargetAxis: function (axis, min, max) {
+                
                 var target = projection.target[axis];
+                
                 target.min = min;
                 target.max = max;
                 // Flag that we want to fire the onViewportBoxUpdate event handler
@@ -671,6 +619,7 @@ var visualElement = function (_a) {
             rebaseProjectionTarget: function (force, box) {
                 if (box === void 0) { box = layoutState.layout; }
                 var _a = element.getProjectionAnimationProgress(), x = _a.x, y = _a.y;
+                
                 var shouldRebase = !projection.isTargetLocked &&
                     !x.isAnimating() &&
                     !y.isAnimating();
@@ -687,6 +636,7 @@ var visualElement = function (_a) {
              * needs to be performed.
              */
             notifyLayoutReady: function (config) {
+                console.log("NOTIFY LAYOUT READY")
                 element.notifyLayoutUpdate(layoutState.layout, element.prevViewportBox || layoutState.layout, config);
             }, 
             /**
@@ -703,9 +653,9 @@ var visualElement = function (_a) {
                 parent ? parent.withoutTransform(callback) : callback();
                 isEnabled && restoreTransform(instance, renderState);
             },
-            updateLayoutProjection: function () {
-                isProjecting() && updateLayoutProjection();
-                children.forEach(fireUpdateLayoutProjection);
+            updateLayoutProjection: updateLayoutProjection,
+            updateTreeLayoutProjection: function () {
+                element.layoutTree.forEach(fireUpdateLayoutProjection);
             },
             /**
              *
@@ -735,7 +685,7 @@ var visualElement = function (_a) {
 function fireUpdateLayoutProjection(child) {
     child.updateLayoutProjection();
 }
-var variantProps = __spread(["initial"], variantPriorityOrder);
+var variantProps = __spreadArray(["initial"], __read(variantPriorityOrder));
 var numVariantProps = variantProps.length;
 
 export { visualElement };

@@ -5,7 +5,7 @@ const incrementId = () => counter++
 </script>
 <script>
     import { getContext, onMount} from "svelte";
-    import { PresenceContext } from "./PresenceContext";
+    import { PresenceContext } from '../../context/PresenceContext.js';
     const context = getContext(PresenceContext)||PresenceContext();
     
     $: ( { isPresent, onExitComplete, register } = $context||{})

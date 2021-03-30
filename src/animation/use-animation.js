@@ -1,4 +1,5 @@
 import { tick } from "svelte";
+import { readable } from "svelte/store";
 import { animationControls } from "./animation-controls"
 
 /**
@@ -50,10 +51,16 @@ import { animationControls } from "./animation-controls"
  *
  * @public
  */
-export const useAnimation = ()=>{
-    let controls = animationControls();
-    tick().then(controls.mount);
-    return controls;
-}
+export const useAnimation = () => new readable(
+    null, (set) => {
+        let controls = animationControls();
+        set(controls);
+        let cleanup = () => { };
+        tick().then(v => cleanup = controls.mount())
+        return cleanup;
+    }
+)
+
+
 
 export { default as UseAnimation } from "./UseAnimation.svelte";

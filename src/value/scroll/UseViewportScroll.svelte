@@ -1,6 +1,6 @@
 <script context="module">
     import { writable, get } from "svelte/store";
-    import { createScrollUpdater } from "./utils";
+    import { createScrollUpdater } from "./utils.js";
     import { addDomEvent } from "../../events/use-dom-event"
 
     let viewportScrollValues = writable(undefined);

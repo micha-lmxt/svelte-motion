@@ -1,11 +1,12 @@
-import DragComp from './Drag.svelte'
+import { UsePanGesture } from '../../gestures/use-pan-gesture.js';
+import { UseDrag } from '../../gestures/drag/use-drag.js';
+
 /**
  * @public
  */
-var Drag = {
-    key: "drag",
-    shouldRender: function (props) { return !!props.drag || !!props.dragControls; },
-    getComponent: function () { return DragComp; },
-};
+const drag = {
+    pan: UsePanGesture,
+    drag: UseDrag
+}
 
-export { Drag };
+export { drag };

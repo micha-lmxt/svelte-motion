@@ -1,24 +1,29 @@
 <script>
-import { MotionConfigContext } from "../../motion/context/MotionConfigContext"
+import { MotionConfigContext } from '../../context/MotionConfigContext.js';
 import { VisualElementDragControls } from "./VisualElementDragControls"
-import { getContext, onMount } from "svelte";
+import { getContext, onDestroy, onMount } from "svelte";
 
 
-    export let props,
-        visualElement;
-    $: ({ dragControls: groupDragControls } = props)
+    export let visualElement,props;
+    $: ({dragControls}=props);
     const mcc = getContext(MotionConfigContext)||MotionConfigContext();
     $: ({transformPagePoint} = $mcc);
-    let dragControls = new VisualElementDragControls({
+    let _dragControls = new VisualElementDragControls({
             visualElement,
         })
-    $: (dragControls.setProps({ ...props, transformPagePoint }));
+    $: (_dragControls.setProps({ ...props, transformPagePoint }));
 
     // If we've been provided a DragControls for manual control over the drag gesture,
     // subscribe this component to it on mount.
-    const dragEffect = () => 
-        groupDragControls && groupDragControls.subscribe(dragControls);
-    $: dragEffect(dragControls);
-    onMount(()=> dragControls.mount(visualElement))
+    let cleanup;
+    const dragEffect = () => {
+        if (cleanup){cleanup()}
+        if (dragControls){
+            cleanup = dragControls.subscribe(_dragControls);
+        }
+    }
+    onDestroy(()=>{if(cleanup){cleanup()}})
+    $: dragEffect(_dragControls);
+    onMount(()=> _dragControls.mount(visualElement))
 </script>
 <slot/>

@@ -1,44 +1,71 @@
 <script>
-    import { getContext } from "svelte";
-    import { PresenceContext } from "../../components/AnimatePresence/PresenceContext";
-    import {MotionConfigContext} from "../context/MotionConfigContext";
-    import { UseVisualElementContext } from "../context/MotionContext";
-    import UseLayoutId from "./UseLayoutId.svelte";
-    import UseVisualElementInner from "./UseVisualElementInner.svelte";
+    import { afterUpdate, getContext, onDestroy } from "svelte";
+    import { PresenceContext } from "../../context/PresenceContext";
+    import { LazyContext } from "../../context/LazyContext";
+    import { MotionConfigContext } from "../../context/MotionConfigContext";
+    import { LayoutGroupContext } from '../../context/LayoutGroupContext'
+    import {MotionContext} from "../../context/MotionContext/index.js";
+    import { isPresent } from '../../components/AnimatePresence/use-presence.js';
 
-    export let createVisualElement,
+    export let createVisualElement=undefined,
         props,
-        isStatic,
-        ref = undefined;
+        Component,
+        visualState;
 
     const config = getContext(MotionConfigContext) || MotionConfigContext();
     const presenceContext = getContext(PresenceContext) || PresenceContext();
-    let visualElementRef = null;
-    $: if (isStatic && visualElementRef !== null) {
-        /**
-         * Clear the VisualElement state in static mode after the initial render.
-         * This will allow the VisualElement to render every render as if its the first,
-         * with no history. This is basically a cheaper way of reinstantiating the VisualElement
-         * every render.
-         */
-        visualElementRef.clearState(props);
+    const lazyContext = getContext(LazyContext) || LazyContext();
+    const parent = getContext(MotionContext) || MotionContext();
+    const layoutGroupId =
+        getContext(LayoutGroupContext) || LayoutGroupContext();
+    $: (layoutId =
+        $layoutGroupId && props.layoutId !== undefined
+            ? $layoutGroupId + "-" + props.layoutId
+            : props.layoutId);
+
+    let visualElementRef = undefined;
+    /**
+     * If we haven't preloaded a renderer, check to see if we have one lazy-loaded
+     */
+    if (!createVisualElement) {
+        createVisualElement = $lazyContext.renderer;
     }
+
+    if (!visualElementRef && createVisualElement) {
+        visualElementRef = createVisualElement(Component, {
+            visualState,
+            parent:$parent,
+            props: { ...props, layoutId },
+            presenceId: $presenceContext?.id,
+            blockInitialAnimation: $presenceContext?.initial === false,
+        });
+    }
+    $: (visualElement = visualElementRef);
+    afterUpdate(() => {
+        if (!visualElement) return;
+
+        visualElement.setProps({
+            ...$config,
+            ...props,
+            layoutId,
+        });
+
+        visualElement.isPresent = isPresent($presenceContext);
+        visualElement.isPresenceRoot =
+            !$parent || $parent.presenceId !== $presenceContext?.id;
+
+        /**
+         * Fire a render to ensure the latest state is reflected on-screen.
+         */
+        visualElement.syncRender();
+
+        /**
+         * In a future refactor we can replace the features-as-components and
+         * have this loop through them all firing "effect" listeners
+         */
+         visualElement.animationState?.animateChanges()
+    });
+    onDestroy(()=>visualElement?.notifyUnmount())
 </script>
 
-<UseVisualElementContext let:parent>
-    <UseLayoutId {props} let:layoutId>
-        <UseVisualElementInner
-            bind:visualElementRef
-            {parent}
-            {layoutId}
-            config={$config}
-            presenceContext={$presenceContext}
-            {props}
-            {isStatic}
-            {ref}
-            {createVisualElement}
-            let:visualElement>
-            <slot {visualElement} />
-        </UseVisualElementInner>
-    </UseLayoutId>
-</UseVisualElementContext>
+<slot {visualElement} />

@@ -1,17 +1,22 @@
 <script>
-    import { MotionConfigContext } from "./context/MotionConfigContext";
+    import { MotionConfigContext } from "../context/MotionConfigContext"
     import { UseVisualElement } from "./utils/use-visual-element";
     import { UseFeatures } from "./features/use-features";
-    import MotionContextProvider from "./context/MotionContextProvider.svelte";
+    import MotionContextProvider from "../context/MotionContext/MotionContextProvider.svelte";
     import { getContext} from "svelte";
     import { UseRender } from "../render/dom/use-render.js";
-    import { createDomVisualElement } from "../render/dom/create-dom-visual-element.js";
+    import { createDomVisualElement } from "../render/dom/create-visual-element.js";
+    import { svgMotionConfig } from '../render/svg/config-motion.js'
+    import { htmlMotionConfig } from '../render/html/config-motion.js'
+    import {UseCreateMotionContext} from "../context/MotionContext/create";
+    import {UseVisualState} from './utils/use-visual-state.js';
+    import {useMotionRef} from "./utils/use-motion-ref.js";
+import MotionContext from "../context/MotionContext/MotionContext.svelte";
 
     export let isSVG = false,
         isCustom = false,
-        features,
         forwardMotionProps = false,
-        externalRef = undefined,
+        externalRef=undefined,
         initial = undefined,
         style = undefined,
         transformTemplate = undefined,
@@ -71,7 +76,8 @@
         layoutId = undefined,
         //MotionAdvancedProps
         custom = undefined,
-        inherit = undefined;
+        inherit = undefined,
+        update=undefined;
 
     //layout=undefined;
     $: motionProps = {
@@ -139,7 +145,9 @@
     //$: (allProps = {...motionProps,$$restProps});
 
     let Component = isSVG ? "SVG" : isCustom ? "Custom" : "DOM";
-    let createVisualElement = createDomVisualElement(Component);
+    let createVisualElement = createDomVisualElement;
+    let visualStateConfig = isSVG ? svgMotionConfig : htmlMotionConfig;
+
     /**
      * If a component is static, we only visually update it as a
      * result of a React re-render, rather than any interactions or animations.
@@ -148,35 +156,57 @@
      */
     const a = getContext(MotionConfigContext) || MotionConfigContext();
     $: ({ isStatic } = $a || {});
+    let mounted=false;
+    const setContext = (c,v)=>{
+        c.visualElement = v;
+        return v
+    }
     
 </script>
-
-<UseVisualElement
-    {createVisualElement}
+<UseCreateMotionContext 
+props={motionProps} 
+{isStatic} 
+let:value={context}>
+    <UseVisualState 
+    config={visualStateConfig} 
     props={motionProps}
-    {isStatic}
-    ref={externalRef}
-    let:visualElement>
-    <UseFeatures
-        defaultFeatures={features}
-        {isStatic}
-        {visualElement}
+    {isStatic} 
+    let:state={visualState}>
+    <UseVisualElement
+        {Component}
+        {visualState}
+        {createVisualElement}
         props={motionProps}
-        let:features={_features}>
-        <UseRender
+        let:visualElement>
+        <UseFeatures
+            visualElement={setContext(context,visualElement)}
             props={motionProps}
-            {visualElement}
-            {forwardMotionProps}
-            componentType={Component}
-            let:motion
-            let:props={renderProps}>
-            <MotionContextProvider value={visualElement}>
-                <slot {motion} props={renderProps} />
+            let:features={_features}>
+            <MotionContextProvider value={context}>
+            <UseRender
+                {Component}
+                props={motionProps}
+                ref={useMotionRef(
+                    visualState,
+                    context.visualElement,
+                    externalRef
+                )}
+                {visualState}
+                {isStatic}
+                {forwardMotionProps}
+                let:motion
+                let:props={renderProps}>
+                
+                    <slot motion={(node)=>{motion(node);mounted=true}} props={renderProps} />
+                
+            </UseRender>
             </MotionContextProvider>
-        </UseRender>
-        {#each _features as feat (feat.key)}
-       
-            <svelte:component this={feat.Component} {...feat.props} />
-        {/each}
-    </UseFeatures>
-</UseVisualElement>
+            {#if mounted}
+            {#each _features as feat (feat.key)}
+                <svelte:component this={feat.Component} props={feat.props} visualElement={feat.visualElement} {...(feat.key==="measureLayout"?{update}:{})}/>
+            {/each}
+            {/if}
+        </UseFeatures>
+    </UseVisualElement>
+</UseVisualState>
+</UseCreateMotionContext>

@@ -1,16 +1,16 @@
 <script>
     import { getContext } from "svelte";
     import {
-        isSharedLayout,
         SharedLayoutContext,
-    } from "../AnimateSharedLayout/SharedLayoutContext";
+        isSharedLayout,
+    } from "../../context/SharedLayoutContext.js";
     import PresenceChild from "./PresenceChild.svelte";
 
     export let list = [],
-        custom=undefined,
+        custom = undefined,
         initial = true,
-        onExitComplete=undefined,
-        exitBeforeEnter=undefined,
+        onExitComplete = undefined,
+        exitBeforeEnter = undefined,
         presenceAffectsLayout = true;
 
     const layoutContext =
@@ -30,8 +30,8 @@
 
     let isInitialRender = true;
     let filteredChildren = list;
-    $: (filteredChildren = list);
-    
+    $: filteredChildren = list;
+
     let presentChildren = filteredChildren;
     let allChildren = new Map();
     let exiting = new Set();
@@ -42,7 +42,7 @@
         });
     };
     $: updateChildLookup(filteredChildren, allChildren);
-    
+
     let childrenToRender = [
         ...filteredChildren.map((v) => ({
             present: true,
@@ -51,7 +51,6 @@
         })),
     ];
     $: if (!isInitialRender) {
-        
         // If this is a subsequent render, deal with entering and exiting children
         childrenToRender = [
             ...filteredChildren.map((v) => ({
@@ -120,7 +119,7 @@
         });
         // Add `MotionContext` even to children that don't need it to ensure we're rendering
         // the same tree between renders
-        
+
         /*
         childrenToRender = childrenToRender.map((child) => {
             const key = child.key as string | number;
@@ -137,10 +136,10 @@
             );
         });
         */
-       presentChildren = childrenToRender;
-       console.log(childrenToRender)
-    }else{
-        isInitialRender=false;
+        presentChildren = childrenToRender;
+        console.log(childrenToRender);
+    } else {
+        isInitialRender = false;
     }
 </script>
 
@@ -149,7 +148,7 @@
         key={getChildKey(child)}
         isPresent={child.present}
         initial={initial ? undefined : false}
-        custom={child.onExit?custom:undefined}
+        custom={child.onExit ? custom : undefined}
         {presenceAffectsLayout}
         onExitComplete={child.onExit}>
         <slot item={child.item} />

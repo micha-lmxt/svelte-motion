@@ -1,22 +1,29 @@
 <script>
-    import { UseSVGProps } from "./utils/use-svg-props";
-    import { UseHTMLProps } from "./utils/use-html-props";
-    import { filterProps } from "./utils/filter-props";
+import { UseSVGProps } from "../svg/use-props"
+import { UseHTMLProps } from "../html/use-props"
+import { filterProps } from "./utils/filter-props"
 
     export let props,
-        visualElement,
-        componentType,
-        forwardMotionProps = false;
-    
+        visualState,
+        Component,
+        forwardMotionProps = false,
+        isStatic,
+        ref;
+    $: (filteredProps = filterProps(
+            props,
+            typeof Component === "string",
+            forwardMotionProps
+        ))
 </script>
 
 <svelte:component
-    this={componentType === 'SVG' ? UseSVGProps : UseHTMLProps}
-    {visualElement}
+    this={Component === 'SVG' ? UseSVGProps : UseHTMLProps}
+    {visualState}
+    {isStatic}
     {props}
     let:visualProps>
     <slot
-        motion={visualElement.ref}
-        props={{ ...filterProps(props, componentType === 'DOM' || componentType === 'SVG', forwardMotionProps), ...visualProps }} />
+        motion={ref}
+        props={{...filteredProps,...visualProps}} />
 </svelte:component>
 

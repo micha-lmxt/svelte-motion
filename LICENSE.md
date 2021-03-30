@@ -2,7 +2,7 @@ The MIT License (MIT)
 
 Copyright (c) 2021 Michael Lucht
 
-based on framer-motion, Copyright (c) 2018 Framer B.V.
+based on framer-motion@4.0.3, Copyright (c) 2018 Framer B.V.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -1,5 +1,5 @@
 <script>
-    import { PresenceContext } from "./PresenceContext";
+    import { PresenceContext } from '../../context/PresenceContext.js';
     import { getContext } from "svelte";
     let presenceContext = getContext(PresenceContext) || PresenceContext();
 </script>

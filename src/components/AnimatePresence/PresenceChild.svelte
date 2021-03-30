@@ -12,7 +12,7 @@
 
 <script>
     import { afterUpdate, setContext, tick } from "svelte";
-    import { PresenceContext } from "./PresenceContext";
+    import { PresenceContext } from '../../context/PresenceContext.js';
     export let isPresent,
         onExitComplete = undefined,
         initial,

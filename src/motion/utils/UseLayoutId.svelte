@@ -1,6 +1,6 @@
 <script>
     import { getContext } from "svelte";
-    import { LayoutGroupContext } from "../../components/AnimateSharedLayout/LayoutGroupContext";
+    import { LayoutGroupContext } from "../../context/LayoutGroupContext"
     export let props;
     $: ({ layoutId } = props);
     const layoutGroupId =

@@ -46,15 +46,13 @@
         const isControllingVariants = checkIfControllingVariants(props);
         const isVariantNode = checkIfVariantNode(props);
 
-        if (
-            context &&
-            isVariantNode &&
-            !isControllingVariants &&
-            props.inherit !== false
-        ) {
-            initial ??= context.initial;
-            animate ??= context.animate;
-        }
+        if (context &&
+        isVariantNode &&
+        !isControllingVariants &&
+        props.inherit !== false) {
+        initial !== null && initial !== void 0 ? initial : (initial = context.initial);
+        animate !== null && animate !== void 0 ? animate : (animate = context.animate);
+    }
 
         const variantToSet =
             blockInitialAnimation || initial === false ? animate : initial;
@@ -85,15 +83,18 @@
 
 <script>
     import { getContext } from "svelte";
-    import { PresenceContext } from "../../components/AnimatePresence/PresenceContext";
-    import MotionContext from "../context/MotionContext.svelte";
+    import {get}from 'svelte/store';
+    import { PresenceContext } from "../../context/PresenceContext";
+    import {MotionContext} from "../../context/MotionContext/index.js";
 
     export let config, props, isStatic;
+
     const context = getContext(MotionContext) || MotionContext();
     const presenceContext = getContext(PresenceContext) || PresenceContext();
     let state = makeState(config, props, get(context), get(presenceContext));
-    $: if (isStatic) {
-        state = makeState(config, props, $context, $presenceContext);
+    const ms = makeState;
+    $: if (isStatic) {    
+        state = ms(config, props, $context, $presenceContext);
     }
 </script>
 

@@ -1,11 +1,11 @@
-import { __assign, __rest, __spread } from 'tslib';
+import { __assign, __rest, __spreadArray, __read } from 'tslib';
 import { inertia, animate } from 'popmotion';
 //import { warning } from 'hey-listen';
 import { secondsToMilliseconds } from '../../utils/time-conversion.js';
 import { isEasingArray, easingDefinitionToFunction } from './easing.js';
 import { isAnimatable } from './is-animatable.js';
 import { getDefaultTransition } from './default-transitions.js';
-import { getAnimatableNone } from '../../render/dom/utils/value-types.js';
+import { getAnimatableNone } from '../../render/dom/value-types/animatable-none.js';
 
 /**
  * Decide whether a transition is defined on a given Transition.
@@ -13,7 +13,7 @@ import { getAnimatableNone } from '../../render/dom/utils/value-types.js';
  * if any options are left.
  */
 function isTransitionDefined(_a) {
-    var when = _a.when, delay = _a.delay, delayChildren = _a.delayChildren, staggerChildren = _a.staggerChildren, staggerDirection = _a.staggerDirection, repeat = _a.repeat, repeatType = _a.repeatType, repeatDelay = _a.repeatDelay, from = _a.from, transition = __rest(_a, ["when", "delay", "delayChildren", "staggerChildren", "staggerDirection", "repeat", "repeatType", "repeatDelay", "from"]);
+    _a.when; _a.delay; _a.delayChildren; _a.staggerChildren; _a.staggerDirection; _a.repeat; _a.repeatType; _a.repeatDelay; _a.from; var transition = __rest(_a, ["when", "delay", "delayChildren", "staggerChildren", "staggerDirection", "repeat", "repeatType", "repeatDelay", "from"]);
     return !!Object.keys(transition).length;
 }
 var legacyRepeatWarning = false;
@@ -72,18 +72,19 @@ function convertTransitionToAnimationOptions(_a) {
     return options;
 }
 /**
- * Get the delay for a value by checking Transition with decreasing specificity.
- */
+* Get the delay for a value by checking Transition with decreasing specificity.
+*/
 function getDelayFromTransition(transition, key) {
-    var _a, _b, _c, _d, _e;
-    return ((_e = (_d = (_b = (_a = transition[key]) === null || _a === void 0 ? void 0 : _a.delay) !== null && _b !== void 0 ? _b : (_c = transition["default"]) === null || _c === void 0 ? void 0 : _c.delay) !== null && _d !== void 0 ? _d : transition.delay) !== null && _e !== void 0 ? _e : 0);
+   var _a;
+   var valueTransition = getValueTransition(transition, key) || {};
+   return (_a = valueTransition.delay) !== null && _a !== void 0 ? _a : 0;
 }
 function hydrateKeyframes(options) {
-    if (Array.isArray(options.to) && options.to[0] === null) {
-        options.to = __spread(options.to);
-        options.to[0] = options.from;
-    }
-    return options;
+   if (Array.isArray(options.to) && options.to[0] === null) {
+       options.to = __spreadArray([], __read(options.to));
+       options.to[0] = options.from;
+   }
+   return options;
 }
 function getPopmotionAnimationOptions(transition, options, key) {
     var _a;

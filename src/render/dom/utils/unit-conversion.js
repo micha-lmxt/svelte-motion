@@ -1,9 +1,9 @@
 import { __assign, __read } from 'tslib';
-import { transformProps } from './transform.js';
-//import { invariant } from 'hey-listen';
 import { number, px } from 'style-value-types';
 import { isKeyframesTarget } from '../../../animation/utils/is-keyframes-target.js';
-import { findDimensionValueType } from './value-types.js';
+//import { invariant } from 'hey-listen';
+import { transformProps } from '../../html/utils/transform.js';
+import { findDimensionValueType } from '../value-types/dimensions.js';
 
 var positionalKeys = new Set([
     "width",
@@ -161,7 +161,7 @@ var checkAndConvertChangedValueTypes = function (visualElement, target, origin, 
                     //    (isNumOrPxType(fromType) && isNumOrPxType(toType)), "Keyframes must be of the same dimension as the current value");
                 }
                 //else {
-                //    invariant(findDimensionValueType(to[i]) === toType, "All keyframes must be of the same type");
+                ///    invariant(findDimensionValueType(to[i]) === toType, "All keyframes must be of the same type");
                 //}
             }
         }
@@ -183,7 +183,8 @@ var checkAndConvertChangedValueTypes = function (visualElement, target, origin, 
                     target[key] = to.map(parseFloat);
                 }
             }
-            else if ((fromType === null || fromType === void 0 ? void 0 : fromType.transform) && (toType === null || toType === void 0 ? void 0 : toType.transform) &&
+            else if ((fromType === null || fromType === void 0 ? void 0 : fromType.transform) &&
+                (toType === null || toType === void 0 ? void 0 : toType.transform) &&
                 (from === 0 || to === 0)) {
                 // If one or the other value is 0, it's safe to coerce it to the
                 // type of the other without measurement

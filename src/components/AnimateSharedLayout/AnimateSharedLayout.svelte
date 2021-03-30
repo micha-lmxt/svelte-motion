@@ -1,24 +1,50 @@
 <script context="module">
-    import { MotionContext } from '../../motion/context/MotionContext';
+    import { MotionContext } from '../../context/MotionContext/index.js';
     let contextType = MotionContext;
 </script>
 <script>
     import { Presence } from './types';
-
-    import { createBatcher, SharedLayoutContext } from './SharedLayoutContext';
+    import { createBatcher } from "./utils/batcher"
+    import { SharedLayoutContext } from "../../context/SharedLayoutContext"
+    
     import { layoutStack } from './utils/stack';
     import { resetRotate } from './utils/rotate';
     import { afterUpdate, onMount, setContext } from 'svelte';
 
 
     export let type = undefined;
-
+    const shouldComponentUpdate= ()=>{
+        renderScheduled=true;
+    }
+    $: shouldComponentUpdate(type);
+    /**
+     * Track whether the component has mounted. If it hasn't, the presence of added children
+     * are set to Present, whereas if it has they're considered Entering
+     */
     let hasMounted = false;
+        /**
+     * A list of all the children in the shared layout
+     */
     let children = new Set();
+        /**
+     * As animate components with a defined `layoutId` are added/removed to the tree,
+     * we store them in order. When one is added, it will animate out from the
+     * previous one, and when it's removed, it'll animate to the previous one.
+     */
     let stacks = new Map();
+        /**
+     * Track whether we already have an update scheduled. If we don't, we'll run snapshots
+     * and schedule one.
+     */
     let updateScheduled = false;
+        /**
+     * Tracks whether we already have a render scheduled. If we don't, we'll force one with this.forceRender
+     */
     let renderScheduled = false;
     let context;
+        /**
+     * The methods provided to all children in the shared layout tree.
+     */
     let syncContext = {
         ...createBatcher(),
         syncUpdate: (force) => scheduleUpdate(force),

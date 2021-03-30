@@ -1,19 +1,19 @@
 import { __rest, __assign } from 'tslib';
-import { progress } from 'popmotion';
-import { eachAxis } from '../../utils/each-axis.js';
-import { axisBox, convertAxisBoxToBoundingBox, convertBoundingBoxToAxisBox } from '../../utils/geometry/index.js';
-import { calcOrigin } from '../../utils/geometry/delta-calc.js';
-import { isRefObject } from '../../utils/is-ref-object.js';
 //import { invariant } from 'hey-listen';
-import { startAnimation } from '../../animation/utils/transitions.js';
-import { AnimationType } from '../../render/utils/types.js';
-import { getBoundingBox } from '../../render/dom/projection/measure.js';
-import { getViewportPointFromEvent } from '../../events/event-info.js';
-import { addDomEvent } from '../../events/use-dom-event.js';
-import { addPointerEvent } from '../../events/use-pointer-event.js';
+import { progress } from 'popmotion';
 import { PanSession } from '../PanSession.js';
 import { getGlobalLock } from './utils/lock.js';
+import { isRefObject } from '../../utils/is-ref-object.js';
+import { addPointerEvent } from '../../events/use-pointer-event.js';
+import { addDomEvent } from '../../events/use-dom-event.js';
+import { getViewportPointFromEvent } from '../../events/event-info.js';
+import { axisBox, convertAxisBoxToBoundingBox, convertBoundingBoxToAxisBox } from '../../utils/geometry/index.js';
+import { eachAxis } from '../../utils/each-axis.js';
 import { calcRelativeConstraints, resolveDragElastic, rebaseAxisConstraints, calcViewportConstraints, applyConstraints, calcConstrainedMinPoint, calcPositionFromProgress, defaultElastic } from './utils/constraints.js';
+import { getBoundingBox } from '../../render/dom/projection/measure.js';
+import { calcOrigin } from '../../utils/geometry/delta-calc.js';
+import { startAnimation } from '../../animation/utils/transitions.js';
+import { AnimationType } from '../../render/utils/types.js';
 
 var elementDragControls = new WeakMap();
 /**

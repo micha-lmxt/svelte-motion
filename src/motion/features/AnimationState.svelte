@@ -3,7 +3,8 @@
 
     import { createAnimationState } from "../../render/utils/animation-state";
     import { isAnimationControls } from "../../animation/utils/is-animation-controls.js";
-    export let visualElement, animate;
+    export let visualElement, props;
+    $: ({animate} = props);
     /**
      * We dynamically generate the AnimationState manager as it contains a reference
      * to the underlying animation library. We only want to load that if we load this,

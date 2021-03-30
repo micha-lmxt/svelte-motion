@@ -1,8 +1,11 @@
-import { __spread } from 'tslib';
+import { __spreadArray, __read } from 'tslib';
 //import { invariant } from 'hey-listen';
-import { setValues } from '../render/utils/setters.js';
 import { stopAnimation, animateVisualElement } from '../render/utils/animation.js';
+import { setValues } from '../render/utils/setters.js';
 
+/**
+ * @public
+ */
 function animationControls() {
     /**
      * Track whether the host component has mounted.
@@ -29,9 +32,7 @@ function animationControls() {
              * isn't behaviour concurrent-safe so when we make Framer concurrent-safe
              * we can ditch this.
              */
-            
             if (hasMounted) {
-                
                 var animations_1 = [];
                 subscribers.forEach(function (visualElement) {
                     animations_1.push(animateVisualElement(visualElement, definition, {
@@ -64,7 +65,7 @@ function animationControls() {
             hasMounted = true;
             pendingAnimations.forEach(function (_a) {
                 var animation = _a.animation, resolve = _a.resolve;
-                controls.start.apply(controls, __spread(animation)).then(resolve);
+                controls.start.apply(controls, __spreadArray([], __read(animation))).then(resolve);
             });
             return function () {
                 hasMounted = false;
@@ -74,6 +75,5 @@ function animationControls() {
     };
     return controls;
 }
-
 
 export { animationControls };

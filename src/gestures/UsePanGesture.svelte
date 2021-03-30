@@ -1,12 +1,12 @@
 <script>
-    import { MotionConfigContext } from "../motion/context/MotionConfigContext";
+    import { MotionConfigContext } from '../context/MotionConfigContext.js';
     import { PanSession } from "./PanSession"
     import { afterUpdate, getContext, onDestroy } from "svelte";
     import { UsePointerEvent } from "../events/use-pointer-event"
 
 
     export let props,
-        ref;
+        visualElement;
     $: ({ onPan, onPanStart, onPanEnd, onPanSessionStart } = props);
     $:( hasPanEvents = onPan || onPanStart || onPanEnd || onPanSessionStart)
     let panSession = null;
@@ -37,6 +37,6 @@
     onDestroy(() => panSession && panSession.end())
 
 </script>
-<UsePointerEvent {ref} eventName="pointerdown" handler={hasPanEvents && onPointerDown}>
+<UsePointerEvent ref={visualElement} eventName="pointerdown" handler={hasPanEvents && onPointerDown}>
     <slot/>
 </UsePointerEvent>

@@ -1,22 +1,18 @@
-import { createDomVisualElement } from './create-dom-visual-element.js';
+import { createDomVisualElement } from './create-visual-element.js';
 import { createMotionComponent } from '../../motion/index.js';
-import { Drag } from '../../motion/features/drag.js';
-import { Gestures } from '../../motion/features/gestures.js';
-import { Exit } from '../../motion/features/exit.js';
-import { Animation } from '../../motion/features/animation.js';
-import { AnimateLayout } from '../../motion/features/layout/Animate.js';
-import { MeasureLayout } from '../../motion/features/layout/Measure.js';
+import { animations } from "../../motion/features/animations"
 import {createMotionClass} from './create-motion-class.js';
+import { gestureAnimations } from "../../motion/features/gestures"
+import { drag } from "../../motion/features/drag"
+import { layoutAnimations } from "../../motion/features/layout"
 //import { createMotionProxy } from './motion-proxy.js';
 
-var allMotionFeatures = [
-    MeasureLayout,
-    Animation,
-    Drag,
-    Gestures,
-    Exit,
-    AnimateLayout,
-];
+const featureBundle = {
+    ...animations,
+    ...gestureAnimations,
+    ...drag,
+    ...layoutAnimations,
+}
 
 /**
  * HTML & SVG components, optimised for use with gestures and animation. These can be used as
@@ -25,7 +21,7 @@ var allMotionFeatures = [
  * @public
  */
 var motion = /*@__PURE__*/ //createMotionProxy(allMotionFeatures);
-    createMotionClass(allMotionFeatures)
+    createMotionClass(featureBundle)
 /**
  * Create a DOM `motion` component with the provided string. This is primarily intended
  * as a full alternative to `motion` for consumers who have to support environments that don't

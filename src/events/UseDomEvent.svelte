@@ -6,9 +6,13 @@
             return target.removeEventListener(eventName, handler, options);
         };
     }
+    
 </script>
 
 <script>
+import { onDestroy } from "svelte";
+
+
     /**
      * Attaches an event listener directly to the provided DOM element.
      *
@@ -34,16 +38,21 @@
         eventName,
             handler=undefined,
             options=undefined;
+    let cleanup = ()=>{};
     const effect = ()=>{
+        cleanup();
         if (!ref){
-            return;
+            return ()=>{};
         }
         const element = ref.current
 
         if (handler && element) {
             return addDomEvent(element, eventName, handler, options)
         }
+        return ()=>{};
     }
-    $: effect(ref, eventName, handler, options);
+    
+    $: (cleanup = effect(ref, eventName, handler, options));
+    onDestroy(cleanup);
 </script>
 <slot/>

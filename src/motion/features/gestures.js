@@ -1,14 +1,13 @@
-import { gestureProps } from '../../gestures/types';
-import GestureComponent from './Gestures.svelte';
+import { UseFocusGesture } from '../../gestures/use-focus-gesture.js';
+import { UseHoverGesture } from '../../gestures/use-hover-gesture.js';
+import { UseTapGesture } from '../../gestures/use-tap-gesture.js';
 /**
  * @public
  */
-var Gestures = {
-    key: "gestures",
-    shouldRender: function (props) {
-        return gestureProps.some(function (key) { return props.hasOwnProperty(key); });
-    },
-    getComponent: function () { return GestureComponent; },
+const gestureAnimations = {
+    tap: UseTapGesture,
+    focus: UseFocusGesture,
+    hover: UseHoverGesture,
 };
 
-export { Gestures };
+export { gestureAnimations };

@@ -1,12 +1,10 @@
 <script>
     import { getContext } from "svelte";
-    import {
-        FramerTreeLayoutContext,
-        SharedLayoutContext,
-    } from "../../../components/AnimateSharedLayout/SharedLayoutContext";
+    import { SharedLayoutContext, FramerTreeLayoutContext } from '../../../context/SharedLayoutContext.js';
     import Measure from "./Measure.svelte";
 
-    export let visualElement;
+    export let visualElement,update;
+    
 
     const syncLayout = getContext(SharedLayoutContext) || SharedLayoutContext();
     const framerSyncLayout =
@@ -16,6 +14,5 @@
 <Measure
     syncLayout={$syncLayout}
     framerSyncLayout={$framerSyncLayout}
-    {visualElement} >
-<slot/>
-</Measure>
+    {visualElement} 
+    {update}/>

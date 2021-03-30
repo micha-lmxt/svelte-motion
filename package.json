@@ -16,5 +16,7 @@
     "svelte": "^3.35.0",
     "tslib": "^2.1.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "framer-motion": "^4.0.3"
+  }
 }

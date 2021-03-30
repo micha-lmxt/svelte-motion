@@ -2,17 +2,17 @@
 
 import { UsePresence } from "../../components/AnimatePresence/use-presence"
 import { getContext } from "svelte";
-import { PresenceContext } from "../../components/AnimatePresence/PresenceContext";
+import { PresenceContext } from "../../context/PresenceContext";
 import { AnimationType } from "../../render/utils/types";
 
     
 
-    export let custom,
+    export let props,
         visualElement;
+    $: ({custom} = props);
     const presenceContext = getContext(PresenceContext)||PresenceContext();
 
     const effect = (isPresent,onExitComplete)=> {
-        console.log(isPresent,onExitComplete)
         const animation = visualElement.animationState?.setActive(
             AnimationType.Exit,
             !isPresent,
