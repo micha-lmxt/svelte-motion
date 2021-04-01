@@ -1,11 +1,13 @@
 <script>
     import { getContext } from "svelte";
+    import { get } from 'svelte/store';
     import { MotionContext } from './index.js';
     import { getCurrentTreeVariants } from './utils.js';
 
     export let props, 
         isStatic;
         let mc = getContext(MotionContext)||MotionContext();
+        let {initial, animate} = getCurrentTreeVariants(props, get(mc)));
         $: ({initial,animate} = getCurrentTreeVariants(props, $mc));
 
     const variantLabelsAsDependency = (prop) => {
