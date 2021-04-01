@@ -6,7 +6,7 @@
     import { LayoutGroupContext } from '../../context/LayoutGroupContext'
     import {MotionContext} from "../../context/MotionContext/index.js";
     import { isPresent } from '../../components/AnimatePresence/use-presence.js';
-import { get } from "svelte/store";
+    import { get } from "svelte/store";
 
     export let createVisualElement=undefined,
         props,

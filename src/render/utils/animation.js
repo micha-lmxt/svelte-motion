@@ -74,6 +74,7 @@ function animateVariant(visualElement, variant, options) {
  * @internal
  */
 function animateTarget(visualElement, definition, _a) {
+    console.log("aniTar",visualElement.path,definition,_a)
     var _b;
     var _c = _a === void 0 ? {} : _a, _d = _c.delay, delay = _d === void 0 ? 0 : _d, transitionOverride = _c.transitionOverride, type = _c.type;
     var _e = visualElement.makeTargetAnimatable(definition), _f = _e.transition, transition = _f === void 0 ? visualElement.getDefaultTransition() : _f, transitionEnd = _e.transitionEnd, target = __rest(_e, ["transition", "transitionEnd"]);

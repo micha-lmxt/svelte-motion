@@ -63,6 +63,7 @@ function createAnimationState(visualElement) {
      *    what to animate those to.
      */
     function animateChanges(options, changedActiveType) {
+        
         var props = visualElement.getProps();
         var context = visualElement.getVariantContext(true) || {};
         /**
@@ -113,6 +114,7 @@ function createAnimationState(visualElement) {
                 visualElement.manuallyAnimateOnMount) {
                 isInherited = false;
             }
+            
             /**
              * Set all encountered keys so far as the protected keys for this type. This will
              * be any key that has been animated or otherwise handled by active, higher-priortiy types.
@@ -278,6 +280,7 @@ function createAnimationState(visualElement) {
             !visualElement.manuallyAnimateOnMount) {
             shouldAnimate = false;
         }
+        console.log("iir",visualElement.path,isInitialRender,shouldAnimate)
         isInitialRender = false;
         return shouldAnimate ? animate(animations) : Promise.resolve();
     }

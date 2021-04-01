@@ -206,6 +206,7 @@ let:value={context}>
             
             
             {#each _features as feat (feat.key)}
+                {console.log("fet",visualElement.path)||""}
                 <svelte:component this={feat.Component} props={feat.props} visualElement={feat.visualElement} {...(feat.key==="measureLayout"?{update}:{})}/>
             {/each}
            

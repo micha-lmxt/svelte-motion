@@ -1,5 +1,5 @@
 import sync from 'framesync';
-impirt { tick } from 'svelte';
+import { tick } from 'svelte';
 import { get } from 'svelte/store';
 import { motionValue } from '.';
 
