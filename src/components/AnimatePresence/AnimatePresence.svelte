@@ -137,7 +137,7 @@
         });
         */
         presentChildren = childrenToRender;
-        console.log(childrenToRender);
+        
     } else {
         isInitialRender = false;
     }

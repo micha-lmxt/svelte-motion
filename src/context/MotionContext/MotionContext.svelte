@@ -1,6 +1,7 @@
 <script context="module">
     import {writable} from 'svelte/store';
-    export const MotionContext = () => writable(null);
+    export const MotionContext = () => writable({});
+    
     export const useVisualElementContext = ()=>{
         return (getContext(MotionContext)||MotionContext())
     }

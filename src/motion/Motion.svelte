@@ -11,7 +11,7 @@
     import {UseCreateMotionContext} from "../context/MotionContext/create";
     import {UseVisualState} from './utils/use-visual-state.js';
     import {useMotionRef} from "./utils/use-motion-ref.js";
-import MotionContext from "../context/MotionContext/MotionContext.svelte";
+
 
     export let isSVG = false,
         isCustom = false,
@@ -182,6 +182,7 @@ let:value={context}>
             visualElement={setContext(context,visualElement)}
             props={motionProps}
             let:features={_features}>
+            
             <MotionContextProvider value={context}>
             <UseRender
                 {Component}
@@ -197,15 +198,17 @@ let:value={context}>
                 let:motion
                 let:props={renderProps}>
                 
-                    <slot motion={(node)=>{motion(node);mounted=true}} props={renderProps} />
+                    <slot motion={(node)=>{motion(node);mounted=true;}} props={renderProps} />
                 
             </UseRender>
             </MotionContextProvider>
-            {#if mounted}
+            
+            
+            
             {#each _features as feat (feat.key)}
                 <svelte:component this={feat.Component} props={feat.props} visualElement={feat.visualElement} {...(feat.key==="measureLayout"?{update}:{})}/>
             {/each}
-            {/if}
+           
         </UseFeatures>
     </UseVisualElement>
 </UseVisualState>

@@ -1,6 +1,6 @@
 <script>
 
-import { afterUpdate, onDestroy, onMount, tick} from "svelte";
+import { afterUpdate, onDestroy, onMount} from "svelte";
 import {isSharedLayout} from "../../../context/SharedLayoutContext"
 
     export let visualElement,
@@ -24,10 +24,7 @@ import {isSharedLayout} from "../../../context/SharedLayoutContext"
                 framerSyncLayout.remove(visualElement)
             }
         })
-        /*tick().then(()=>{
-            unsub = visualElement.onLayoutAnimationComplete(updater)
-            updater();
-        })*/
+      
     })
     onDestroy(unsub)
     /**
@@ -37,7 +34,6 @@ import {isSharedLayout} from "../../../context/SharedLayoutContext"
      * If it is stand-alone component, add it to the batcher.
      */
     const updater= ()=>{
-        console.log("update")
         if (isSharedLayout(syncLayout)) {
             syncLayout.syncUpdate()
         } else {
@@ -49,7 +45,7 @@ import {isSharedLayout} from "../../../context/SharedLayoutContext"
     }
 
     $: updater(update);
-    $: console.log(update)
+    
 
     afterUpdate(()=>{
         

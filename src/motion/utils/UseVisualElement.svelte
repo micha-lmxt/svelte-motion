@@ -6,6 +6,7 @@
     import { LayoutGroupContext } from '../../context/LayoutGroupContext'
     import {MotionContext} from "../../context/MotionContext/index.js";
     import { isPresent } from '../../components/AnimatePresence/use-presence.js';
+import { get } from "svelte/store";
 
     export let createVisualElement=undefined,
         props,
@@ -15,14 +16,19 @@
     const config = getContext(MotionConfigContext) || MotionConfigContext();
     const presenceContext = getContext(PresenceContext) || PresenceContext();
     const lazyContext = getContext(LazyContext) || LazyContext();
-    const parent = getContext(MotionContext) || MotionContext();
+    const mc = getContext(MotionContext) || MotionContext();
+    let parent = get(mc).visualElement;
+    $: (parent = $mc.visualElement);
     const layoutGroupId =
         getContext(LayoutGroupContext) || LayoutGroupContext();
+    let layoutId = $layoutGroupId && props.layoutId !== undefined
+            ? $layoutGroupId + "-" + props.layoutId
+            : props.layoutId;
     $: (layoutId =
         $layoutGroupId && props.layoutId !== undefined
             ? $layoutGroupId + "-" + props.layoutId
             : props.layoutId);
-
+    
     let visualElementRef = undefined;
     /**
      * If we haven't preloaded a renderer, check to see if we have one lazy-loaded
@@ -31,19 +37,22 @@
         createVisualElement = $lazyContext.renderer;
     }
 
-    if (!visualElementRef && createVisualElement) {
+    $: if (!visualElementRef && createVisualElement) {
+        
         visualElementRef = createVisualElement(Component, {
             visualState,
-            parent:$parent,
+            parent:parent,
             props: { ...props, layoutId },
             presenceId: $presenceContext?.id,
             blockInitialAnimation: $presenceContext?.initial === false,
         });
     }
+    let visualElement = visualElementRef;
     $: (visualElement = visualElementRef);
     afterUpdate(() => {
+        
         if (!visualElement) return;
-
+        
         visualElement.setProps({
             ...$config,
             ...props,
@@ -52,7 +61,7 @@
 
         visualElement.isPresent = isPresent($presenceContext);
         visualElement.isPresenceRoot =
-            !$parent || $parent.presenceId !== $presenceContext?.id;
+            !parent || parent.presenceId !== $presenceContext?.id;
 
         /**
          * Fire a render to ensure the latest state is reflected on-screen.

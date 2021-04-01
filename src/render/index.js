@@ -133,6 +133,7 @@ var visualElement = function (_a) {
             triggerBuild();
             
             renderInstance(instance, renderState);
+            
         }
         function triggerBuild() {
             var valuesToRender = latestValues;
@@ -145,7 +146,7 @@ var visualElement = function (_a) {
             build(element, renderState, valuesToRender, leadProjection, layoutState, options, props);
         }
         function update() {
-            console.log("UPDATE")
+            
             lifecycles.notifyUpdate(latestValues);
         }
         function updateLayoutProjection() {
@@ -202,6 +203,8 @@ var visualElement = function (_a) {
          */
         var isControllingVariants = checkIfControllingVariants(props);
         var isVariantNode = checkIfVariantNode(props);
+
+        
         var element = __assign(__assign({ treeType: treeType, 
             /**
              * This is a mirror of the internal instance prop, which keeps
@@ -216,7 +219,9 @@ var visualElement = function (_a) {
              * An ancestor path back to the root visual element. This is used
              * by layout projection to quickly recurse back up the tree.
              */
-            path: parent ? __spreadArray(__spreadArray([], __read(parent.path)), [parent]) : [], layoutTree: parent ? parent.layoutTree : new FlatTree(), 
+            path: parent ? [...parent.path, parent]:[],
+            
+            layoutTree: parent ? parent.layoutTree : new FlatTree(), 
             /**
              *
              */
@@ -466,6 +471,7 @@ var visualElement = function (_a) {
              * added to our map, old ones removed, and listeners updated.
              */
             setProps: function (newProps) {
+                
                 props = newProps;
                 lifecycles.updatePropListeners(newProps);
                 prevMotionValues = updateMotionValuesFromProps(element, scrapeMotionValuesFromProps(props), prevMotionValues);
@@ -636,7 +642,7 @@ var visualElement = function (_a) {
              * needs to be performed.
              */
             notifyLayoutReady: function (config) {
-                console.log("NOTIFY LAYOUT READY")
+                
                 element.notifyLayoutUpdate(layoutState.layout, element.prevViewportBox || layoutState.layout, config);
             }, 
             /**
