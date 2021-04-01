@@ -1,5 +1,5 @@
 <script>
-    import { afterUpdate, getContext, onDestroy } from "svelte";
+    import { afterUpdate, getContext, onDestroy, tick} from "svelte";
     import { PresenceContext } from "../../context/PresenceContext";
     import { LazyContext } from "../../context/LazyContext";
     import { MotionConfigContext } from "../../context/MotionConfigContext";
@@ -72,7 +72,7 @@ import { get } from "svelte/store";
          * In a future refactor we can replace the features-as-components and
          * have this loop through them all firing "effect" listeners
          */
-         visualElement.animationState?.animateChanges()
+         tick().then(()=>visualElement.animationState?.animateChanges())
     });
     onDestroy(()=>visualElement?.notifyUnmount())
 </script>
