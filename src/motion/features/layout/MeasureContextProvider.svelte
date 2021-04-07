@@ -5,8 +5,8 @@
 
     export let visualElement,update;
     
-
     const syncLayout = getContext(SharedLayoutContext) || SharedLayoutContext();
+
     const framerSyncLayout =
         getContext(FramerTreeLayoutContext) || FramerTreeLayoutContext();
 </script>

@@ -1,3 +1,5 @@
+
+import { getFrameData, flushSync } from "framesync"
 import { compareByDepth } from '../../../render/utils/compare-by-depth.js';
 import { Presence } from '../types.js';
 
@@ -46,6 +48,9 @@ function createBatcher() {
                 if (child.isPresent)
                     child.presence = Presence.Present;
             });
+
+            flushSync.preRender()
+            flushSync.render()
             queue.clear();
         },
     };

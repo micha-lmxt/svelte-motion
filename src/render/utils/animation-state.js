@@ -280,7 +280,7 @@ function createAnimationState(visualElement) {
             !visualElement.manuallyAnimateOnMount) {
             shouldAnimate = false;
         }
-        console.log("iir",visualElement.path,isInitialRender,shouldAnimate)
+
         isInitialRender = false;
         return shouldAnimate ? animate(animations) : Promise.resolve();
     }

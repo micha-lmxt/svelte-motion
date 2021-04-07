@@ -1,6 +1,6 @@
 <script context="module">
-    import { MotionContext } from '../../context/MotionContext/index.js';
-    let contextType = MotionContext;
+    
+ 
 </script>
 <script>
     import { Presence } from './types';
@@ -9,14 +9,23 @@
     
     import { layoutStack } from './utils/stack';
     import { resetRotate } from './utils/rotate';
-    import { afterUpdate, onMount, setContext } from 'svelte';
+    import { afterUpdate, getContext, onMount, setContext ,tick} from 'svelte';
+    import { get } from "svelte/store";
+    import { writable } from 'svelte/store';
+    import { MotionContext } from '../../context/MotionContext/index.js';
 
 
-    export let type = undefined;
+    export let type = undefined,
+        update=undefined ;
+    
+    const context = getContext(MotionContext)||MotionContext();
     const shouldComponentUpdate= ()=>{
+
         renderScheduled=true;
+        //setSyncContext();
+        //syncContext = { ...syncContext }
     }
-    $: shouldComponentUpdate(type);
+    $: shouldComponentUpdate(type,update);
     /**
      * Track whether the component has mounted. If it hasn't, the presence of added children
      * are set to Present, whereas if it has they're considered Entering
@@ -41,7 +50,15 @@
      * Tracks whether we already have a render scheduled. If we don't, we'll force one with this.forceRender
      */
     let renderScheduled = false;
-    let context;
+ 
+
+    let forced = false;
+    const resetForced = ()=>{
+        if (forced){
+            forced=false;
+        }
+    }
+    $: resetForced(forced);
         /**
      * The methods provided to all children in the shared layout tree.
      */
@@ -51,14 +68,25 @@
         forceUpdate: () => {
             // By copying syncContext to itself, when this component re-renders it'll also re-render
             // all children subscribed to the SharedLayout context.
-            syncContext = { syncContext }
-            scheduleUpdate(true)
+            //syncContext = { ...syncContext }
+            //scheduleUpdate(true)
+            //syncContext = { ...syncContext }
+            setSyncContext()
+            scheduleUpdate(true) 
+
+            forced=true;
+                
+            
         },
         register: (child) => addChild(child),
-        remove: (child) => removeChild(child),
+        remove: (child) => {
+            removeChild(child)
+            
+        },
     }
 
     const startLayoutAnimation = ()=>{
+       
         /**
          * Reset update and render scheduled status
          */
@@ -78,7 +106,7 @@
                         : Presence.Present
             }
         })
-
+        
         updateStacks()
 
          /**
@@ -94,7 +122,7 @@
                     child.notifyLayoutReady()
                 }
             },
-            parent: context,
+            parent: get(context).visualElement,
         }
         /**
          * Shared layout animations can be used without the AnimateSharedLayout wrapping component.
@@ -110,6 +138,7 @@
          * Clear snapshots so subsequent rerenders don't retain memory of outgoing components
          */
         stacks.forEach((stack) => stack.clearSnapshot())
+        
     }
 
     const updateStacks = () => {
@@ -117,6 +146,7 @@
     }
     
     const scheduleUpdate = (force = false) => {
+
         if (!(force || !updateScheduled)) return
 
         /**
@@ -148,8 +178,8 @@
          * Force a rerender by setting state if we aren't already going to render.
          */
         if (force || !renderScheduled) {
-            renderScheduled = true
-            forceUpdate()
+            renderScheduled = true;
+            forced=true;
         }
     }
 
@@ -161,9 +191,13 @@
     }
 
     const removeChild = (child) => {
+        
         scheduleUpdate()
         children.delete(child)
         removeFromStack(child)
+        
+            
+        
     }
 
     const addToStack = (child) => {
@@ -174,6 +208,8 @@
     const removeFromStack = (child) => {
         const stack = getStack(child)
         stack?.remove(child)
+        
+        
     }
     
     /**
@@ -189,13 +225,25 @@
 
         return stacks.get(id) 
     }
+    let sc = writable(syncContext);
 
-    setContext(SharedLayoutContext,syncContext);
+    const setSyncContext = ()=>{
+        syncContext = {...syncContext};
+        sc.set(syncContext);
+        //forced = !forced
+    }
+    //$: sc.set(syncContext)
+    setContext(SharedLayoutContext,sc);
 
     onMount(()=>{
         hasMounted=true;
     })
+
+    //afterUpdate(()=>!forced && startLayoutAnimation())
+    //const falseForced = ()=>{forced=false;return true;}
+    //$: forced && renderScheduled && falseForced() && startLayoutAnimation() 
+    //$: forced && renderScheduled && falseForced() && tick().then(startLayoutAnimation)
     afterUpdate(startLayoutAnimation)
 
 </script>
-<slot/>
+<slot {renderScheduled}/>

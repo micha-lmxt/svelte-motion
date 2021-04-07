@@ -1,5 +1,5 @@
 <script>
-    import { getContext } from "svelte";
+    import { afterUpdate, getContext} from "svelte";
     import {
         SharedLayoutContext,
         isSharedLayout,
@@ -50,6 +50,7 @@
             key: v.key,
         })),
     ];
+    let xforce = undefined;
     $: if (!isInitialRender) {
         // If this is a subsequent render, deal with entering and exiting children
         childrenToRender = [
@@ -104,9 +105,11 @@
 
                 // Defer re-rendering until all exiting children have indeed left
                 if (!exiting.size) {
-                    presentChildren = filteredChildren;
+                    presentChildren = filteredChildren;                   
                     forceRender();
                     onExitComplete && onExitComplete();
+                    
+                    
                 }
             };
 
@@ -141,6 +144,12 @@
     } else {
         isInitialRender = false;
     }
+    afterUpdate(()=>{
+        if (xforce){
+            xforce();
+            xforce=undefined;
+        }
+    })
 </script>
 
 {#each childrenToRender as child (getChildKey(child))}

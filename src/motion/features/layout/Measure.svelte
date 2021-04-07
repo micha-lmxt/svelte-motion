@@ -1,14 +1,12 @@
 <script>
 
-import { afterUpdate, onDestroy, onMount} from "svelte";
+import { afterUpdate,  onMount} from "svelte";
 import {isSharedLayout} from "../../../context/SharedLayoutContext"
 
     export let visualElement,
         syncLayout,
         framerSyncLayout,
         update;
-
-    let unsub = ()=>{}
 
     onMount(()=>{
         isSharedLayout(syncLayout) && syncLayout.register(visualElement)
@@ -26,16 +24,24 @@ import {isSharedLayout} from "../../../context/SharedLayoutContext"
         })
       
     })
-    onDestroy(unsub)
     /**
      * If this is a child of a SyncContext, notify it that it needs to re-render. It will then
      * handle the snapshotting.
      *
      * If it is stand-alone component, add it to the batcher.
      */
-    const updater= ()=>{
+    const updaterForce = ()=>{
+        updater(undefined,true)
+    }
+    const updater = (_,force=false)=>{
         if (isSharedLayout(syncLayout)) {
-            syncLayout.syncUpdate()
+            if (force){
+                //syncLayout.forceUpdate();
+                syncLayout.syncUpdate(true)
+
+            }else{
+                syncLayout.syncUpdate()             
+            }
         } else {
             visualElement.snapshotViewportBox()
             syncLayout.add(visualElement)
@@ -44,12 +50,14 @@ import {isSharedLayout} from "../../../context/SharedLayoutContext"
         return null
     }
 
-    $: updater(update);
+    $: update!==undefined && updaterForce();
+    $: updater(syncLayout);
     
+    //beforeUpdate(updater)
 
     afterUpdate(()=>{
         
-        
+
         if (!isSharedLayout(syncLayout)) {
             syncLayout.flush()
         }
@@ -59,7 +67,6 @@ import {isSharedLayout} from "../../../context/SharedLayoutContext"
          * to the measured box
          */
         visualElement.rebaseProjectionTarget()
-
       
     })
 </script>

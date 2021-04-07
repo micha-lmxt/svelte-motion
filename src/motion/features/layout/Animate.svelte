@@ -130,11 +130,14 @@
         visualElement.layoutSafeToRemove = () => safeToRemove();
 
         addScaleCorrection(defaultScaleCorrectors)
+
     });
 
     onDestroy(() => {
+        
         unsubLayoutReady();
         eachAxis((axis) => stopAxisAnimation[axis]?.());
+
     });
 
     const animateF = (
@@ -149,6 +152,7 @@
             ...config
         } = {}
     ) => {
+        
         /**
          * Early return if we've been instructed not to animate this render.
          */
@@ -156,7 +160,7 @@
             isAnimatingTree = false;
             return safeToRemove();
         }
-
+        
         /**
          * Prioritise tree animations
          */
@@ -215,9 +219,11 @@
          * have successfully finished.
          */
         return Promise.all(animations).then(() => {
+
             isAnimatingTree = false;
             onComplete && onComplete();
             visualElement.notifyLayoutAnimationComplete();
+
         });
     };
 
@@ -275,7 +281,7 @@
         frame();
 
         // Ensure that the layout delta is updated for this frame.
-        visualElement.updateLayoutProjection();
+        //visualElement.updateLayoutProjection();
 
         // Create a function to stop animation on this specific axis
         const unsubscribeProgress = layoutProgress.onChange(frame);

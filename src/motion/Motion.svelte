@@ -204,12 +204,12 @@ let:value={context}>
             </MotionContextProvider>
             
             
-            
+            {#if mounted}
             {#each _features as feat (feat.key)}
-                {console.log("fet",visualElement.path)||""}
+                
                 <svelte:component this={feat.Component} props={feat.props} visualElement={feat.visualElement} {...(feat.key==="measureLayout"?{update}:{})}/>
             {/each}
-           
+           {/if}
         </UseFeatures>
     </UseVisualElement>
 </UseVisualState>

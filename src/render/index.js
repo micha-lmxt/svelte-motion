@@ -111,11 +111,12 @@ var visualElement = function (_a) {
          *
          */
         function render() {
-            
+
             if (!instance)
                 return;
-            
+                
             if (isProjecting()) {
+                
                 /**
                  * Apply the latest user-set transforms to the targetBox to produce the targetBoxFinal.
                  * This is the final box that we will then project into by calculating a transform delta and
@@ -133,7 +134,7 @@ var visualElement = function (_a) {
             triggerBuild();
             
             renderInstance(instance, renderState);
-            
+
         }
         function triggerBuild() {
             var valuesToRender = latestValues;
@@ -277,6 +278,7 @@ var visualElement = function (_a) {
              *
              */
             unmount: function () {
+
                 cancelSync.update(update);
                 cancelSync.render(render);
                 cancelSync.preRender(element.updateLayoutProjection);
@@ -286,6 +288,7 @@ var visualElement = function (_a) {
                 removeFromVariantTree === null || removeFromVariantTree === void 0 ? void 0 : removeFromVariantTree();
                 unsubscribeFromLeadVisualElement === null || unsubscribeFromLeadVisualElement === void 0 ? void 0 : unsubscribeFromLeadVisualElement();
                 lifecycles.clearAllListeners();
+
             },
             /**
              * Add a child visual element to our set of children.
@@ -642,13 +645,15 @@ var visualElement = function (_a) {
              * needs to be performed.
              */
             notifyLayoutReady: function (config) {
-                
                 element.notifyLayoutUpdate(layoutState.layout, element.prevViewportBox || layoutState.layout, config);
+
             }, 
             /**
              * Temporarily reset the transform of the instance.
              */
-            resetTransform: function () { return resetTransform(element, instance, props); }, 
+            resetTransform: function () { 
+
+                return resetTransform(element, instance, props); }, 
             /**
              * Perform the callback after temporarily unapplying the transform
              * upwards through the tree.

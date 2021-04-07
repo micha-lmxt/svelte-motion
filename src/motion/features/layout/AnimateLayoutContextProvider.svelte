@@ -65,6 +65,7 @@
         //MotionAdvancedProps
         custom = undefined,
         inherit = undefined*/;
+    let {transition,layout} = props;
     $: ({transition,layout} = props);
 </script>
 

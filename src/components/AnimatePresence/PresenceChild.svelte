@@ -25,7 +25,7 @@
     $: refresh = presenceAffectsLayout ? undefined : isPresent;
 
     const memoContext = () => {
-        
+
         return ({
             id,
             initial,
@@ -49,6 +49,7 @@
     let context = PresenceContext();
 
     afterUpdate(()=>{
+        
         if (presenceAffectsLayout){
             context.set(memoContext());
         }

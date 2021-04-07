@@ -74,7 +74,10 @@
          */
          tick().then(()=>visualElement.animationState?.animateChanges())
     });
-    onDestroy(()=>visualElement?.notifyUnmount())
+    onDestroy(()=>{
+        visualElement?.notifyUnmount()
+        
+    })
 </script>
 
 <slot {visualElement} />

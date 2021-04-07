@@ -7,7 +7,7 @@
     export let props, 
         isStatic;
         let mc = getContext(MotionContext)||MotionContext();
-        let {initial, animate} = getCurrentTreeVariants(props, get(mc)));
+        let {initial, animate} = getCurrentTreeVariants(props, get(mc));
         $: ({initial,animate} = getCurrentTreeVariants(props, $mc));
 
     const variantLabelsAsDependency = (prop) => {

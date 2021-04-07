@@ -7,7 +7,7 @@ const incrementId = () => counter++
     import { getContext, onMount} from "svelte";
     import { PresenceContext } from '../../context/PresenceContext.js';
     const context = getContext(PresenceContext)||PresenceContext();
-    
+    let { isPresent, onExitComplete, register } = $context||{};
     $: ( { isPresent, onExitComplete, register } = $context||{})
     
     // It's safe to call the following hooks conditionally (after an early return) because the context will always
