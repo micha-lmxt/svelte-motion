@@ -1,11 +1,12 @@
 export { VisibilityAction } from './components/AnimateSharedLayout/types.js';
 export { MotionValue, motionValue } from './value/index.js';
+export { MotionConfig } from "./components/MotionConfig"
 export { animateVisualElement } from './render/utils/animation.js';
 export { animationControls } from './animation/animation-controls.js';
 export { addScaleCorrection } from './render/dom/projection/scale-correction.js';
 export { visualElement } from './render/index.js';
 export { isValidMotionProp } from './motion/utils/valid-prop.js';
-export { MotionConfig, MotionConfigContext } from './context/MotionConfigContext.js';
+export { MotionConfigContext } from './context/MotionConfigContext.js';
 export { PresenceContext } from './context/PresenceContext.js';
 export { UseIsPresent, UsePresence } from './components/AnimatePresence/use-presence.js';
 export { LayoutGroupContext } from './context/LayoutGroupContext.js';
@@ -13,15 +14,14 @@ export { createBatcher } from './components/AnimateSharedLayout/utils/batcher.js
 export { FramerTreeLayoutContext, SharedLayoutContext } from './context/SharedLayoutContext.js';
 export { createMotionComponent } from './motion/index.js';
 export { UseDomEvent } from './events/use-dom-event.js';
-export { Drag as DragFeature } from './motion/features/drag.js';
+
 export { UsePanGesture } from './gestures/use-pan-gesture.js';
 export { UseTapGesture } from './gestures/use-tap-gesture.js';
 export { UseGestures } from './gestures/use-gestures.js';
-export { Gestures as GesturesFeature } from './motion/features/gestures.js';
-export { Animation as AnimationFeature } from './motion/features/animations.js';
-export { AnimateLayout as AnimateLayoutFeature } from './motion/features/layout/Animate.js';
-export { createDomMotionComponent, Motion } from './render/dom/motion.js';
-export { M } from './render/dom/motion-minimal.js';
+
+export { Motion } from './render/dom/motion.js';
+export { default as MotionSSR } from './motion/MotionSSR.svelte';
+
 export { AnimatePresence } from './components/AnimatePresence/index.js';
 export { animate } from './animation/animate.js';
 export { createCrossfader } from './components/AnimateSharedLayout/utils/crossfader.js';

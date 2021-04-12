@@ -2,19 +2,33 @@
   "name": "svelte-motion",
   "version": "0.1.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "svelte": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c"
   },
   "author": "micha-lmxt <micha-lmxt@gradientdescent.de> (https://micha-lmxt.lucht-familie.de)",
   "license": "ISC",
+  "dependencies": {
+    "framesync": "5.3.0",
+    "popmotion": "9.3.5",
+    "style-value-types": "4.1.4",
+    "tslib": "^2.2.0"
+  },
   "devDependencies": {
     "@emotion/is-prop-valid": "^1.1.0",
-    "framesync": "^5.3.0",
-    "popmotion": "^9.3.4",
-    "style-value-types": "^4.1.4",
-    "svelte": "^3.35.0",
-    "tslib": "^2.1.0"
+    "@rollup/plugin-node-resolve": "^11.2.1",
+    "@rollup/plugin-replace": "^2.4.2",
+    "@tsconfig/svelte": "^1.0.10",
+    "rollup": "^2.44.0",
+    "rollup-plugin-css-porter": "^1.0.2",
+    "rollup-plugin-svelte": "^7.1.0",
+    "svelte-preprocess": "^4.7.0"
   },
-  "dependencies": {}
+  "peerDependencies": {
+    "svelte": "^3.35.0"
+  },
+  "type": "svelte"
 }

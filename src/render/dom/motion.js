@@ -1,18 +1,10 @@
 import { createDomVisualElement } from './create-visual-element.js';
 import { createMotionComponent } from '../../motion/index.js';
-import { animations } from "../../motion/features/animations"
 import {createMotionClass} from './create-motion-class.js';
-import { gestureAnimations } from "../../motion/features/gestures"
-import { drag } from "../../motion/features/drag"
-import { layoutAnimations } from "../../motion/features/layout"
+import {featureBundle} from './featureBundle.js';
 //import { createMotionProxy } from './motion-proxy.js';
 
-const featureBundle = {
-    ...animations,
-    ...gestureAnimations,
-    ...drag,
-    ...layoutAnimations,
-}
+
 
 /**
  * HTML & SVG components, optimised for use with gestures and animation. These can be used as

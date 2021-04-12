@@ -1,3 +1,6 @@
+<script context="module">
+    export const ssr=false;
+</script>
 <script>
     import { afterUpdate, getContext, onDestroy, tick} from "svelte";
     import { PresenceContext } from "../../context/PresenceContext";
