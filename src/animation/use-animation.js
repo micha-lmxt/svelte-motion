@@ -1,3 +1,8 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
+
 import { tick } from "svelte";
 import { readable } from "svelte/store";
 import { animationControls } from "./animation-controls"
