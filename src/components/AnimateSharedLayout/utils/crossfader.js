@@ -1,3 +1,8 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
+
 import { __assign } from 'tslib';
 import sync, { getFrameData } from 'framesync';
 import { mix, progress, linear, mixColor, circOut } from 'popmotion';
