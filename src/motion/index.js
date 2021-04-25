@@ -1,4 +1,7 @@
-
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 import Motion from './Motion.svelte';
 import { loadFeatures } from "./features/definitions"
 
