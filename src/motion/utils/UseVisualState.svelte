@@ -1,4 +1,9 @@
 <script context="module">
+    /** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
+    
     import { resolveMotionValue } from "../../value/utils/resolve-motion-value";
     import {
         checkIfControllingVariants,
