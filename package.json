@@ -1,7 +1,7 @@
 {
   "name": "svelte-motion",
-  "version": "0.1.0",
-  "description": "",
+  "version": "0.2.0",
+  "description": "Svelte animstion library baded on the React library framer-motion.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "svelte": "src/index.js",
