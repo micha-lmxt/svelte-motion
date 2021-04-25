@@ -1,3 +1,7 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 import { __assign, __read } from 'tslib';
 import { number, px } from 'style-value-types';
 import { isKeyframesTarget } from '../../../animation/utils/is-keyframes-target.js';
