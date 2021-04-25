@@ -1,3 +1,7 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 import { mix, distance, clamp, progress } from 'popmotion';
 
 var clampProgress = function (v) { return clamp(0, 1, v); };
