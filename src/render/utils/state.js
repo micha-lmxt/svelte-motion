@@ -1,3 +1,7 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 import { axisBox, delta } from '../../utils/geometry/index.js';
 
 var createProjectionState = function () { return ({
