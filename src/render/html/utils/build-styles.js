@@ -1,3 +1,7 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 import { valueScaleCorrection } from '../../dom/projection/scale-correction.js';
 import { buildTransform, buildTransformOrigin } from './build-transform.js';
 import { isCSSVariable } from '../../dom/utils/is-css-variable.js';
