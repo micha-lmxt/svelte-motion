@@ -1,4 +1,8 @@
 <script>
+    /** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
     import { MotionValue } from "."
     import { UseCombineMotionValues } from "./use-combine-values"
 import UseCombineValues from "./UseCombineValues.svelte";
