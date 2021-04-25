@@ -1,3 +1,7 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 import { px } from 'style-value-types';
 
 // Convert a progress 0-1 to a pixels value based on the provided length
