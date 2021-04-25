@@ -1,3 +1,7 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 import { resetBox, applyTreeDeltas } from '../../utils/geometry/delta-apply.js';
 import { updateBoxDelta } from '../../utils/geometry/delta-calc.js';
 
