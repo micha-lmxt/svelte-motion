@@ -19,4 +19,9 @@ import { Motion } from 'svelte-motion'
 
 <Motion let:motion><div use:motion/></Motion>
 ```
+For svg elements like 'g', 'path' or 'circle', use:
+
+```javascript
+<Motion let:motion isSVG><g use:motion/></Motion>
+```
 
