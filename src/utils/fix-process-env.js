@@ -1,6 +1,6 @@
 
 const fix = ()=>{
-    if (!window || (process && process.env)){
+    if (!window || (window.process && window.process.env)){
         return false;
     }
     if (!window.process){

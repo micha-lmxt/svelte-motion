@@ -11,7 +11,7 @@ Copyright (c) 2018 Framer B.V.
     
     import { layoutStack } from './utils/stack';
     import { resetRotate } from './utils/rotate';
-    import { afterUpdate, getContext, onMount, setContext, tick } from 'svelte';
+    import {  getContext, onMount, setContext, tick } from 'svelte';
     import { get } from "svelte/store";
     import { writable } from 'svelte/store';
     import { MotionContext } from '../../context/MotionContext/index.js';
@@ -54,13 +54,14 @@ Copyright (c) 2018 Framer B.V.
     let renderScheduled = false;
  
 
-    let forced = false;
+    let forced = false;/*
     const resetForced = ()=>{
         if (forced){
             forced=false;
         }
     }
     $: resetForced(forced);
+    */
         /**
      * The methods provided to all children in the shared layout tree.
      */
@@ -88,6 +89,7 @@ Copyright (c) 2018 Framer B.V.
     }
 
     const startLayoutAnimation = ()=>{
+        console.log("startLayoutAnimation")
         /**
          * Reset update and render scheduled status
          */
@@ -147,9 +149,9 @@ Copyright (c) 2018 Framer B.V.
     }
     
     const scheduleUpdate = (force = false) => {
-        
-        if (!(force || !updateScheduled)) return
-
+        console.log("schedulteUpdate",force,updateScheduled)
+        if (!(force || !updateScheduled)) return;
+        console.log("schedulteUpdate-really")
         /**
          * Flag we've scheduled an update
          */
@@ -192,11 +194,9 @@ Copyright (c) 2018 Framer B.V.
         
     }
 
-    //let blockonce
-    const removeChild = (child) => {
-        
-        scheduleUpdate(true)
-        //blockonce=true;
+
+    const removeChild = (child) => { 
+        scheduleUpdate()
         children.delete(child)
         removeFromStack(child)
         
@@ -254,4 +254,4 @@ Copyright (c) 2018 Framer B.V.
     //afterUpdate(startLayoutAnimation)
 
 </script>
-<slot {renderScheduled}/>
+<slot/>
