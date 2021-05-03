@@ -1,3 +1,7 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 import { htmlVisualElement } from '../html/visual-element.js';
 import { svgVisualElement } from '../svg/visual-element.js';
 

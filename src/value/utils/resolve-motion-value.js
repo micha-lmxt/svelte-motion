@@ -1,3 +1,7 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 import { isCustomValue } from '../../utils/resolve-value.js';
 import { isMotionValue } from './is-motion-value.js';
 

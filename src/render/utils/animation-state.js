@@ -1,3 +1,7 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 import { __spread, __assign, __rest } from 'tslib';
 import { isKeyframesTarget } from '../../animation/utils/is-keyframes-target.js';
 import { isVariantLabels, resolveVariant, isVariantLabel } from './variants.js';

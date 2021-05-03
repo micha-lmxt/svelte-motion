@@ -1,3 +1,7 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 import sync from 'framesync';
 import { tick } from 'svelte';
 import { get } from 'svelte/store';

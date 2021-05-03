@@ -1,4 +1,7 @@
-
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 import { createDomVisualElement } from './create-dom-visual-element.js';
 
 import { createMotionComponent } from '../../motion/index.js';

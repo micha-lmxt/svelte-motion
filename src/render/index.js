@@ -1,3 +1,7 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 import { __assign, __spreadArray, __read } from 'tslib';
 import sync, { cancelSync } from 'framesync';
 import { pipe } from 'popmotion';

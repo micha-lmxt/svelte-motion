@@ -1,3 +1,7 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 import { isForcedMotionValue } from '../../../motion/utils/is-forced-motion-value.js';
 import { isMotionValue } from '../../../value/utils/is-motion-value.js';
 

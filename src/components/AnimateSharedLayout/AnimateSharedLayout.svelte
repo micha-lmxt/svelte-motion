@@ -1,8 +1,10 @@
-<script context="module">
-    
- 
-</script>
+
 <script>
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
+
     import { Presence } from './types';
     import { createBatcher } from "./utils/batcher"
     import { SharedLayoutContext } from "../../context/SharedLayoutContext"
@@ -252,4 +254,4 @@
     //afterUpdate(startLayoutAnimation)
 
 </script>
-<slot/>
+<slot {renderScheduled}/>

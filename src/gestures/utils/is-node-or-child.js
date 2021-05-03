@@ -1,3 +1,8 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
+
 /**
  * Recursively traverse up the tree to check whether the provided child node
  * is the parent or a descendant of it.

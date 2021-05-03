@@ -1,5 +1,10 @@
 
 <script>
+    /** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
+    
     import { UsePresence } from "../../../components/AnimatePresence/use-presence";
     import  Animate  from "./Animate.svelte";
     export let visualElement,

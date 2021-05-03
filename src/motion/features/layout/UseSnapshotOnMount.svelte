@@ -1,4 +1,9 @@
 <script>
+    /** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
+    
 import { getContext, onDestroy } from "svelte";
 import { FramerTreeLayoutContext, isSharedLayout, SharedLayoutContext } from "../../../components/AnimateSharedLayout/SharedLayoutContext";
 

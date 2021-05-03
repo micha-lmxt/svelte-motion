@@ -1,3 +1,7 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 import { __assign } from 'tslib';
 import { complex, px } from 'style-value-types';
 import { mix } from 'popmotion';

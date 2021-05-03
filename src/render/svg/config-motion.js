@@ -1,3 +1,7 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 import { renderSVG } from './utils/render.js';
 import { scrapeMotionValuesFromProps } from './utils/scrape-motion-values.js';
 import { createSvgRenderState } from './utils/create-render-state.js';

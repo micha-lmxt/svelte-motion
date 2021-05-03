@@ -1,4 +1,9 @@
 <script context="module">
+    /** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
+    
     const progressTarget = 1000
 
     function hasMoved(a, b) {

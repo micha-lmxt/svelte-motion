@@ -1,3 +1,7 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 function renderHTML(element, _a) {
     var style = _a.style, vars = _a.vars;
     // Directly assign style into the Element's style prop. In tests Object.assign is the

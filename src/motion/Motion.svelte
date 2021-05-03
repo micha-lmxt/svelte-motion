@@ -1,4 +1,8 @@
 <script>
+    /** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
     import { MotionConfigContext } from "../context/MotionConfigContext"
     import { UseVisualElement } from "./utils/use-visual-element";
     import { UseFeatures } from "./features/use-features";

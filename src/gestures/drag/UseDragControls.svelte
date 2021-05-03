@@ -1,4 +1,9 @@
 <script context="module">
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
+
     /**
      * Can manually trigger a drag gesture on one or more `drag`-enabled `motion` components.
      *

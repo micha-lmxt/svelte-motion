@@ -1,4 +1,8 @@
 <script>
+    /** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
     import { createSvgRenderState } from "./utils/create-render-state";
     import { copyRawValuesOnly } from "../html/use-props";
     import { buildSVGAttrs } from "./utils/build-attrs";

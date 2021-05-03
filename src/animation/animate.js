@@ -1,3 +1,8 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
+
 import { motionValue } from '../value/index.js';
 import { isMotionValue } from '../value/utils/is-motion-value.js';
 import { startAnimation } from './utils/transitions.js';

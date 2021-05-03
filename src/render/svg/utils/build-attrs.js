@@ -1,3 +1,7 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
 import { __rest } from 'tslib';
 import { buildHTMLStyles } from '../../html/utils/build-styles.js';
 import { calcSVGTransformOrigin } from './transform-origin.js';

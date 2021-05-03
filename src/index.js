@@ -1,3 +1,8 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
+
 export { VisibilityAction } from './components/AnimateSharedLayout/types.js';
 export { MotionValue, motionValue } from './value/index.js';
 export { MotionConfig } from "./components/MotionConfig"

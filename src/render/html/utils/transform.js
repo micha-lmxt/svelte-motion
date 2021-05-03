@@ -1,3 +1,8 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
+
 /**
  * A list of all transformable axes. We'll use this list to generated a version
  * of each axes for each transform.

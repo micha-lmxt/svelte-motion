@@ -1,3 +1,8 @@
+/** 
+based on framer-motion@4.0.3,
+Copyright (c) 2018 Framer B.V.
+*/
+
 import { __rest, __assign } from 'tslib';
 //import { invariant } from 'hey-listen';
 import { progress } from 'popmotion';
