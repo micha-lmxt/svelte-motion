@@ -35,4 +35,4 @@ export const useCombineMotionValues = (values, combineValues) => {
   }
   return value;
 }
-export { default as UseCombineMotionValues } from "./UseCombineValues.svelte";
+//export { default as UseCombineMotionValues } from "./UseCombineValues.svelte";

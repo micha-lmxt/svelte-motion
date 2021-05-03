@@ -66,4 +66,4 @@ export const useTransform = (
         comb)
     return comb;
 }
-export { default as UseTransform } from './UseTransform.svelte';
+//export { default as UseTransform } from './UseTransform.svelte';
