@@ -3,29 +3,36 @@ based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
 import sync from 'framesync';
-import { tick } from 'svelte';
-import { get } from 'svelte/store';
+import { onDestroy } from 'svelte';
 import { motionValue } from '.';
 
-export const useCombineMotionValues = (values, combineValues ) => {
+export const useCombineMotionValues = (values, combineValues) => {
+
+
+  const value = motionValue(combineValues());
+
+  const updateValue = () => {
+    value.set(combineValues());
+  }
+
+
+  const handler = () => {
+    
+    sync.update(updateValue, false, true);
+  }
   
-    let updateValue = () => {};
+  const subscriptions = values.map((val) => val.onChange(handler))
   
-    const handler = () => sync.update(updateValue,false,true);
-  
-    const value = readable(motionValue(combineValues()), ()=>{
-      
-      let subscriptions = [];
-      
-      tick().then(() => subscriptions = values.map((val) => val.onChange(handler)));
-      
-      return () => subscriptions.forEach((unsubscribe) => unsubscribe());
-    });
-  
-    updateValue = (combineValues) => get(value).set(combineValues());
-  
-    value.update = updateValue;
-  
-    return value;
+
+  onDestroy(() =>{
+
+    subscriptions.forEach((unsubscribe) => unsubscribe())
+  }
+  )
+
+  value.update = (values,combineValues)=>{
+    value.set(combineValues());
+  }
+  return value;
 }
 export { default as UseCombineMotionValues } from "./UseCombineValues.svelte";
