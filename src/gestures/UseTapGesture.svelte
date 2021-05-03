@@ -3,7 +3,7 @@
 based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
-
+    import {fixed} from '../utils/fix-process-env';
     import { isNodeOrChild } from "./utils/is-node-or-child";
     import { pipe } from "popmotion";
     import { isDragActive } from "./drag/utils/lock";

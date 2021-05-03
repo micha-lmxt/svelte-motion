@@ -2,7 +2,7 @@
 based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
-
+import {fixed} from '../utils/fix-process-env';
 import { __assign } from 'tslib';
 import { isMouseEvent, isTouchEvent } from './utils/event-type.js';
 import { extractEventInfo } from '../events/event-info.js';

@@ -49,6 +49,7 @@ Copyright (c) 2018 Framer B.V.
  *
  * @public
  */
+    import {fixed} from './fix-process-env';
     import { wrap } from "popmotion";
     export let items;
     let index = 0;

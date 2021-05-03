@@ -2,6 +2,7 @@
 based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
+import {fixed} from '../../utils/fix-process-env';
 import { __rest, __assign, __spreadArray, __read } from 'tslib';
 import { complex } from 'style-value-types';
 import { isNumericalString } from '../../utils/is-numerical-string.js';
