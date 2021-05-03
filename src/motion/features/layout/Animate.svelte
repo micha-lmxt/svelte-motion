@@ -123,7 +123,6 @@
     let isAnimatingTree = false;
     
     onMount(() => {
-        
         visualElement.animateMotionValue = startAnimation;
         visualElement.enableLayoutProjection();
         unsubLayoutReady = visualElement.onLayoutUpdate(animateF);

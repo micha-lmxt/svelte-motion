@@ -9,7 +9,7 @@
     
     import { layoutStack } from './utils/stack';
     import { resetRotate } from './utils/rotate';
-    import { afterUpdate, getContext, onMount, setContext ,tick} from 'svelte';
+    import { afterUpdate, getContext, onMount, setContext, tick } from 'svelte';
     import { get } from "svelte/store";
     import { writable } from 'svelte/store';
     import { MotionContext } from '../../context/MotionContext/index.js';
@@ -21,7 +21,7 @@
     const context = getContext(MotionContext)||MotionContext();
     const shouldComponentUpdate= ()=>{
 
-        renderScheduled=true;
+        //renderScheduled=true;
         //setSyncContext();
         //syncContext = { ...syncContext }
     }
@@ -86,7 +86,6 @@
     }
 
     const startLayoutAnimation = ()=>{
-       
         /**
          * Reset update and render scheduled status
          */
@@ -146,7 +145,7 @@
     }
     
     const scheduleUpdate = (force = false) => {
-
+        
         if (!(force || !updateScheduled)) return
 
         /**
@@ -188,11 +187,14 @@
         addToStack(child)
 
         child.presence = hasMounted ? Presence.Entering : Presence.Present
+        
     }
 
+    //let blockonce
     const removeChild = (child) => {
         
-        scheduleUpdate()
+        scheduleUpdate(true)
+        //blockonce=true;
         children.delete(child)
         removeFromStack(child)
         
@@ -242,8 +244,12 @@
     //afterUpdate(()=>!forced && startLayoutAnimation())
     //const falseForced = ()=>{forced=false;return true;}
     //$: forced && renderScheduled && falseForced() && startLayoutAnimation() 
-    //$: forced && renderScheduled && falseForced() && tick().then(startLayoutAnimation)
-    afterUpdate(startLayoutAnimation)
+    
+    $: if(renderScheduled){
+        tick().then(startLayoutAnimation)
+    }
+    
+    //afterUpdate(startLayoutAnimation)
 
 </script>
-<slot {renderScheduled}/>
+<slot/>

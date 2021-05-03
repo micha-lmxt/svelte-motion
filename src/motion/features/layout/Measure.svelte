@@ -30,18 +30,12 @@ import {isSharedLayout} from "../../../context/SharedLayoutContext"
      *
      * If it is stand-alone component, add it to the batcher.
      */
-    const updaterForce = ()=>{
-        updater(undefined,true)
-    }
-    const updater = (_,force=false)=>{
-        if (isSharedLayout(syncLayout)) {
-            if (force){
-                //syncLayout.forceUpdate();
-                syncLayout.syncUpdate(true)
 
-            }else{
-                syncLayout.syncUpdate()             
-            }
+    const updater = ()=>{
+        if (isSharedLayout(syncLayout)) {
+
+            syncLayout.syncUpdate()
+
         } else {
             visualElement.snapshotViewportBox()
             syncLayout.add(visualElement)
@@ -50,10 +44,8 @@ import {isSharedLayout} from "../../../context/SharedLayoutContext"
         return null
     }
 
-    $: update!==undefined && updaterForce();
-    $: updater(syncLayout);
+    $: updater(syncLayout,update);
     
-    //beforeUpdate(updater)
 
     afterUpdate(()=>{
         
