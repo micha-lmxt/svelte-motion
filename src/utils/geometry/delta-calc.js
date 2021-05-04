@@ -1,5 +1,5 @@
 /** 
-based on framer-motion@4.0.3,
+based on framer-motion@4.1.11,
 Copyright (c) 2018 Framer B.V.
 */
 import {fixed} from '../../utils/fix-process-env';
@@ -68,5 +68,13 @@ function updateBoxDelta(delta, source, target, origin) {
 function defaultOrigin(origin) {
     return typeof origin === "number" ? origin : 0.5;
 }
+function calcRelativeAxis(target, relative, parent) {
+    target.min = parent.min + relative.min;
+    target.max = target.min + calcLength(relative);
+}
+function calcRelativeBox(projection, parentProjection) {
+    calcRelativeAxis(projection.target.x, projection.relativeTarget.x, parentProjection.target.x);
+    calcRelativeAxis(projection.target.y, projection.relativeTarget.y, parentProjection.target.y);
+}
 
-export { calcOrigin, isNear, updateAxisDelta, updateBoxDelta };
+export { calcOrigin, calcRelativeAxis, calcRelativeBox, isNear, updateAxisDelta, updateBoxDelta };

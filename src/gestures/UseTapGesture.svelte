@@ -11,7 +11,7 @@ Copyright (c) 2018 Framer B.V.
     import {UsePointerEvent, addPointerEvent } from "../events/use-pointer-event";
     import { AnimationType } from "../render/utils/types";
     export let props, visualElement;
-
+    
     $: ({ onTap, onTapStart, onTapCancel, whileTap } = props);
     $: hasPressListeners = onTap || onTapStart || onTapCancel || whileTap;
 

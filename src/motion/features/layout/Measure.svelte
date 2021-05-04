@@ -1,12 +1,13 @@
 <script>
     /** 
-based on framer-motion@4.0.3,
+based on framer-motion@4.1.11,
 Copyright (c) 2018 Framer B.V.
 */
     
 
 import { afterUpdate,  onMount} from "svelte";
-import {isSharedLayout} from "../../../context/SharedLayoutContext"
+import {isSharedLayout} from "../../../context/SharedLayoutContext";
+import { snapshotViewportBox } from "../../../render/dom/projection/utils";
 
     export let visualElement,
         syncLayout,
@@ -42,7 +43,7 @@ import {isSharedLayout} from "../../../context/SharedLayoutContext"
             syncLayout.syncUpdate()
 
         } else {
-            visualElement.snapshotViewportBox()
+            snapshotViewportBox(visualElement)
             syncLayout.add(visualElement)
         }
 

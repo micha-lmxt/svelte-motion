@@ -9,6 +9,7 @@ function createLock(name) {
         var openLock = function () {
             lock = null;
         };
+        
         if (lock === null) {
             lock = name;
             return openLock;
@@ -21,9 +22,11 @@ var globalVerticalLock = createLock("dragVertical");
 function getGlobalLock(drag) {
     var lock = false;
     if (drag === "y") {
+        
         lock = globalVerticalLock();
     }
     else if (drag === "x") {
+        
         lock = globalHorizontalLock();
     }
     else {

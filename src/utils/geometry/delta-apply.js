@@ -1,10 +1,11 @@
 /** 
-based on framer-motion@4.0.3,
+based on framer-motion@4.1.11,
 Copyright (c) 2018 Framer B.V.
 */
 import {fixed} from '../fix-process-env';
 import { __read } from 'tslib';
 import { mix } from 'popmotion';
+import { isDraggable } from '../../render/utils/is-draggable.js';
 
 /**
  * Reset an axis to the provided origin box.
@@ -135,13 +136,20 @@ function applyTreeDeltas(box, treeScale, treePath) {
         return;
     // Reset the treeScale
     treeScale.x = treeScale.y = 1;
+    var node;
+    var delta;
     for (var i = 0; i < treeLength; i++) {
-        var delta = treePath[i].getLayoutState().delta;
+        node = treePath[i];
+        delta = node.getLayoutState().delta;
         // Incoporate each ancestor's scale into a culmulative treeScale for this component
         treeScale.x *= delta.x.scale;
         treeScale.y *= delta.y.scale;
         // Apply each ancestor's calculated delta into this component's recorded layout box
         applyBoxDelta(box, delta);
+        // If this is a draggable ancestor, also incorporate the node's transform to the layout box
+        if (isDraggable(node)) {
+            applyBoxTransforms(box, box, node.getLatestValues());
+        }
     }
 }
 

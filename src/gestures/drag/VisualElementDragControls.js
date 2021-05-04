@@ -5,7 +5,6 @@ Copyright (c) 2018 Framer B.V.
 import {fixed} from '../../utils/fix-process-env';
 import { __rest, __assign } from 'tslib';
 //import { invariant } from 'hey-listen';
-import { progress } from 'popmotion';
 import { PanSession } from '../PanSession.js';
 import { getGlobalLock } from './utils/lock.js';
 import { isRefObject } from '../../utils/is-ref-object.js';
@@ -19,6 +18,10 @@ import { getBoundingBox } from '../../render/dom/projection/measure.js';
 import { calcOrigin } from '../../utils/geometry/delta-calc.js';
 import { startAnimation } from '../../animation/utils/transitions.js';
 import { AnimationType } from '../../render/utils/types.js';
+import { updateTreeLayoutMeasurements } from '../../render/dom/projection/utils.js';
+import { progress } from 'popmotion';
+import { convertToRelativeProjection } from '../../render/dom/projection/convert-to-relative.js';
+import { calcRelativeOffset } from '../../motion/features/layout/utils.js';
 
 var elementDragControls = new WeakMap();
 /**
@@ -96,43 +99,28 @@ var VisualElementDragControls = /** @class */ (function () {
     VisualElementDragControls.prototype.start = function (originEvent, _a) {
         var _this = this;
         var _b = _a === void 0 ? {} : _a, _c = _b.snapToCursor, snapToCursor = _c === void 0 ? false : _c, cursorProgress = _b.cursorProgress;
-        /**
-         * If this drag session has been manually triggered by the user, it might be from an event
-         * outside the draggable element. If snapToCursor is set to true, we need to measure the position
-         * of the element and snap it to the cursor.
-         */
-        snapToCursor && this.snapToCursor(originEvent);
-        var onSessionStart = function () {
+        var onSessionStart = function (event) {
             // Stop any animations on both axis values immediately. This allows the user to throw and catch
             // the component.
+            
             _this.stopMotion();
-        };
-        var onStart = function (event, info) {
-            var _a, _b, _c;
-            // Attempt to grab the global drag gesture lock - maybe make this part of PanSession
-            var _d = _this.props, drag = _d.drag, dragPropagation = _d.dragPropagation;
-            if (drag && !dragPropagation) {
-                if (_this.openGlobalLock)
-                    _this.openGlobalLock();
-                _this.openGlobalLock = getGlobalLock(drag);
-                // If we don 't have the lock, don't start dragging
-                if (!_this.openGlobalLock)
-                    return;
-            }
+            
             /**
-             * Record the progress of the mouse within the draggable element on each axis.
-             * onPan, we're going to use this to calculate a new bounding box for the element to
-             * project into. This will ensure that even if the DOM element moves via a relayout, it'll
-             * stick to the correct place under the pointer.
+             * Ensure that this element's layout measurements are updated.
+             * We'll need these to accurately project the element and figure out its constraints.
              */
-            _this.prepareBoundingBox();
-            _this.visualElement.lockProjectionTarget();
+            _this.updateLayoutMeasurements();
             /**
-             * Resolve the drag constraints. These are either set as top/right/bottom/left constraints
-             * relative to the element's layout, or a ref to another element. Both need converting to
-             * viewport coordinates.
+             * If this drag session has been manually triggered by the user, it might be from an event
+             * outside the draggable element. If snapToCursor is set to true, we need to measure the position
+             * of the element and snap it to the cursor.
              */
-            _this.resolveDragConstraints();
+            snapToCursor && _this.snapToCursor(originEvent);
+            /**
+             * Apply a simple lock to the projection target. This ensures no animations
+             * can run on the projection box while this lock is active.
+             */
+            _this.isLayoutDrag() && _this.visualElement.lockProjectionTarget();
             /**
              * When dragging starts, we want to find where the cursor is relative to the bounding box
              * of the element. Every frame, we calculate a new bounding box using this relative position
@@ -159,6 +147,25 @@ var VisualElementDragControls = /** @class */ (function () {
                     _this.originPoint[axis] = axisValue.get();
                 }
             });
+        };
+        var onStart = function (event, info) {
+            var _a, _b, _c;
+            // Attempt to grab the global drag gesture lock - maybe make this part of PanSession
+            var _d = _this.props, drag = _d.drag, dragPropagation = _d.dragPropagation;
+            if (drag && !dragPropagation) {
+                if (_this.openGlobalLock)
+                    _this.openGlobalLock();
+                _this.openGlobalLock = getGlobalLock(drag);
+                // If we don 't have the lock, don't start dragging
+                if (!_this.openGlobalLock)
+                    return;
+            }
+            /**
+             * Resolve the drag constraints. These are either set as top/right/bottom/left constraints
+             * relative to the element's layout, or a ref to another element. Both need converting to
+             * viewport coordinates.
+             */
+            _this.resolveDragConstraints();
             // Set current drag status
             _this.isDragging = true;
             _this.currentDirection = null;
@@ -199,23 +206,18 @@ var VisualElementDragControls = /** @class */ (function () {
             onEnd: onEnd,
         }, { transformPagePoint: transformPagePoint });
     };
-    /**
-     * Ensure the component's layout and target bounding boxes are up-to-date.
-     */
-    VisualElementDragControls.prototype.prepareBoundingBox = function () {
-        var visualElement = this.visualElement;
-        visualElement.withoutTransform(function () {
-            visualElement.updateLayoutMeasurement();
-        });
-        visualElement.rebaseProjectionTarget(true, visualElement.measureViewportBox(false));
+    VisualElementDragControls.prototype.updateLayoutMeasurements = function () {
+        updateTreeLayoutMeasurements(this.visualElement, Boolean(this.getAxisMotionValue("x") && !this.isExternalDrag()));
     };
     VisualElementDragControls.prototype.resolveDragConstraints = function () {
         var _this = this;
         var _a = this.props, dragConstraints = _a.dragConstraints, dragElastic = _a.dragElastic;
+        this.visualElement.updateLayoutProjection();
+        var layout = this.visualElement.getLayoutState().layoutCorrected;
         if (dragConstraints) {
             this.constraints = isRefObject(dragConstraints)
-                ? this.resolveRefConstraints(this.visualElement.getLayoutState().layout, dragConstraints)
-                : calcRelativeConstraints(this.visualElement.getLayoutState().layout, dragConstraints);
+                ? this.resolveRefConstraints(layout, dragConstraints)
+                : calcRelativeConstraints(layout, dragConstraints);
         }
         else {
             this.constraints = false;
@@ -228,7 +230,7 @@ var VisualElementDragControls = /** @class */ (function () {
         if (this.constraints && !this.hasMutatedConstraints) {
             eachAxis(function (axis) {
                 if (_this.getAxisMotionValue(axis)) {
-                    _this.constraints[axis] = rebaseAxisConstraints(_this.visualElement.getLayoutState().layout[axis], _this.constraints[axis]);
+                    _this.constraints[axis] = rebaseAxisConstraints(layout[axis], _this.constraints[axis]);
                 }
             });
         }
@@ -258,13 +260,15 @@ var VisualElementDragControls = /** @class */ (function () {
         this.panSession && this.panSession.end();
         this.panSession = null;
         if (!this.props.dragPropagation && this.openGlobalLock) {
+            
             this.openGlobalLock();
             this.openGlobalLock = null;
         }
         (_a = this.visualElement.animationState) === null || _a === void 0 ? void 0 : _a.setActive(AnimationType.Drag, false);
     };
     VisualElementDragControls.prototype.stop = function (event, info) {
-        var _a;
+        
+        var _a, _b, _c;
         this.visualElement.unlockProjectionTarget();
         (_a = this.panSession) === null || _a === void 0 ? void 0 : _a.end();
         this.panSession = null;
@@ -272,16 +276,12 @@ var VisualElementDragControls = /** @class */ (function () {
         this.cancelDrag();
         if (!isDragging)
             return;
-        var _b = this.props, dragMomentum = _b.dragMomentum, onDragEnd = _b.onDragEnd;
-        if (dragMomentum || this.elastic) {
-            var velocity = info.velocity;
-            this.animateDragEnd(velocity);
-        }
-        onDragEnd === null || onDragEnd === void 0 ? void 0 : onDragEnd(event, info);
+        var velocity = info.velocity;
+        this.animateDragEnd(velocity);
+        (_c = (_b = this.props).onDragEnd) === null || _c === void 0 ? void 0 : _c.call(_b, event, info);
     };
     VisualElementDragControls.prototype.snapToCursor = function (event) {
         var _this = this;
-        this.prepareBoundingBox();
         eachAxis(function (axis) {
             var drag = _this.props.drag;
             // If we're not dragging this axis, do an early return.
@@ -367,14 +367,47 @@ var VisualElementDragControls = /** @class */ (function () {
             return this.visualElement.getValue(axis, 0);
         }
     };
+    VisualElementDragControls.prototype.isLayoutDrag = function () {
+        return !this.getAxisMotionValue("x");
+    };
+    VisualElementDragControls.prototype.isExternalDrag = function () {
+        var _a = this.props, _dragX = _a._dragX, _dragY = _a._dragY;
+        return _dragX || _dragY;
+    };
     VisualElementDragControls.prototype.animateDragEnd = function (velocity) {
         var _this = this;
         var _a = this.props, drag = _a.drag, dragMomentum = _a.dragMomentum, dragElastic = _a.dragElastic, dragTransition = _a.dragTransition;
+        /**
+         * Everything beyond the drag gesture should be performed with
+         * relative projection so children stay in sync with their parent element.
+         */
+        var isRelative = convertToRelativeProjection(this.visualElement, this.isLayoutDrag() && !this.isExternalDrag());
+        /**
+         * If we had previously resolved constraints relative to the viewport,
+         * we need to also convert those to a relative coordinate space for the animation
+         */
+        var constraints = this.constraints || {};
+        if (isRelative &&
+            Object.keys(constraints).length &&
+            this.isLayoutDrag()) {
+            var projectionParent = this.visualElement.getProjectionParent();
+            if (projectionParent) {
+                var relativeConstraints_1 = calcRelativeOffset(projectionParent.projection.targetFinal, constraints);
+                eachAxis(function (axis) {
+                    var _a = relativeConstraints_1[axis], min = _a.min, max = _a.max;
+                    constraints[axis] = {
+                        min: isNaN(min) ? undefined : min,
+                        max: isNaN(max) ? undefined : max,
+                    };
+                });
+            }
+        }
         var momentumAnimations = eachAxis(function (axis) {
+            var _a;
             if (!shouldDrag(axis, drag, _this.currentDirection)) {
                 return;
             }
-            var transition = _this.constraints ? _this.constraints[axis] : {};
+            var transition = (_a = constraints === null || constraints === void 0 ? void 0 : constraints[axis]) !== null && _a !== void 0 ? _a : {};
             /**
              * Overdamp the boundary spring if `dragElastic` is disabled. There's still a frame
              * of spring animations so we should look into adding a disable spring option to `inertia`.
@@ -390,7 +423,7 @@ var VisualElementDragControls = /** @class */ (function () {
             // otherwise we just have to animate the `MotionValue` itself.
             return _this.getAxisMotionValue(axis)
                 ? _this.startAxisValueAnimation(axis, inertia)
-                : _this.visualElement.startLayoutAnimation(axis, inertia);
+                : _this.visualElement.startLayoutAnimation(axis, inertia, isRelative);
         });
         // Run all animations and then resolve the new drag constraints.
         return Promise.all(momentumAnimations).then(function () {
@@ -421,6 +454,7 @@ var VisualElementDragControls = /** @class */ (function () {
         var _a = this.props, drag = _a.drag, dragConstraints = _a.dragConstraints;
         if (!isRefObject(dragConstraints) || !this.constraintsBox)
             return;
+       
         // Stop any current animations as there can be some visual glitching if we resize mid animation
         this.stopMotion();
         // Record the relative progress of the targetBox relative to the constraintsBox
@@ -433,7 +467,7 @@ var VisualElementDragControls = /** @class */ (function () {
          * Then, using the latest layout and constraints measurements, reposition the new layout axis
          * proportionally within the constraints.
          */
-        this.prepareBoundingBox();
+        this.updateLayoutMeasurements();
         this.resolveDragConstraints();
         eachAxis(function (axis) {
             if (!shouldDrag(axis, drag, null))

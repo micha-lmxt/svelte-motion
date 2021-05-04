@@ -15,6 +15,7 @@ Copyright (c) 2018 Framer B.V.
     import { get } from "svelte/store";
     import { writable } from 'svelte/store';
     import { MotionContext } from '../../context/MotionContext/index.js';
+    import { snapshotViewportBox } from "../../render/dom/projection/utils"
 
 
     export let type = undefined,
@@ -89,7 +90,6 @@ Copyright (c) 2018 Framer B.V.
     }
 
     const startLayoutAnimation = ()=>{
-        console.log("startLayoutAnimation")
         /**
          * Reset update and render scheduled status
          */
@@ -149,9 +149,9 @@ Copyright (c) 2018 Framer B.V.
     }
     
     const scheduleUpdate = (force = false) => {
-        console.log("schedulteUpdate",force,updateScheduled)
+   
         if (!(force || !updateScheduled)) return;
-        console.log("schedulteUpdate-really")
+
         /**
          * Flag we've scheduled an update
          */
@@ -165,7 +165,7 @@ Copyright (c) 2018 Framer B.V.
         /**
          * Read: Snapshot children
          */
-        children.forEach((child) => child.snapshotViewportBox())
+        children.forEach((child) => snapshotViewportBox(child))
 
         /**
          * Every child keeps a local snapshot, but we also want to record

@@ -1,5 +1,5 @@
 /** 
-based on framer-motion@4.0.3,
+based on framer-motion@4.1.1,
 Copyright (c) 2018 Framer B.V.
 */
 import {fixed} from '../utils/fix-process-env';
@@ -8,9 +8,9 @@ import sync, { cancelSync } from 'framesync';
 import { pipe } from 'popmotion';
 import { Presence } from '../components/AnimateSharedLayout/types.js';
 import { eachAxis } from '../utils/each-axis.js';
-import { copyAxisBox } from '../utils/geometry/index.js';
+import { axisBox } from '../utils/geometry/index.js';
 import { removeBoxTransforms, applyBoxTransforms } from '../utils/geometry/delta-apply.js';
-import { updateBoxDelta } from '../utils/geometry/delta-calc.js';
+import { calcRelativeBox, updateBoxDelta } from '../utils/geometry/delta-calc.js';
 import { motionValue } from '../value/index.js';
 import { isMotionValue } from '../value/utils/is-motion-value.js';
 import { buildLayoutProjectionTransform } from './html/utils/build-projection-transform.js';
@@ -21,6 +21,8 @@ import { updateLayoutDeltas } from './utils/projection.js';
 import { createLayoutState, createProjectionState } from './utils/state.js';
 import { FlatTree } from './utils/flat-tree.js';
 import { checkIfControllingVariants, checkIfVariantNode, isVariantLabel } from './utils/variants.js';
+import { setCurrentViewportBox } from './dom/projection/relative-set.js';
+import { isDraggable } from './utils/is-draggable.js';
 
 var visualElement = function (_a) {
     var _b = _a.treeType, treeType = _b === void 0 ? "" : _b, build = _a.build, getBaseTarget = _a.getBaseTarget, makeTargetAnimatable = _a.makeTargetAnimatable, measureViewportBox = _a.measureViewportBox, renderInstance = _a.render, readValueFromInstance = _a.readValueFromInstance, resetTransform = _a.resetTransform, restoreTransform = _a.restoreTransform, removeValueFromRenderState = _a.removeValueFromRenderState, sortNodePosition = _a.sortNodePosition, scrapeMotionValuesFromProps = _a.scrapeMotionValuesFromProps;
@@ -44,6 +46,13 @@ var visualElement = function (_a) {
          *
          */
         var projection = createProjectionState();
+        /**
+         * A reference to the nearest projecting parent. This is either
+         * undefined if we haven't looked for the nearest projecting parent,
+         * false if there is no parent performing layout projection, or a reference
+         * to the projecting parent.
+         */
+        var projectionParent;
         /**
          * This is a reference to the visual state of the "lead" visual element.
          * Usually, this will be this visual element. But if it shares a layoutId
@@ -109,19 +118,10 @@ var visualElement = function (_a) {
         /**
          *
          */
-        function isProjecting() {
-            return projection.isEnabled && layoutState.isHydrated;
-        }
-        /**
-         *
-         */
         function render() {
-
             if (!instance)
                 return;
-                
-            if (isProjecting()) {
-                
+            if (element.isProjectionReady()) {
                 /**
                  * Apply the latest user-set transforms to the targetBox to produce the targetBoxFinal.
                  * This is the final box that we will then project into by calculating a transform delta and
@@ -137,9 +137,7 @@ var visualElement = function (_a) {
                 updateBoxDelta(layoutState.deltaFinal, layoutState.layoutCorrected, leadProjection.targetFinal, latestValues);
             }
             triggerBuild();
-            
             renderInstance(instance, renderState);
-
         }
         function triggerBuild() {
             var valuesToRender = latestValues;
@@ -148,11 +146,9 @@ var visualElement = function (_a) {
                 if (crossfadedValues)
                     valuesToRender = crossfadedValues;
             }
-            
             build(element, renderState, valuesToRender, leadProjection, layoutState, options, props);
         }
         function update() {
-            
             lifecycles.notifyUpdate(latestValues);
         }
         function updateLayoutProjection() {
@@ -172,6 +168,9 @@ var visualElement = function (_a) {
                 element.scheduleRender();
             }
             layoutState.deltaTransform = deltaTransform;
+        }
+        function updateTreeLayoutProjection() {
+            element.layoutTree.forEach(fireUpdateLayoutProjection);
         }
         /**
          *
@@ -209,8 +208,6 @@ var visualElement = function (_a) {
          */
         var isControllingVariants = checkIfControllingVariants(props);
         var isVariantNode = checkIfVariantNode(props);
-
-        
         var element = __assign(__assign({ treeType: treeType, 
             /**
              * This is a mirror of the internal instance prop, which keeps
@@ -220,14 +217,12 @@ var visualElement = function (_a) {
             /**
              * The depth of this visual element within the visual element tree.
              */
-            depth: parent ? parent.depth + 1 : 0, 
+            depth: parent ? parent.depth + 1 : 0, parent: parent, children: new Set(), 
             /**
              * An ancestor path back to the root visual element. This is used
              * by layout projection to quickly recurse back up the tree.
              */
-            path: parent ? [...parent.path, parent]:[],
-            
-            layoutTree: parent ? parent.layoutTree : new FlatTree(), 
+            path: parent ? __spreadArray(__spreadArray([], __read(parent.path)), [parent]) : [], layoutTree: parent ? parent.layoutTree : new FlatTree(), 
             /**
              *
              */
@@ -278,12 +273,12 @@ var visualElement = function (_a) {
                 if (isVariantNode && parent && !isControllingVariants) {
                     removeFromVariantTree = parent === null || parent === void 0 ? void 0 : parent.addVariantChild(element);
                 }
+                parent === null || parent === void 0 ? void 0 : parent.children.add(element);
             },
             /**
              *
              */
             unmount: function () {
-
                 cancelSync.update(update);
                 cancelSync.render(render);
                 cancelSync.preRender(element.updateLayoutProjection);
@@ -291,9 +286,9 @@ var visualElement = function (_a) {
                 element.stopLayoutAnimation();
                 element.layoutTree.remove(element);
                 removeFromVariantTree === null || removeFromVariantTree === void 0 ? void 0 : removeFromVariantTree();
+                parent === null || parent === void 0 ? void 0 : parent.children.delete(element);
                 unsubscribeFromLeadVisualElement === null || unsubscribeFromLeadVisualElement === void 0 ? void 0 : unsubscribeFromLeadVisualElement();
                 lifecycles.clearAllListeners();
-
             },
             /**
              * Add a child visual element to our set of children.
@@ -479,7 +474,6 @@ var visualElement = function (_a) {
              * added to our map, old ones removed, and listeners updated.
              */
             setProps: function (newProps) {
-                
                 props = newProps;
                 lifecycles.updatePropListeners(newProps);
                 prevMotionValues = updateMotionValuesFromProps(element, scrapeMotionValuesFromProps(props), prevMotionValues);
@@ -536,34 +530,24 @@ var visualElement = function (_a) {
             unlockProjectionTarget: function () {
                 element.stopLayoutAnimation();
                 projection.isTargetLocked = false;
-            },
-            /**
-             * Record the viewport box as it was before an expected mutation/re-render
-             */
-            snapshotViewportBox: function () {
-                // TODO: Store this snapshot in LayoutState
-                element.prevViewportBox = element.measureViewportBox(false);
-                /**
-                 * Update targetBox to match the prevViewportBox. This is just to ensure
-                 * that targetBox is affected by scroll in the same way as the measured box
-                 */
-                element.rebaseProjectionTarget(false, element.prevViewportBox);
             }, getLayoutState: function () { return layoutState; }, setCrossfader: function (newCrossfader) {
                 crossfader = newCrossfader;
-            },
+            }, isProjectionReady: function () { return projection.isEnabled && layoutState.isHydrated; }, 
             /**
              * Start a layout animation on a given axis.
-             * TODO: This could be better.
              */
-            startLayoutAnimation: function (axis, transition) {
+            startLayoutAnimation: function (axis, transition, isRelative) {
+                if (isRelative === void 0) { isRelative = false; }
                 var progress = element.getProjectionAnimationProgress()[axis];
-                var _a = projection.target[axis], min = _a.min, max = _a.max;
+                var _a = isRelative
+                    ? projection.relativeTarget[axis]
+                    : projection.target[axis], min = _a.min, max = _a.max;
                 var length = max - min;
                 progress.clearListeners();
                 progress.set(min);
                 progress.set(min); // Set twice to hard-reset velocity
                 progress.onChange(function (v) {
-                    return element.setProjectionTargetAxis(axis, v, v + length);
+                    element.setProjectionTargetAxis(axis, v, v + length, isRelative);
                 });
                 return element.animateMotionValue(axis, progress, 0, transition);
             },
@@ -588,18 +572,6 @@ var visualElement = function (_a) {
                 return viewportBox;
             },
             /**
-             * Update the layoutState by measuring the DOM layout. This
-             * should be called after resetting any layout-affecting transforms.
-             */
-            updateLayoutMeasurement: function () {
-                element.notifyBeforeLayoutMeasure(layoutState.layout);
-                layoutState.isHydrated = true;
-                layoutState.layout = element.measureViewportBox();
-                layoutState.layoutCorrected = copyAxisBox(layoutState.layout);
-                element.notifyLayoutMeasure(layoutState.layout, element.prevViewportBox || layoutState.layout);
-                sync.update(function () { return element.rebaseProjectionTarget(); });
-            },
-            /**
              * Get the motion values tracking the layout animations on each
              * axis. Lazy init if not already created.
              */
@@ -614,10 +586,19 @@ var visualElement = function (_a) {
              * Update the projection of a single axis. Schedule an update to
              * the tree layout projection.
              */
-            setProjectionTargetAxis: function (axis, min, max) {
-                
-                var target = projection.target[axis];
-                
+            setProjectionTargetAxis: function (axis, min, max, isRelative) {
+                if (isRelative === void 0) { isRelative = false; }
+                var target;
+                if (isRelative) {
+                    if (!projection.relativeTarget) {
+                        projection.relativeTarget = axisBox();
+                    }
+                    target = projection.relativeTarget[axis];
+                }
+                else {
+                    projection.relativeTarget = undefined;
+                    target = projection.target[axis];
+                }
                 target.min = min;
                 target.max = max;
                 // Flag that we want to fire the onViewportBoxUpdate event handler
@@ -633,8 +614,8 @@ var visualElement = function (_a) {
             rebaseProjectionTarget: function (force, box) {
                 if (box === void 0) { box = layoutState.layout; }
                 var _a = element.getProjectionAnimationProgress(), x = _a.x, y = _a.y;
-                
-                var shouldRebase = !projection.isTargetLocked &&
+                var shouldRebase = !projection.relativeTarget &&
+                    !projection.isTargetLocked &&
                     !x.isAnimating() &&
                     !y.isAnimating();
                 if (force || shouldRebase) {
@@ -650,28 +631,50 @@ var visualElement = function (_a) {
              * needs to be performed.
              */
             notifyLayoutReady: function (config) {
+                setCurrentViewportBox(element);
                 element.notifyLayoutUpdate(layoutState.layout, element.prevViewportBox || layoutState.layout, config);
-
             }, 
             /**
              * Temporarily reset the transform of the instance.
              */
-            resetTransform: function () { 
-
-                return resetTransform(element, instance, props); }, 
-            /**
-             * Perform the callback after temporarily unapplying the transform
-             * upwards through the tree.
-             */
-            withoutTransform: function (callback) {
-                var isEnabled = projection.isEnabled;
-                isEnabled && element.resetTransform();
-                parent ? parent.withoutTransform(callback) : callback();
-                isEnabled && restoreTransform(instance, renderState);
-            },
-            updateLayoutProjection: updateLayoutProjection,
+            resetTransform: function () { return resetTransform(element, instance, props); }, restoreTransform: function () { return restoreTransform(instance, renderState); }, updateLayoutProjection: updateLayoutProjection,
             updateTreeLayoutProjection: function () {
-                element.layoutTree.forEach(fireUpdateLayoutProjection);
+                element.layoutTree.forEach(fireResolveRelativeTargetBox);
+                /**
+                 * Schedule the projection updates at the end of the current preRender
+                 * step. This will ensure that all layout trees will first resolve
+                 * relative projection boxes into viewport boxes, and *then*
+                 * update projections.
+                 */
+                sync.preRender(updateTreeLayoutProjection, false, true);
+            },
+            getProjectionParent: function () {
+                if (projectionParent === undefined) {
+                    var foundParent = false;
+                    // Search backwards through the tree path
+                    for (var i = element.path.length - 1; i >= 0; i--) {
+                        var ancestor = element.path[i];
+                        if (ancestor.projection.isEnabled) {
+                            foundParent = ancestor;
+                            break;
+                        }
+                    }
+                    projectionParent = foundParent;
+                }
+                return projectionParent;
+            },
+            resolveRelativeTargetBox: function () {
+                var relativeParent = element.getProjectionParent();
+                if (!projection.relativeTarget || !relativeParent)
+                    return;
+                calcRelativeBox(projection, relativeParent.projection);
+                if (isDraggable(relativeParent)) {
+                    var target = projection.target;
+                    applyBoxTransforms(target, target, relativeParent.getLatestValues());
+                }
+            },
+            shouldResetTransform: function () {
+                return Boolean(props._layoutResetTransform);
             },
             /**
              *
@@ -698,6 +701,9 @@ var visualElement = function (_a) {
         return element;
     };
 };
+function fireResolveRelativeTargetBox(child) {
+    child.resolveRelativeTargetBox();
+}
 function fireUpdateLayoutProjection(child) {
     child.updateLayoutProjection();
 }

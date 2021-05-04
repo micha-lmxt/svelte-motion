@@ -8,8 +8,8 @@ Copyright (c) 2018 Framer B.V.
     import { PanSession } from "./PanSession"
     import { afterUpdate, getContext, onDestroy } from "svelte";
     import { UsePointerEvent } from "../events/use-pointer-event"
-
-
+    
+    
     export let props,
         visualElement;
     $: ({ onPan, onPanStart, onPanEnd, onPanSessionStart } = props);

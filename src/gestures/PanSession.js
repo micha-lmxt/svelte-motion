@@ -60,23 +60,28 @@ var PanSession = /** @class */ (function () {
             _this.lastMoveEventInfo = transformPoint(info, _this.transformPagePoint);
             // Because Safari doesn't trigger mouseup events when it's above a `<select>`
             if (isMouseEvent(event) && event.buttons === 0) {
+
                 _this.handlePointerUp(event, info);
+
                 return;
             }
             // Throttle mouse move event to once per frame
             sync.update(_this.updatePoint, true);
         };
         this.handlePointerUp = function (event, info) {
+            
             _this.end();
             var onEnd = _this.handlers.onEnd;
             if (!onEnd || !_this.startEvent)
                 return;
             var panInfo = getPanInfo(transformPoint(info, _this.transformPagePoint), _this.history);
             onEnd && onEnd(event, panInfo);
+            
         };
         // If we have more than one touch, don't start detecting this gesture
         if (isTouchEvent(event) && event.touches.length > 1)
             return;
+            
         this.handlers = handlers;
         this.transformPagePoint = transformPagePoint;
         var info = extractEventInfo(event);
