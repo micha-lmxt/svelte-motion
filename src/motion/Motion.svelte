@@ -15,6 +15,7 @@ Copyright (c) 2018 Framer B.V.
     import {UseCreateMotionContext} from "../context/MotionContext/create";
     import {UseVisualState} from './utils/use-visual-state.js';
     import {useMotionRef} from "./utils/use-motion-ref.js";
+import Animate from "./features/layout/Animate.svelte";
 
 
     export let isSVG = false,
@@ -145,6 +146,7 @@ Copyright (c) 2018 Framer B.V.
         //MotionAdvancedProps
         custom,
         inherit,
+        ...(isSVG?$$restProps:{})
     };
     //$: (allProps = {...motionProps,$$restProps});
 

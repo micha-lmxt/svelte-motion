@@ -147,6 +147,7 @@ Copyright (c) 2018 Framer B.V.
         //MotionAdvancedProps
         custom,
         inherit,
+        ...(isSVG?$$restProps:{})
     };
     //$: (allProps = {...motionProps,$$restProps});
     loadFeatures(featureBundle)
