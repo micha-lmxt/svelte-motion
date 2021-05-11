@@ -159,7 +159,6 @@ Copyright (c) 2018 Framer B.V.
 
 {#each childrenToRender as child (getChildKey(child))}
     <PresenceChild
-        key={getChildKey(child)}
         isPresent={child.present}
         initial={initial ? undefined : false}
         custom={child.onExit ? custom : undefined}
