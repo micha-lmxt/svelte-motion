@@ -182,6 +182,7 @@ Copyright (c) 2018 Framer B.V.
         target = targetBox || target;
 
         const boxHasMoved = hasMoved(origin, target);
+        
 
         const animations = eachAxis((axis) => {
             /**

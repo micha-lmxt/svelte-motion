@@ -5,7 +5,7 @@ Copyright (c) 2018 Framer B.V.
 */
     
 
-import { afterUpdate,  onMount} from "svelte";
+import { afterUpdate,  beforeUpdate,  onMount} from "svelte";
 import {isSharedLayout} from "../../../context/SharedLayoutContext";
 import { snapshotViewportBox } from "../../../render/dom/projection/utils";
 
@@ -38,6 +38,7 @@ import { snapshotViewportBox } from "../../../render/dom/projection/utils";
      */
 
     const updater = ()=>{
+        console.log(visualElement)
         if (isSharedLayout(syncLayout)) {
 
             syncLayout.syncUpdate()
@@ -50,11 +51,11 @@ import { snapshotViewportBox } from "../../../render/dom/projection/utils";
         return null
     }
 
-    $: updater(syncLayout,update);
+    //$: updater(syncLayout,update);
     
-
+    beforeUpdate(updater)
     afterUpdate(()=>{
-        
+        //updater();
 
         if (!isSharedLayout(syncLayout)) {
             syncLayout.flush()
@@ -64,7 +65,7 @@ import { snapshotViewportBox } from "../../../render/dom/projection/utils";
          * If this axis isn't animating as a result of this render we want to reset the targetBox
          * to the measured box
          */
-        visualElement.rebaseProjectionTarget()
+        //visualElement.rebaseProjectionTarget()
       
     })
 </script>

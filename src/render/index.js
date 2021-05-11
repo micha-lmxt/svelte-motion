@@ -154,7 +154,7 @@ var visualElement = function (_a) {
         function updateLayoutProjection() {
             var delta = layoutState.delta, treeScale = layoutState.treeScale;
             var prevTreeScaleX = treeScale.x;
-            var prevTreeScaleY = treeScale.x;
+            var prevTreeScaleY = treeScale.y;
             var prevDeltaTransform = layoutState.deltaTransform;
             updateLayoutDeltas(layoutState, leadProjection, element.path, latestValues);
             hasViewportBoxUpdated &&
