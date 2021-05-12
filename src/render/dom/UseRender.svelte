@@ -13,11 +13,15 @@ import { filterProps } from "./utils/filter-props"
         forwardMotionProps = false,
         isStatic,
         ref;
+    const motion = (node)=>{
+        ref(node)
+    }
     $: (filteredProps = filterProps(
             props,
             typeof Component === "string",
             forwardMotionProps
         ))
+    
 </script>
 
 <svelte:component
@@ -27,7 +31,7 @@ import { filterProps } from "./utils/filter-props"
     {props}
     let:visualProps>
     <slot
-        motion={ref}
+        motion={motion}
         props={{...filteredProps,...visualProps}} />
 </svelte:component>
 
