@@ -1,15 +1,15 @@
 /** 
-based on framer-motion@4.0.3,
+based on framer-motion@4.1.15,
 Copyright (c) 2018 Framer B.V.
 */
 import {fixed} from '../../utils/fix-process-env';
 import { __assign, __rest, __spreadArray, __read } from 'tslib';
 import { inertia, animate } from 'popmotion';
-//import { warning } from 'hey-listen';
 import { secondsToMilliseconds } from '../../utils/time-conversion.js';
 import { isEasingArray, easingDefinitionToFunction } from './easing.js';
 import { isAnimatable } from './is-animatable.js';
 import { getDefaultTransition } from './default-transitions.js';
+import { warning } from 'hey-listen';
 import { getAnimatableNone } from '../../render/dom/value-types/animatable-none.js';
 
 /**
@@ -54,7 +54,7 @@ function convertTransitionToAnimationOptions(_a) {
      * TODO: These options are officially removed from the API.
      */
     if (yoyo || loop || flip) {
-        //warning(!legacyRepeatWarning, "yoyo, loop and flip have been removed from the API. Replace with repeat and repeatType options.");
+        warning(!legacyRepeatWarning, "yoyo, loop and flip have been removed from the API. Replace with repeat and repeatType options.");
         legacyRepeatWarning = true;
         if (yoyo) {
             options.repeatType = "reverse";
@@ -77,19 +77,19 @@ function convertTransitionToAnimationOptions(_a) {
     return options;
 }
 /**
-* Get the delay for a value by checking Transition with decreasing specificity.
-*/
+ * Get the delay for a value by checking Transition with decreasing specificity.
+ */
 function getDelayFromTransition(transition, key) {
-   var _a;
-   var valueTransition = getValueTransition(transition, key) || {};
-   return (_a = valueTransition.delay) !== null && _a !== void 0 ? _a : 0;
+    var _a;
+    var valueTransition = getValueTransition(transition, key) || {};
+    return (_a = valueTransition.delay) !== null && _a !== void 0 ? _a : 0;
 }
 function hydrateKeyframes(options) {
-   if (Array.isArray(options.to) && options.to[0] === null) {
-       options.to = __spreadArray([], __read(options.to));
-       options.to[0] = options.from;
-   }
-   return options;
+    if (Array.isArray(options.to) && options.to[0] === null) {
+        options.to = __spreadArray([], __read(options.to));
+        options.to[0] = options.from;
+    }
+    return options;
 }
 function getPopmotionAnimationOptions(transition, options, key) {
     var _a;
@@ -113,15 +113,23 @@ function getAnimation(key, value, target, transition, onComplete) {
     var valueTransition = getValueTransition(transition, key);
     var origin = (_a = valueTransition.from) !== null && _a !== void 0 ? _a : value.get();
     var isTargetAnimatable = isAnimatable(key, target);
-    /**
-     * If we're trying to animate from "none", try and get an animatable version
-     * of the target. This could be improved to work both ways.
-     */
     if (origin === "none" && isTargetAnimatable && typeof target === "string") {
+        /**
+         * If we're trying to animate from "none", try and get an animatable version
+         * of the target. This could be improved to work both ways.
+         */
         origin = getAnimatableNone(key, target);
     }
+    else if (isZero(origin) && typeof target === "string") {
+        origin = getZeroUnit(target);
+    }
+    else if (!Array.isArray(target) &&
+        isZero(target) &&
+        typeof origin === "string") {
+        target = getZeroUnit(origin);
+    }
     var isOriginAnimatable = isAnimatable(key, origin);
-    //warning(isOriginAnimatable === isTargetAnimatable, "You are trying to animate " + key + " from \"" + origin + "\" to \"" + target + "\". " + origin + " is not an animatable value - to enable this animation set " + origin + " to a value animatable to " + target + " via the `style` property.");
+    warning(isOriginAnimatable === isTargetAnimatable, "You are trying to animate " + key + " from \"" + origin + "\" to \"" + target + "\". " + origin + " is not an animatable value - to enable this animation set " + origin + " to a value animatable to " + target + " via the `style` property.");
     function start() {
         var options = {
             from: origin,
@@ -156,6 +164,17 @@ function getAnimation(key, value, target, transition, onComplete) {
         ? set
         : start;
 }
+function isZero(value) {
+    return (value === 0 ||
+        (typeof value === "string" &&
+            parseFloat(value) === 0 &&
+            value.indexOf(" ") === -1));
+}
+function getZeroUnit(potentialUnitType) {
+    return typeof potentialUnitType === "number"
+        ? 0
+        : getAnimatableNone("", potentialUnitType);
+}
 function getValueTransition(transition, key) {
     return transition[key] || transition["default"] || transition;
 }
@@ -186,4 +205,4 @@ function startAnimation(key, value, target, transition) {
     });
 }
 
-export { convertTransitionToAnimationOptions, getDelayFromTransition, getPopmotionAnimationOptions, getValueTransition, hydrateKeyframes, isTransitionDefined, startAnimation };
+export { convertTransitionToAnimationOptions, getDelayFromTransition, getPopmotionAnimationOptions, getValueTransition, getZeroUnit, hydrateKeyframes, isTransitionDefined, isZero, startAnimation };

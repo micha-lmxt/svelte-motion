@@ -3,50 +3,57 @@
 based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
-
-    const stateVisualElement = visualElement({
-    createRenderState: () => ({}),
-    build() {},
+    var createObject = function () { return ({}); };
+    var stateVisualElement = visualElement({
+    build: function () { },
     measureViewportBox: axisBox,
-    resetTransform() {},
-    restoreTransform() {},
-    removeValueFromMutableState() {},
-    render() {},
-    scrapeMotionValuesFromProps() {
-        return {}
+    resetTransform: function () { },
+    restoreTransform: function () { },
+    removeValueFromRenderState: function () { },
+    render: function () { },
+    scrapeMotionValuesFromProps: createObject,
+    readValueFromInstance: function (_state, key, options) {
+        return options.initialState[key] || 0;
     },
+    makeTargetAnimatable: function (element, _a) {
+        var transition = _a.transition, transitionEnd = _a.transitionEnd, target = __rest(_a, ["transition", "transitionEnd"]);
+        var origin = getOrigin(target, transition || {}, element);
+        checkTargetForNewValues(element, target, origin);
+        return __assign({ transition: transition, transitionEnd: transitionEnd }, target);
+    },
+});
 
-    readValueFromInstance(_state, key, options) {
-        return options.initialState[key] || 0
-    },
-
-    makeTargetAnimatable(element, { transition, transitionEnd, ...target }) {
-        const origin = getOrigin(target, transition || {}, element)
-        checkTargetForNewValues(element, target, origin)
-        return { transition, transitionEnd, ...target }
-    },
-})
 </script>
+
 <script>
-
-import { afterUpdate, onMount } from "svelte";
-
-
+  
+    import { afterUpdate, onMount } from "svelte";
+    import {UseVisualState} from '../motion/utils/use-visual-state.js';
     export let initialState;
 
     let animationState = initialState;
-    let element = stateVisualElement({ props: {} }, { initialState });
-    onMount(()=> {
-        element.ref({})
-        return () => element.ref(null)
-    })
-    afterUpdate(()=>{
+    const sve = stateVisualElement;
+    $:( element = sve({ props: {} }, { visualState:state }))
+    onMount(() => {
+        element.mount({});
+        return () => element.unmount();
+    });
+    afterUpdate(() => {
         element.setProps({
             onUpdate: (v) => setAnimationState({ ...v }),
-        })
-    })
+        });
+    });
     let startAnimation = (animationDefinition) => {
-            return animateVisualElement(element, animationDefinition)
-        }
+        return animateVisualElement(element, animationDefinition);
+    };
 </script>
-<slot animatedState={[animationState,startAnimation]}/>
+
+<UseVisualState
+    config={{ scrapeMotionValuesFromProps: createObject, createRenderState: createObject }}
+   
+    props={{}}
+    isStatic={false}
+    let:state
+    >
+    <slot animatedState={[animationState, startAnimation]} />
+</UseVisualState>

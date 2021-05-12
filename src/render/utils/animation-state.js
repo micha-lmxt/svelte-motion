@@ -2,14 +2,13 @@
 based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
-import { __spread, __assign, __rest } from 'tslib';
-import { isKeyframesTarget } from '../../animation/utils/is-keyframes-target.js';
-import { isVariantLabels, resolveVariant, isVariantLabel } from './variants.js';
-import { animateVisualElement } from './animation.js';
-
-import { shallowCompare } from '../../utils/shallow-compare.js';
-import { AnimationType } from './types.js';
+import { __spreadArray, __read, __assign, __rest } from 'tslib';
 import { isAnimationControls } from '../../animation/utils/is-animation-controls.js';
+import { isKeyframesTarget } from '../../animation/utils/is-keyframes-target.js';
+import { shallowCompare } from '../../utils/shallow-compare.js';
+import { animateVisualElement } from './animation.js';
+import { AnimationType } from './types.js';
+import { isVariantLabels, resolveVariant, isVariantLabel } from './variants.js';
 
 var variantPriorityOrder = [
     AnimationType.Animate,
@@ -19,7 +18,7 @@ var variantPriorityOrder = [
     AnimationType.Focus,
     AnimationType.Exit,
 ];
-var reversePriorityOrder = __spread(variantPriorityOrder).reverse();
+var reversePriorityOrder = __spreadArray([], __read(variantPriorityOrder)).reverse();
 var numAnimationTypes = variantPriorityOrder.length;
 function animateList(visualElement) {
     return function (animations) {
@@ -41,7 +40,7 @@ function createAnimationState(visualElement) {
     var buildResolvedTypeValues = function (acc, definition) {
         var resolved = resolveVariant(visualElement, definition);
         if (resolved) {
-            var transition = resolved.transition, transitionEnd = resolved.transitionEnd, target = __rest(resolved, ["transition", "transitionEnd"]);
+            resolved.transition; var transitionEnd = resolved.transitionEnd, target = __rest(resolved, ["transition", "transitionEnd"]);
             acc = __assign(__assign(__assign({}, acc), target), transitionEnd);
         }
         return acc;
@@ -67,7 +66,7 @@ function createAnimationState(visualElement) {
      *    what to animate those to.
      */
     function animateChanges(options, changedActiveType) {
-        
+        var _a;
         var props = visualElement.getProps();
         var context = visualElement.getVariantContext(true) || {};
         /**
@@ -118,7 +117,6 @@ function createAnimationState(visualElement) {
                 visualElement.manuallyAnimateOnMount) {
                 isInherited = false;
             }
-            
             /**
              * Set all encountered keys so far as the protected keys for this type. This will
              * be any key that has been animated or otherwise handled by active, higher-priortiy types.
@@ -169,7 +167,7 @@ function createAnimationState(visualElement) {
              * 4. If it hasn't been removed in a higher priority but hasn't changed, and
              *    needs adding to the type's protectedKeys list.
              */
-            var _a = typeState.prevResolvedValues, prevResolvedValues = _a === void 0 ? {} : _a;
+            var _b = typeState.prevResolvedValues, prevResolvedValues = _b === void 0 ? {} : _b;
             var allKeys = __assign(__assign({}, prevResolvedValues), resolvedValues);
             var markToAnimate = function (key) {
                 shouldAnimateType = true;
@@ -247,10 +245,10 @@ function createAnimationState(visualElement) {
              * by removed values?
              */
             if (shouldAnimateType && !isInherited) {
-                animations.push.apply(animations, __spread(definitionList.map(function (animation) { return ({
+                animations.push.apply(animations, __spreadArray([], __read(definitionList.map(function (animation) { return ({
                     animation: animation,
                     options: __assign({ type: type }, options),
-                }); })));
+                }); }))));
             }
         };
         /**
@@ -284,7 +282,6 @@ function createAnimationState(visualElement) {
             !visualElement.manuallyAnimateOnMount) {
             shouldAnimate = false;
         }
-
         isInitialRender = false;
         return shouldAnimate ? animate(animations) : Promise.resolve();
     }

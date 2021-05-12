@@ -152,6 +152,8 @@ var visualElement = function (_a) {
             lifecycles.notifyUpdate(latestValues);
         }
         function updateLayoutProjection() {
+            if (!element.isProjectionReady())
+            return;
             var delta = layoutState.delta, treeScale = layoutState.treeScale;
             var prevTreeScaleX = treeScale.x;
             var prevTreeScaleY = treeScale.y;
