@@ -38,11 +38,21 @@ Copyright (c) 2018 Framer B.V.
         element.mount({});
         return () => element.unmount();
     });
-    afterUpdate(() => {
+    const _afterUpdate = () => {
         element.setProps({
             onUpdate: (v) => setAnimationState({ ...v }),
         });
-    });
+    }
+
+    afterUpdate(_afterUpdate);
+    const scaleCorrectionParentContext = getContext(
+        ScaleCorrectionParentContext
+    );
+    scaleCorrectionParentContext.update((v) =>
+        v.concat([{
+            afterU:_afterUpdate
+        } ])
+    );
     let startAnimation = (animationDefinition) => {
         return animateVisualElement(element, animationDefinition);
     };

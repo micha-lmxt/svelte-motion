@@ -4,7 +4,13 @@ based on framer-motion@4.1.11,
 Copyright (c) 2018 Framer B.V.
 */
 
-    import { afterUpdate, beforeUpdate, getContext, onMount, tick } from "svelte";
+    import {
+        afterUpdate,
+        beforeUpdate,
+        getContext,
+        onMount,
+        tick,
+    } from "svelte";
     import { get } from "svelte/store";
     import {
         ScaleCorrectionContext,
@@ -12,10 +18,9 @@ Copyright (c) 2018 Framer B.V.
     } from "../../../context/ScaleCorrectionProvider.svelte";
     import { isSharedLayout } from "../../../context/SharedLayoutContext";
     import { snapshotViewportBox } from "../../../render/dom/projection/utils";
-    import { setCurrentViewportBox } from "../../../render/dom/projection/relative-set"
+    import { setCurrentViewportBox } from "../../../render/dom/projection/relative-set";
 
     export let visualElement, syncLayout, framerSyncLayout, update;
-
 
     const scaleCorrectionContext = getContext(ScaleCorrectionContext);
     const scaleCorrectionParentContext = getContext(
@@ -45,39 +50,34 @@ Copyright (c) 2018 Framer B.V.
      */
 
     const updater = () => {
-        //console.log(visualElement);
+        //setCurrentViewportBox(visualElement);
         
+        get(scaleCorrectionContext).forEach((v) =>{ v.updater?.()});
+        console.log(visualElement);
         if (isSharedLayout(syncLayout)) {
             syncLayout.syncUpdate();
         } else {
             snapshotViewportBox(visualElement);
             syncLayout.add(visualElement);
         }
-        //get(scaleCorrectionContext).forEach((v) => v());
-        
+        //
+
         return null;
     };
 
-    scaleCorrectionParentContext.update((v) =>
-        v.concat([
-            () => {
-                //innerupdate=true;
-                console.log("xx")
-                    snapshotViewportBox(visualElement);
-                    setCurrentViewportBox(visualElement)
-
-            },
-        ])
-    );
-
-    $: update !== undefined && updater(update,innerupdate);
     
+
+    $: update !== undefined && updater(update);
 
     if (update === undefined) {
         beforeUpdate(updater);
     }
-
-    afterUpdate(() => {
+    const afterU = ()=>{
+        get(scaleCorrectionContext).forEach((v,i) => {
+            console.log(i)
+            v.afterU()
+        });
+        console.log("afterupdate", visualElement);
         //updater();
 
         if (!isSharedLayout(syncLayout)) {
@@ -88,6 +88,13 @@ Copyright (c) 2018 Framer B.V.
          * If this axis isn't animating as a result of this render we want to reset the targetBox
          * to the measured box
          */
-        setCurrentViewportBox(visualElement)
-    });
+        //setCurrentViewportBox(visualElement);
+    }
+    scaleCorrectionParentContext.update((v) =>
+        v.concat([{
+            updater,
+            afterU
+        } ])
+    );
+    afterUpdate(afterU);
 </script>

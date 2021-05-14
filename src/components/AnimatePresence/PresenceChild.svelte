@@ -54,11 +54,11 @@ Copyright (c) 2018 Framer B.V.
     let context = PresenceContext();
 
     afterUpdate(()=>{
-        
         if (presenceAffectsLayout){
             context.set(memoContext());
         }
     })
+    
     $: ( context.set(memoContext(refresh)))
 
     const keyset = () => {
