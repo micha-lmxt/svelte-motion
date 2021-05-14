@@ -1,5 +1,5 @@
 /** 
-based on framer-motion@4.0.3,
+based on framer-motion@4.1.15,
 Copyright (c) 2018 Framer B.V.
 */
 import { __rest, __assign } from 'tslib';
@@ -56,12 +56,6 @@ var htmlConfig = {
      * works
      */
     resetTransform: function (element, domElement, props) {
-        /**
-         * When we reset the transform of an element, there's a fair possibility that
-         * the element will visually move from underneath the pointer, triggering attached
-         * pointerenter/leave events. We temporarily suspend these while measurement takes place.
-         */
-        element.suspendHoverEvents();
         var transformTemplate = props.transformTemplate;
         domElement.style.transform = transformTemplate
             ? transformTemplate({}, "")

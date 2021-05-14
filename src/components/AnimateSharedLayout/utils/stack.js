@@ -78,13 +78,17 @@ function layoutStack() {
                 prevValues: prevValues,
                 crossfadeOpacity: (follow === null || follow === void 0 ? void 0 : follow.isPresenceRoot) || (lead === null || lead === void 0 ? void 0 : lead.isPresenceRoot),
             });
-            if (state.follow &&
+            if (
+            // Don't crossfade if we've just animated back from lead and switched the
+            // old follow to the new lead.
+            state.lead !== prevState.follow &&
                 (prevState.lead !== state.lead ||
                     prevState.leadIsExiting !== state.leadIsExiting)) {
                 needsCrossfadeAnimation = true;
             }
         },
         animate: function (child, shouldCrossfade) {
+            var _a;
             if (shouldCrossfade === void 0) { shouldCrossfade = false; }
             if (child === state.lead) {
                 if (shouldCrossfade) {
@@ -98,6 +102,13 @@ function layoutStack() {
                     child.setVisibility(true);
                 }
                 var config = {};
+                var prevParent = (_a = state.follow) === null || _a === void 0 ? void 0 : _a.getProjectionParent();
+                if (prevParent) {
+                    /**
+                     * We'll use this to determine if the element or its layoutId has been reparented.
+                     */
+                    config.prevParent = prevParent;
+                }
                 if (child.presence === Presence.Entering) {
                     config.originBox = getFollowViewportBox();
                 }

@@ -6,7 +6,12 @@
 <script>
     import {getContext,setContext} from 'svelte';
     const fromParent = getContext(ScaleCorrectionContext)||ScaleCorrectionContext();
+
+    
     setContext(ScaleCorrectionContext,ScaleCorrectionContext());
+    
     setContext(ScaleCorrectionParentContext,fromParent)
+    
+
 </script>
 <slot/>

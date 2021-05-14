@@ -15,6 +15,7 @@ Copyright (c) 2018 Framer B.V.
     import {MotionContext} from "../../context/MotionContext/index.js";
     import { isPresent } from '../../components/AnimatePresence/use-presence.js';
     import { get } from "svelte/store";
+    import { ScaleCorrectionParentContext } from '../../context/ScaleCorrectionProvider.svelte'
 
     export let createVisualElement=undefined,
         props,
@@ -57,16 +58,13 @@ Copyright (c) 2018 Framer B.V.
     }
     let visualElement = visualElementRef;
     $: (visualElement = visualElementRef);
-    afterUpdate(() => {
-        
-        if (!visualElement) return;
-        
+
+    $: if (visualElement){
         visualElement.setProps({
             ...$config,
             ...props,
             layoutId,
         });
-
         visualElement.isPresent = isPresent($presenceContext);
         visualElement.isPresenceRoot =
             !parent || parent.presenceId !== $presenceContext?.id;
@@ -74,14 +72,15 @@ Copyright (c) 2018 Framer B.V.
         /**
          * Fire a render to ensure the latest state is reflected on-screen.
          */
-        visualElement.syncRender();
+         visualElement.syncRender();
+    }
 
-        /**
-         * In a future refactor we can replace the features-as-components and
-         * have this loop through them all firing "effect" listeners
-         */
-         tick().then(()=>visualElement.animationState?.animateChanges())
+    afterUpdate(()=>{
+        tick().then(()=>{ 
+             visualElement.animationState?.animateChanges()
+         })
     });
+
     onDestroy(()=>{
         visualElement?.notifyUnmount()
         

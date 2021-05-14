@@ -49,18 +49,19 @@ Copyright (c) 2018 Framer B.V.
      * If it is stand-alone component, add it to the batcher.
      */
 
-    const updater = () => {
-        //setCurrentViewportBox(visualElement);
-        
-        get(scaleCorrectionContext).forEach((v) =>{ v.updater?.()});
-        console.log(visualElement);
+    const updater = (nc=false) => {
+
+        get(scaleCorrectionContext).forEach((v) =>{
+            v.updater?.(true);
+        });
+
         if (isSharedLayout(syncLayout)) {
             syncLayout.syncUpdate();
         } else {
-            snapshotViewportBox(visualElement);
+            snapshotViewportBox(visualElement,nc);
             syncLayout.add(visualElement);
+
         }
-        //
 
         return null;
     };
@@ -72,14 +73,13 @@ Copyright (c) 2018 Framer B.V.
     if (update === undefined) {
         beforeUpdate(updater);
     }
-    const afterU = ()=>{
-        get(scaleCorrectionContext).forEach((v,i) => {
-            console.log(i)
-            v.afterU()
+    const afterU = (nc =false)=>{
+        const scc = get(scaleCorrectionContext);
+        
+        scc.forEach((v,i) => {
+            v.afterU?.(true)
         });
-        console.log("afterupdate", visualElement);
-        //updater();
-
+        
         if (!isSharedLayout(syncLayout)) {
             syncLayout.flush();
         }
@@ -89,6 +89,9 @@ Copyright (c) 2018 Framer B.V.
          * to the measured box
          */
         //setCurrentViewportBox(visualElement);
+
+
+
     }
     scaleCorrectionParentContext.update((v) =>
         v.concat([{

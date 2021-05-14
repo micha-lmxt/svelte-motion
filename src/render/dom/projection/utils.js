@@ -48,10 +48,10 @@ function updateLayoutMeasurement(visualElement) {
 /**
  * Record the viewport box as it was before an expected mutation/re-render
  */
-function snapshotViewportBox(visualElement) {
+function snapshotViewportBox(visualElement,nc) {
     if (visualElement.shouldResetTransform())
         return;
-    visualElement.prevViewportBox = visualElement.measureViewportBox(false);
+    if (!nc) visualElement.prevViewportBox = visualElement.measureViewportBox(false);
     /**
      * Update targetBox to match the prevViewportBox. This is just to ensure
      * that targetBox is affected by scroll in the same way as the measured box

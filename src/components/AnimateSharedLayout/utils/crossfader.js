@@ -7,6 +7,7 @@ import { __assign } from 'tslib';
 import sync, { getFrameData } from 'framesync';
 import { mix, progress, linear, mixColor, circOut } from 'popmotion';
 import { animate } from '../../../animation/animate.js';
+import { getValueTransition } from '../../../animation/utils/transitions.js';
 import { motionValue } from '../../../value/index.js';
 
 function createCrossfader() {
@@ -20,6 +21,7 @@ function createCrossfader() {
         crossfadeOpacity: false,
         preserveFollowOpacity: false,
     };
+    var prevOptions = __assign({}, options);
     var leadState = {};
     var followState = {};
     /**
@@ -52,9 +54,10 @@ function createCrossfader() {
              */
             finalCrossfadeFrame = getFrameData().timestamp;
         };
+        transition = transition && getValueTransition(transition, "crossfade");
         return animate(progress, target, __assign(__assign({}, transition), { onUpdate: onUpdate, onComplete: function () {
                 if (!hasUpdated) {
-                    progress.set(1);
+                    progress.set(target);
                     /**
                      * If we never ran an update, for instance if this was an instant transition, fire a
                      * simulated final frame to ensure the crossfade gets applied correctly.
@@ -97,7 +100,12 @@ function createCrossfader() {
         var leadTargetOpacity = (_a = latestLeadValues.opacity) !== null && _a !== void 0 ? _a : 1;
         var followTargetOpacity = (_b = latestFollowValues === null || latestFollowValues === void 0 ? void 0 : latestFollowValues.opacity) !== null && _b !== void 0 ? _b : 1;
         if (options.crossfadeOpacity && follow) {
-            leadState.opacity = mix(0, leadTargetOpacity, easeCrossfadeIn(p));
+            leadState.opacity = mix(
+            /**
+             * If the follow child has been completely hidden we animate
+             * this opacity from its previous opacity, but otherwise from completely transparent.
+             */
+            follow.isVisible !== false ? 0 : followTargetOpacity, leadTargetOpacity, easeCrossfadeIn(p));
             followState.opacity = options.preserveFollowOpacity
                 ? followTargetOpacity
                 : mix(followTargetOpacity, 0, easeCrossfadeOut(p));
@@ -116,7 +124,21 @@ function createCrossfader() {
             return startCrossfadeAnimation(0, transition);
         },
         toLead: function (transition) {
-            progress.set(options.follow ? 1 - progress.get() : 0);
+            var initialProgress = 0;
+            if (!options.prevValues && !options.follow) {
+                /**
+                 * If we're not coming from anywhere, start at the end of the animation.
+                 */
+                initialProgress = 1;
+            }
+            else if (prevOptions.lead === options.follow &&
+                prevOptions.follow === options.lead) {
+                /**
+                 * If we're swapping follow/lead we can reverse the progress
+                 */
+                initialProgress = 1 - progress.get();
+            }
+            progress.set(initialProgress);
             return startCrossfadeAnimation(1, transition);
         },
         reset: function () { return progress.set(1); },
@@ -131,6 +153,7 @@ function createCrossfader() {
             }
         },
         setOptions: function (newOptions) {
+            prevOptions = options;
             options = newOptions;
             leadState = {};
             followState = {};
@@ -173,7 +196,7 @@ function mixValues(leadState, followState, latestLeadValues, latestFollowValues,
          */
         if (typeof followRadius === "number" &&
             typeof leadRadius === "number") {
-            var radius = mix(followRadius, leadRadius, p);
+            var radius = Math.max(mix(followRadius, leadRadius, p), 0);
             leadState[borderLabel] = followState[borderLabel] = radius;
         }
     }
