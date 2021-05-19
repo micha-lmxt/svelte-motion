@@ -1,6 +1,6 @@
 <script>
     /** 
-based on framer-motion@4.1.11,
+based on framer-motion@4.1.16,
 Copyright (c) 2018 Framer B.V.
 */
 
@@ -18,8 +18,7 @@ Copyright (c) 2018 Framer B.V.
     } from "../../../context/ScaleCorrectionProvider.svelte";
     import { isSharedLayout } from "../../../context/SharedLayoutContext";
     import { snapshotViewportBox } from "../../../render/dom/projection/utils";
-    import { setCurrentViewportBox } from "../../../render/dom/projection/relative-set";
-
+   
     export let visualElement, syncLayout, framerSyncLayout, update;
 
     const scaleCorrectionContext = getContext(ScaleCorrectionContext);
@@ -51,10 +50,11 @@ Copyright (c) 2018 Framer B.V.
 
     const updater = (nc=false) => {
 
+        // in React the updater function is called on children first, in Svelte the child does not call it.
         get(scaleCorrectionContext).forEach((v) =>{
             v.updater?.(true);
         });
-
+        
         if (isSharedLayout(syncLayout)) {
             syncLayout.syncUpdate();
         } else {
@@ -74,6 +74,7 @@ Copyright (c) 2018 Framer B.V.
         beforeUpdate(updater);
     }
     const afterU = (nc =false)=>{
+        /* Second part of the updater calling in child layouts first.*/
         const scc = get(scaleCorrectionContext);
         
         scc.forEach((v,i) => {
