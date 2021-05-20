@@ -3,26 +3,26 @@
 based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
-    import { MotionConfigContext } from "../context/MotionConfigContext"
+    import { MotionConfigContext } from "../context/MotionConfigContext";
     import { UseVisualElement } from "./utils/use-visual-element";
     import { UseFeatures } from "./features/use-features";
     import MotionContextProvider from "../context/MotionContext/MotionContextProvider.svelte";
-    import { getContext} from "svelte";
+    import { getContext, onMount } from "svelte";
     import { UseRender } from "../render/dom/use-render.js";
     import { createDomVisualElement } from "../render/dom/create-visual-element.js";
-    import { svgMotionConfig } from '../render/svg/config-motion.js'
-    import { htmlMotionConfig } from '../render/html/config-motion.js'
-    import {UseCreateMotionContext} from "../context/MotionContext/create";
-    import {UseVisualState} from './utils/use-visual-state.js';
-    import {useMotionRef} from "./utils/use-motion-ref.js";
-    import {featureBundle} from '../render/dom/featureBundle.js';
+    import { svgMotionConfig } from "../render/svg/config-motion.js";
+    import { htmlMotionConfig } from "../render/html/config-motion.js";
+    import { UseCreateMotionContext } from "../context/MotionContext/create";
+    import { UseVisualState } from "./utils/use-visual-state.js";
+    import { useMotionRef } from "./utils/use-motion-ref.js";
+    import ScaleCorrectionProvider from "../context/ScaleCorrectionProvider.svelte";
+    import { featureBundle } from "../render/dom/featureBundle.js";
     import { loadFeatures } from "./features/definitions";
-
 
     export let isSVG = false,
         isCustom = false,
         forwardMotionProps = false,
-        externalRef=undefined,
+        externalRef = undefined,
         initial = undefined,
         style = undefined,
         transformTemplate = undefined,
@@ -83,7 +83,7 @@ Copyright (c) 2018 Framer B.V.
         //MotionAdvancedProps
         custom = undefined,
         inherit = undefined,
-        update=undefined;
+        update = undefined;
 
     //layout=undefined;
     $: motionProps = {
@@ -147,10 +147,10 @@ Copyright (c) 2018 Framer B.V.
         //MotionAdvancedProps
         custom,
         inherit,
-        ...(isSVG?$$restProps:{})
+        ...(isSVG ? $$restProps : {}),
     };
     //$: (allProps = {...motionProps,$$restProps});
-    loadFeatures(featureBundle)
+    loadFeatures(featureBundle);
     let Component = isSVG ? "SVG" : isCustom ? "Custom" : "DOM";
     let createVisualElement = createDomVisualElement;
     let visualStateConfig = isSVG ? svgMotionConfig : htmlMotionConfig;
@@ -163,61 +163,56 @@ Copyright (c) 2018 Framer B.V.
      */
     const a = getContext(MotionConfigContext) || MotionConfigContext();
     $: ({ isStatic } = $a || {});
-    let mounted=false;
-    const setContext = (c,v)=>{
+    let mounted = false;
+    const setContext = (c, v) => {
         c.visualElement = v;
-        return v
-    }
-    
+        return v;
+    };
+
 </script>
-<UseCreateMotionContext 
-props={motionProps} 
-{isStatic} 
-let:value={context}>
-    <UseVisualState 
-    config={visualStateConfig} 
-    props={motionProps}
-    {isStatic} 
-    let:state={visualState}>
-    <UseVisualElement
-        {Component}
-        {visualState}
-        {createVisualElement}
-        props={motionProps}
-        let:visualElement>
-        <UseFeatures
-            visualElement={setContext(context,visualElement)}
+
+<ScaleCorrectionProvider>
+    <UseCreateMotionContext props={motionProps} {isStatic} let:value={context}>
+        <UseVisualState
+            config={visualStateConfig}
             props={motionProps}
-            let:features={_features}>
-            
-            <MotionContextProvider value={context}>
-            <UseRender
+            {isStatic}
+            let:state={visualState}>
+            <UseVisualElement
                 {Component}
-                props={motionProps}
-                ref={useMotionRef(
-                    visualState,
-                    context.visualElement,
-                    externalRef
-                )}
                 {visualState}
-                {isStatic}
-                {forwardMotionProps}
-                let:motion
-                let:props={renderProps}>
-                
-                    <slot motion={(node)=>{motion(node);mounted=true;}} props={renderProps} />
-                
-            </UseRender>
-            </MotionContextProvider>
-            
-            
-            {#if mounted}
-            {#each _features as feat (feat.key)}
-                
-                <svelte:component this={feat.Component} props={feat.props} visualElement={feat.visualElement} {...(feat.key==="measureLayout"?{update}:{})}/>
-            {/each}
-           {/if}
-        </UseFeatures>
-    </UseVisualElement>
-</UseVisualState>
-</UseCreateMotionContext>
+                {createVisualElement}
+                props={motionProps}
+                let:visualElement>
+                <UseFeatures
+                    visualElement={setContext(context, visualElement)}
+                    props={motionProps}
+                    let:features={_features}>
+                    <MotionContextProvider value={context}>
+                        <UseRender
+                            {Component}
+                            props={motionProps}
+                            ref={useMotionRef(visualState, context.visualElement, externalRef)}
+                            {visualState}
+                            {isStatic}
+                            {forwardMotionProps}
+                            let:motion
+                            let:props={renderProps}>
+                            <slot {motion} props={renderProps} />
+                        </UseRender>
+                    </MotionContextProvider>
+
+                    {#if mounted}
+                        {#each _features as feat (feat.key)}
+                            <svelte:component
+                                this={feat.Component}
+                                props={feat.props}
+                                visualElement={feat.visualElement}
+                                {...feat.key === 'measureLayout' ? { update } : {}} />
+                        {/each}
+                    {/if}
+                </UseFeatures>
+            </UseVisualElement>
+        </UseVisualState>
+    </UseCreateMotionContext>
+</ScaleCorrectionProvider>
