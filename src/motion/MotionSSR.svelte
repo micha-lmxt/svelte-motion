@@ -168,7 +168,7 @@ Copyright (c) 2018 Framer B.V.
         c.visualElement = v;
         return v;
     };
-
+    onMount(() => (mounted = true));
 </script>
 
 <ScaleCorrectionProvider>
