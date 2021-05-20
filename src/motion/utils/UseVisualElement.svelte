@@ -15,7 +15,6 @@ Copyright (c) 2018 Framer B.V.
     import {MotionContext} from "../../context/MotionContext/index.js";
     import { isPresent } from '../../components/AnimatePresence/use-presence.js';
     import { get } from "svelte/store";
-    import { ScaleCorrectionParentContext } from '../../context/ScaleCorrectionProvider.svelte'
 
     export let createVisualElement=undefined,
         props,

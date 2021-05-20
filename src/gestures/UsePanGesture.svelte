@@ -8,15 +8,30 @@ Copyright (c) 2018 Framer B.V.
     import { PanSession } from "./PanSession"
     import { afterUpdate, getContext, onDestroy } from "svelte";
     import { UsePointerEvent } from "../events/use-pointer-event"
+    import { get } from 'svelte/store'
     
     
     export let props,
         visualElement;
+    let { onPan, onPanStart, onPanEnd, onPanSessionStart } = props;
     $: ({ onPan, onPanStart, onPanEnd, onPanSessionStart } = props);
     $:( hasPanEvents = onPan || onPanStart || onPanEnd || onPanSessionStart)
     let panSession = null;
     const mcc = getContext(MotionConfigContext)||MotionConfigContext();
+    let {transformPagePoint} = get(mcc);
     $: ({transformPagePoint} = $mcc);
+    let handlers = {
+        onSessionStart: onPanSessionStart,
+        onStart: onPanStart,
+        onMove: onPan,
+        onEnd: (
+            event,
+            info
+        ) => {
+            panSession = null
+            onPanEnd && onPanEnd(event, info)
+        },
+    };
     $:( handlers = {
         onSessionStart: onPanSessionStart,
         onStart: onPanStart,

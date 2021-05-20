@@ -1,49 +1,53 @@
 <script>
-/** 
+    /** 
 based on framer-motion@4.1.11,
 Copyright (c) 2018 Framer B.V.
 */
 
-import { MotionConfigContext } from '../../context/MotionConfigContext.js';
-import { VisualElementDragControls } from "./VisualElementDragControls"
-import { getContext, onDestroy, onMount } from "svelte";
-import { get } from 'svelte/store';
+    import { MotionConfigContext } from "../../context/MotionConfigContext.js";
+    import { VisualElementDragControls } from "./VisualElementDragControls";
+    import { getContext, onDestroy, onMount } from "svelte";
+    import { get } from "svelte/store";
 
-    export let visualElement,props;
+    export let visualElement, props;
 
-    
-    const mcc = getContext(MotionConfigContext)||MotionConfigContext();
+    const mcc = getContext(MotionConfigContext) || MotionConfigContext();
+
     let dragControls = new VisualElementDragControls({
-            visualElement,
-        })
+        visualElement,
+    });
 
     // If we've been provided a DragControls for manual control over the drag gesture,
     // subscribe this component to it on mount.
     let cleanup;
     const dragEffect = () => {
-        if (cleanup){cleanup()}
-        if (groupDragControls){
+        if (cleanup) {
+            cleanup();
+        }
+        if (groupDragControls) {
             cleanup = groupDragControls.subscribe(dragControls);
         }
-    }
-    let {dragControls:groupDragControls} = props;
-    let {transformPagePoint} = get(mcc);
+    };
+    let { dragControls: groupDragControls } = props;
+    let { transformPagePoint } = get(mcc);
 
-    $: ({dragControls:groupDragControls} = props);
+    $: ({ dragControls: groupDragControls } = props);
     //let {transformPagePoint} = get($mcc);
-    $: ({transformPagePoint} = $mcc);
-    dragControls.setProps({ ...props, transformPagePoint })
-    
-    
-    //dragControls.setProps({ ...props, transformPagePoint })        
-    
-    $: (dragControls.setProps({ ...props, transformPagePoint }));
+    $: ({ transformPagePoint } = $mcc);
+    dragControls.setProps({ ...props, transformPagePoint });
 
-    
-    
+    //dragControls.setProps({ ...props, transformPagePoint })
+
+    $: dragControls.setProps({ ...props, transformPagePoint });
+
     $: dragEffect(dragControls);
 
-    onDestroy(()=>{if(cleanup){cleanup()}})
-    onMount(()=> dragControls.mount(visualElement))
+    onDestroy(() => {
+        if (cleanup) {
+            cleanup();
+        }
+    });
+    onMount(() => dragControls.mount(visualElement));
 </script>
-<slot/>
+
+<slot />
