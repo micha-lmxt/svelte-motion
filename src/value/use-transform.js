@@ -36,7 +36,7 @@ export const useTransform = (
                 return _transformer(latest)
             })
 
-            cmb.updateInner = cmb.update;
+            cmb.updateInner = cmb.reset;
         } else {
             cmb.updateInner(values, ()=>{
                 latest.length = 0
@@ -55,7 +55,7 @@ export const useTransform = (
         outputRange,
         options,
         latest)
-    comb.update = (input,
+    comb.reset = (input,
         inputRangeOrTransformer,
         outputRange,
         options) => update(input,
