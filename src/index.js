@@ -32,7 +32,7 @@ export { animate } from './animation/animate.js';
 export { createCrossfader } from './components/AnimateSharedLayout/utils/crossfader.js';
 export { AnimateSharedLayout } from './components/AnimateSharedLayout/index.js';
 export { useMotionValue } from './value/use-motion-value.js';
-export { UseMotionTemplate } from './value/use-motion-template.js';
+export { useMotionTemplate } from './value/use-motion-template.js';
 export { resolveMotionValue } from './value/utils/resolve-motion-value.js';
 export { transform } from './utils/transform.js';
 export { useTransform } from './value/use-transform.js';
