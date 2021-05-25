@@ -8,7 +8,6 @@ import { motionValue } from '.';
 
 export const useCombineMotionValues = (values, combineValues) => {
 
-
   const value = motionValue(combineValues());
 
   const updateValue = () => {
@@ -17,22 +16,26 @@ export const useCombineMotionValues = (values, combineValues) => {
 
 
   const handler = () => {
-    
+
     sync.update(updateValue, false, true);
   }
-  
-  const subscriptions = values.map((val) => val.onChange(handler))
-  
 
-  onDestroy(() =>{
+  let subscriptions = values.map((val) => val.onChange(handler))
+
+
+  onDestroy(() => {
 
     subscriptions.forEach((unsubscribe) => unsubscribe())
-  }
-  )
+  })
 
-  value.update = (values,combineValues)=>{
+  value.reset = (values, combineValues) => {
+    //cleanup and reset
+    subscriptions.forEach((unsubscribe) => unsubscribe())
+    subscriptions = values.map((val) => val.onChange(handler));
+
     value.set(combineValues());
   }
+
   return value;
 }
 //export { default as UseCombineMotionValues } from "./UseCombineValues.svelte";

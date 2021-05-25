@@ -36,7 +36,7 @@ export { UseMotionTemplate } from './value/use-motion-template.js';
 export { resolveMotionValue } from './value/utils/resolve-motion-value.js';
 export { transform } from './utils/transform.js';
 export { useTransform } from './value/use-transform.js';
-export { UseSpring } from './value/use-spring.js';
+export { useSpring } from './value/use-spring.js';
 export { UseElementScroll } from './value/scroll/use-element-scroll.js';
 export { UseViewportScroll } from './value/scroll/use-viewport-scroll.js';
 export { UseReducedMotion } from './utils/use-reduced-motion.js';
