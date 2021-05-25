@@ -202,7 +202,7 @@ var MotionValue = /** @class */ (function () {
     MotionValue.prototype.subscribe = function (subscription) {
         return this.onChange(subscription);
     };
-    
+
     MotionValue.prototype.clearListeners = function () {
         this.updateSubscribers.clear();
     };
@@ -251,6 +251,10 @@ var MotionValue = /** @class */ (function () {
             this.passiveEffect(v, this.updateAndNotify);
         }
     };
+    /** Add update method for Svelte Store behavior */
+    MotionValue.prototype.update = function(v){
+        this.set(v(this.get()));
+    }
     /**
      * Returns the latest state of `MotionValue`
      *
