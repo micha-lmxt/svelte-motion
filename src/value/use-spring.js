@@ -9,7 +9,7 @@ import { MotionConfigContext } from "../context/MotionConfigContext"
 import { get } from 'svelte/store';
 import { useMotionValue } from "./use-motion-value";
 import { isMotionValue } from "./utils/is-motion-value";
-import { animate, PlaybackControls, SpringOptions } from "popmotion"
+import { animate } from "popmotion"
 
 /**
  * Creates a `MotionValue` that, when `set`, will use a spring animation to animate to its new state.
