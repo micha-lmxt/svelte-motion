@@ -198,6 +198,11 @@ var MotionValue = /** @class */ (function () {
     MotionValue.prototype.onChange = function (subscription) {
         return this.updateSubscribers.add(subscription);
     };
+    /** Add subscribe method for Svelte store interface */
+    MotionValue.prototype.subscribe = function (subscription) {
+        return this.onChange(subscription);
+    };
+    
     MotionValue.prototype.clearListeners = function () {
         this.updateSubscribers.clear();
     };
