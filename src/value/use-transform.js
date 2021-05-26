@@ -6,64 +6,54 @@ export const useTransform = (
     inputRangeOrTransformer,
     outputRange,
     options
-)=>{
-    let latest=[];
+) => {
+
+    let latest = [];
+
     const update = (
         input,
         inputRangeOrTransformer,
         outputRange,
-        options,
-        latest,
-        combined
-        )=>{
+        options
+    ) => {
         const transformer = typeof inputRangeOrTransformer === "function"
-        ? inputRangeOrTransformer
-        : transform(inputRangeOrTransformer, outputRange, options);
-        const values =  Array.isArray(input) ? input : [input];
-        const _transformer = Array.isArray(input) ? transformer : 
-        ([latest]) =>
-              transformer(latest);
+            ? inputRangeOrTransformer
+            : transform(inputRangeOrTransformer, outputRange, options);
+        const values = Array.isArray(input) ? input : [input];
+        const _transformer = Array.isArray(input) ? transformer :
+            ([latest]) =>
+                transformer(latest);
+        return [values, () => {
+            latest.length = 0
+            const numValues = values.length
+            for (let i = 0; i < numValues; i++) {
+                latest[i] = values[i].get()
+            }
 
-        let cmb = combined;
-        if (!cmb){
-            cmb = useCombineMotionValues(values, ()=>{
-                latest.length = 0
-                const numValues = values.length
-                for (let i = 0; i < numValues; i++) {
-                    latest[i] = values[i].get()
-                }
-        
-                return _transformer(latest)
-            })
+            return _transformer(latest)
+        }]
 
-            cmb.updateInner = cmb.reset;
-        } else {
-            cmb.updateInner(values, ()=>{
-                latest.length = 0
-                const numValues = values.length
-                for (let i = 0; i < numValues; i++) {
-                    latest[i] = values[i].get()
-                }
-        
-                return _transformer(latest)
-            })
-        }
-        return cmb;
     }
-    const comb = update( input,
+    const comb = useCombineMotionValues(...update(input,
         inputRangeOrTransformer,
         outputRange,
-        options,
-        latest)
-    comb.reset = (input,
+        options));
+
+    comb.updateInner = comb.reset;
+
+    comb.reset = (
+        input,
         inputRangeOrTransformer,
         outputRange,
-        options) => update(input,
-        inputRangeOrTransformer,
-        outputRange,
-        options,
-        latest,
-        comb)
+        options
+    ) => comb.updateInner(
+        ...update(
+            input,
+            inputRangeOrTransformer,
+            outputRange,
+            options
+        )
+    )
     return comb;
 }
 //export { default as UseTransform } from './UseTransform.svelte';

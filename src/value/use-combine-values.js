@@ -10,7 +10,7 @@ export const useCombineMotionValues = (values, combineValues) => {
 
   const value = motionValue(combineValues());
 
-  const updateValue = () => {
+  let updateValue = () => {
     value.set(combineValues());
   }
 
@@ -28,12 +28,14 @@ export const useCombineMotionValues = (values, combineValues) => {
     subscriptions.forEach((unsubscribe) => unsubscribe())
   })
 
-  value.reset = (values, combineValues) => {
+  value.reset = (_values, _combineValues) => {
     //cleanup and reset
     subscriptions.forEach((unsubscribe) => unsubscribe())
-    subscriptions = values.map((val) => val.onChange(handler));
-
-    value.set(combineValues());
+    updateValue = ()=>{
+      value.set(_combineValues())
+    }
+    subscriptions = _values.map((val) => val.onChange(handler));
+    updateValue();
   }
 
   return value;

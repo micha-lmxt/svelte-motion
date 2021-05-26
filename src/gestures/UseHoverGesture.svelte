@@ -4,13 +4,14 @@ based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
 
+import { isDragActive } from "./drag/utils/lock"
     function createHoverEvent(
     visualElement,
     isActive,
     callback
 ) {
     return (event, info) => {
-        if (!isMouseEvent(event) || !visualElement.isHoverEventsEnabled) return
+        if (!isMouseEvent(event) || isDragActive()) return
         callback?.(event, info)
 
         visualElement.animationState?.setActive(AnimationType.Hover, isActive)
@@ -24,6 +25,7 @@ import { isMouseEvent } from "./utils/event-type";
 
     export let props,
         visualElement;
+    let {onHoverStart, onHoverEnd, whileHover} = props;
     $: ({onHoverStart, onHoverEnd, whileHover} = props);
 </script>
 <UsePointerEvent ref={visualElement} eventName="pointerenter" handler={ onHoverStart || whileHover
