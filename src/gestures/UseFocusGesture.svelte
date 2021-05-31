@@ -5,6 +5,7 @@ Copyright (c) 2018 Framer B.V.
 */
 
 import { UseDomEvent } from "../events/use-dom-event"
+import { AnimationType } from "../render/utils/types"
 
     export let props,
         visualElement;
