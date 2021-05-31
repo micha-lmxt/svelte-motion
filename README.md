@@ -2,6 +2,8 @@
 
 An animation library based on [framer-motion](https://www.framer.com/motion/). 
 
+[Visit Project Page](https://svelte-motion.gradientdescent.de)
+
 ## Installation
 
 ```bash
