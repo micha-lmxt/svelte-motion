@@ -11,7 +11,7 @@ import { getContext, onMount} from "svelte";
 function isPresent(context) {
     return context === null ? true : context.isPresent
 }
-export const useIsPresence = () => {
+export const useIsPresent = () => {
     let presenceContext = getContext(PresenceContext) || PresenceContext();
     return derived(presenceContext, $v => $v === null ? true : $v.isPresent)
 }
