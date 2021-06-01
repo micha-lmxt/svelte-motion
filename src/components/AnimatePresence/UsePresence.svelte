@@ -5,7 +5,7 @@ Copyright (c) 2018 Framer B.V.
 */
 
     let counter = 0
-const incrementId = () => counter++
+export const incrementId = () => counter++
 
 </script>
 <script>

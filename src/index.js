@@ -13,7 +13,7 @@ export { visualElement } from './render/index.js';
 export { isValidMotionProp } from './motion/utils/valid-prop.js';
 export { MotionConfigContext } from './context/MotionConfigContext.js';
 export { PresenceContext } from './context/PresenceContext.js';
-export { UseIsPresent, UsePresence } from './components/AnimatePresence/use-presence.js';
+export { UseIsPresent, UsePresence, useIsPresence, usePresence } from './components/AnimatePresence/use-presence.js';
 export { LayoutGroupContext } from './context/LayoutGroupContext.js';
 export { createBatcher } from './components/AnimateSharedLayout/utils/batcher.js';
 export { FramerTreeLayoutContext, SharedLayoutContext } from './context/SharedLayoutContext.js';

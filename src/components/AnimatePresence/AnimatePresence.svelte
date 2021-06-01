@@ -1,32 +1,37 @@
 <script>
-/** 
+    /** 
 based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
 
-    import { afterUpdate, getContext} from "svelte";
+    import { getContext } from "svelte";
     import {
         SharedLayoutContext,
         isSharedLayout,
     } from "../../context/SharedLayoutContext.js";
     import PresenceChild from "./PresenceChild.svelte";
 
-    export let list = [],
+    export let list = undefined,
         custom = undefined,
         initial = true,
         onExitComplete = undefined,
         exitBeforeEnter = undefined,
-        presenceAffectsLayout = true;
+        presenceAffectsLayout = true,
+        show = undefined;
+
+    let _list = list !== undefined ? list : show ? [{ key: 1 }] : [];
+    $: _list = list !== undefined ? list : show ? [{ key: 1 }] : [];
 
     const layoutContext =
         getContext(SharedLayoutContext) || SharedLayoutContext();
 
     $: isl = isSharedLayout($layoutContext);
+
     $: forceRender = () => {
         if (isl) {
             $layoutContext.forceUpdate();
         }
-        list = [...list];
+        _list = [..._list];
     };
 
     function getChildKey(child) {
@@ -34,8 +39,8 @@ Copyright (c) 2018 Framer B.V.
     }
 
     let isInitialRender = true;
-    let filteredChildren = list;
-    $: filteredChildren = list;
+    let filteredChildren = _list;
+    $: filteredChildren = _list;
 
     let presentChildren = filteredChildren;
     let allChildren = new Map();
@@ -55,7 +60,7 @@ Copyright (c) 2018 Framer B.V.
             key: v.key,
         })),
     ];
-    let xforce = undefined;
+    
     $: if (!isInitialRender) {
         // If this is a subsequent render, deal with entering and exiting children
         childrenToRender = [
@@ -110,11 +115,9 @@ Copyright (c) 2018 Framer B.V.
 
                 // Defer re-rendering until all exiting children have indeed left
                 if (!exiting.size) {
-                    presentChildren = filteredChildren;                   
+                    presentChildren = filteredChildren;
                     forceRender();
                     onExitComplete && onExitComplete();
-                    
-                    
                 }
             };
 
@@ -145,7 +148,6 @@ Copyright (c) 2018 Framer B.V.
         });
         */
         presentChildren = childrenToRender;
-        
     } else {
         isInitialRender = false;
     }
