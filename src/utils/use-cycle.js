@@ -62,5 +62,6 @@ export const useCycle = (...items) => {
             i;
         x.set(items[index])
     }
-    return [x,next]
+    x.next=next;
+    return x;
 }
