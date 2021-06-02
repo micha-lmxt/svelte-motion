@@ -41,6 +41,6 @@ export { useElementScroll } from './value/scroll/use-element-scroll.js';
 export { useViewportScroll } from './value/scroll/use-viewport-scroll.js';
 export { UseReducedMotion } from './utils/use-reduced-motion.js';
 export { UseAnimation, useAnimation } from './animation/use-animation.js';
-export { UseCycle } from './utils/use-cycle.js';
+export { useCycle } from './utils/use-cycle.js';
 export { DragControls, UseDragControls } from './gestures/drag/use-drag-controls.js';
 export { useVelocity } from './value/use-velocity';
