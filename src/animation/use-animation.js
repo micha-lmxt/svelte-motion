@@ -3,8 +3,7 @@ based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
 
-import { tick } from "svelte";
-import { readable } from "svelte/store";
+import { onDestroy, tick } from "svelte";
 import { animationControls } from "./animation-controls"
 
 /**
@@ -56,15 +55,14 @@ import { animationControls } from "./animation-controls"
  *
  * @public
  */
-export const useAnimation = () => new readable(
-    null, (set) => {
-        let controls = animationControls();
-        set(controls);
-        let cleanup = () => { };
-        tick().then(v => cleanup = controls.mount())
-        return cleanup;
-    }
-)
+export const useAnimation = () =>{
+    const controls =  animationControls();
+    
+    let cleanup = () => { };
+    tick().then(v => cleanup = controls.mount());
+    onDestroy(cleanup);
+    return controls;
+}
 
 
 
