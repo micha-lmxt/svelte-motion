@@ -3,7 +3,7 @@ based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
 import { motionValue } from "../value";
-import { get, derived } from "svelte/store";
+import { derived } from "svelte/store";
 // Does this device prefer reduced motion? Returns `null` server-side.
 let prefersReducedMotion;
 
