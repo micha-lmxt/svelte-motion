@@ -151,13 +151,7 @@ Copyright (c) 2018 Framer B.V.
     } else {
         isInitialRender = false;
     }
-    /*
-    afterUpdate(()=>{
-        if (xforce){
-            xforce();
-            xforce=undefined;
-        }
-    })*/
+
 </script>
 
 {#each childrenToRender as child (getChildKey(child))}
