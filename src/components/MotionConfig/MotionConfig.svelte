@@ -7,6 +7,8 @@ Copyright (c) 2018 Framer B.V.
     import { getContext, setContext } from "svelte";
     import { writable, get} from "svelte/store";
     import { MotionConfigContext } from "../../context/MotionConfigContext.js";
+    import {provideScaleCorrection} from '../../context/ScaleCorrectionProvider.svelte'
+    import { scaleCorrection } from './MotionConfigScaleCorrection.js'
 
     export let transformPagePoint = undefined,
         isStatic = undefined,
@@ -18,6 +20,8 @@ Copyright (c) 2018 Framer B.V.
     let config = { ...get(mcc), ...{ transformPagePoint, isStatic, transition } }
     $: config = { ...$mcc, ...{ transformPagePoint, isStatic, transition } };
   
+    // need to inform child layouts, or problems with scroll occur
+    provideScaleCorrection();
     /**
      * Don't allow isStatic to change between renders as it affects how many hooks
      * motion components fire.
@@ -36,7 +40,14 @@ Copyright (c) 2018 Framer B.V.
     let context = writable(config);
     setContext(MotionConfigContext, context);
     const memo = () => config;
-    $: context.set(memo(transitionDependency, config.transformPagePoint));
+    const scaleCorrector = scaleCorrection()
+    $: {
+        context.set(memo(transitionDependency, config.transformPagePoint))
+        scaleCorrector.update();
+    }
 </script>
 
+
 <slot />
+
+

@@ -47,8 +47,13 @@ Copyright (c) 2018 Framer B.V.
      * If it is stand-alone component, add it to the batcher.
      */
 
+    let updated=false;
     const updater = (nc=false) => {
-
+        if (updated){
+            return null;
+        }
+        updated=true;
+    
         // in React the updater function is called on children first, in Svelte the child does not call it.
         get(scaleCorrectionContext).forEach((v) =>{
             v.updater?.(true);
@@ -73,6 +78,7 @@ Copyright (c) 2018 Framer B.V.
         beforeUpdate(updater);
     }
     const afterU = (nc =false)=>{
+        updated=false;
         /* Second part of the updater calling in child layouts first.*/
         const scc = get(scaleCorrectionContext);
         
