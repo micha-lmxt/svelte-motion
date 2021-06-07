@@ -21,7 +21,7 @@ Copyright (c) 2018 Framer B.V.
     export let isSVG = false,
         isCustom = false,
         forwardMotionProps = false,
-        externalRef = undefined,
+        externalRef = undefined;/*
         initial = undefined,
         style = undefined,
         transformTemplate = undefined,
@@ -83,9 +83,9 @@ Copyright (c) 2018 Framer B.V.
         custom = undefined,
         inherit = undefined,
         update = undefined;
-
+*/
     //layout=undefined;
-    $: motionProps = {
+    $: motionProps = $$restProps/*{
         initial,
         style,
         transformTemplate,
@@ -147,10 +147,8 @@ Copyright (c) 2018 Framer B.V.
         custom,
         inherit,
         ...(isSVG ? $$restProps : {}),
-    };
-    $: Object.keys(motionProps).forEach(key => motionProps[key] === undefined ? delete motionProps[key] : {});
-    //$: (allProps = {...motionProps,$$restProps});
-
+    };*/
+    
     let Component = isSVG ? "SVG" : isCustom ? "Custom" : "DOM";
     let createVisualElement = createDomVisualElement;
     let visualStateConfig = isSVG ? svgMotionConfig : htmlMotionConfig;
@@ -209,7 +207,7 @@ Copyright (c) 2018 Framer B.V.
                                 this={feat.Component}
                                 props={feat.props}
                                 visualElement={feat.visualElement}
-                                {...feat.key === 'measureLayout' ? { update } : {}} />
+                                />
                         {/each}
                     {/if}
                 </UseFeatures>

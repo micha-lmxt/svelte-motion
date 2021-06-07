@@ -70,14 +70,13 @@ Copyright (c) 2018 Framer B.V.
         //MotionAdvancedProps
         custom = undefined,
         inherit = undefined*/;
-    let {transition,layout} = props;
-    $: ({transition,layout} = props);
+    let {layout} = props;
+    $: ({layout} = props);
 </script>
 
 <UsePresence let:presence>
     <Animate
         {visualElement}
-        {transition}
         {layout}
         safeToRemove={presence[1]} />
 </UsePresence>

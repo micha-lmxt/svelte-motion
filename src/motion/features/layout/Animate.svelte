@@ -48,7 +48,7 @@ Copyright (c) 2018 Framer B.V.
         //animate = undefined,
         //exit = undefined,
         //variants = undefined,
-        transition = undefined,
+        //transition = undefined,
         //VisualElementLifecycles
         //onViewportBoxUpdate = undefined,
         //onBeforeLayoutMeasure = undefined,
@@ -303,7 +303,6 @@ Copyright (c) 2018 Framer B.V.
             _transition ||
             visualElement.getDefaultTransition() ||
             defaultLayoutTransition
-        console.log(_transition,"\n",transition,"\n",layoutTransition)
         
         // Start the animation on this axis
         const animation = startAnimation(
