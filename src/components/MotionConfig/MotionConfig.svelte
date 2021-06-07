@@ -5,7 +5,7 @@ Copyright (c) 2018 Framer B.V.
 */
 
     import { getContext, setContext } from "svelte";
-    import { writable } from "svelte/store";
+    import { writable, get} from "svelte/store";
     import { MotionConfigContext } from "../../context/MotionConfigContext.js";
 
     export let transformPagePoint = undefined,
@@ -15,8 +15,9 @@ Copyright (c) 2018 Framer B.V.
     /**
      * Inherit props from any parent MotionConfig components
      */
+    let config = { ...get(mcc), ...{ transformPagePoint, isStatic, transition } }
     $: config = { ...$mcc, ...{ transformPagePoint, isStatic, transition } };
-
+  
     /**
      * Don't allow isStatic to change between renders as it affects how many hooks
      * motion components fire.

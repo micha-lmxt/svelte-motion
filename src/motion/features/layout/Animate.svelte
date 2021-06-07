@@ -38,6 +38,7 @@ Copyright (c) 2018 Framer B.V.
     import { addScaleCorrection } from "../../../render/dom/projection/scale-correction"
     import { defaultScaleCorrectors } from "../../../render/dom/projection/default-scale-correctors"
 
+
     export let visualElement,
         //initial = undefined,
         //style = undefined,
@@ -100,7 +101,7 @@ Copyright (c) 2018 Framer B.V.
         //custom = undefined,
         //inherit = undefined,
         safeToRemove;
-
+    
         /**
      * A mutable object that tracks the target viewport box
      * for the current animation frame.
@@ -298,7 +299,7 @@ Copyright (c) 2018 Framer B.V.
         };
 
         currentAnimationTarget[axis] = target
-
+        console.log(_transition,"\n",transition,"\n",defaultTransition)
         // Start the animation on this axis
         const animation = startAnimation(
             axis === "x" ? "layoutX" : "layoutY",

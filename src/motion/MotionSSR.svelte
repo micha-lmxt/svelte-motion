@@ -162,6 +162,7 @@ Copyright (c) 2018 Framer B.V.
      * and don't load any additional functionality.
      */
     const a = getContext(MotionConfigContext) || MotionConfigContext();
+    
     $: ({ isStatic } = $a || {});
     let mounted = false;
     const setContext = (c, v) => {

@@ -17,6 +17,7 @@ Copyright (c) 2018 Framer B.V.
     import { useMotionRef } from "./utils/use-motion-ref.js";
     import ScaleCorrectionProvider from "../context/ScaleCorrectionProvider.svelte";
 
+
     export let isSVG = false,
         isCustom = false,
         forwardMotionProps = false,
@@ -147,6 +148,7 @@ Copyright (c) 2018 Framer B.V.
         inherit,
         ...(isSVG ? $$restProps : {}),
     };
+    $: Object.keys(motionProps).forEach(key => motionProps[key] === undefined ? delete motionProps[key] : {});
     //$: (allProps = {...motionProps,$$restProps});
 
     let Component = isSVG ? "SVG" : isCustom ? "Custom" : "DOM";
@@ -161,6 +163,7 @@ Copyright (c) 2018 Framer B.V.
      */
     const a = getContext(MotionConfigContext) || MotionConfigContext();
     $: ({ isStatic } = $a || {});
+   
     let mounted = false;
     const setContext = (c, v) => {
         c.visualElement = v;

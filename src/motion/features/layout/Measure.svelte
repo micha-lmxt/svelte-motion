@@ -8,8 +8,7 @@ Copyright (c) 2018 Framer B.V.
         afterUpdate,
         beforeUpdate,
         getContext,
-        onMount,
-        tick,
+        onMount
     } from "svelte";
     import { get } from "svelte/store";
     import {
