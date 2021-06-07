@@ -23,7 +23,7 @@ Copyright (c) 2018 Framer B.V.
         return a.min === b.min && a.max === b.max;
     }
 
-    const defaultTransition = {
+    const defaultLayoutTransition = {
         duration: 0.45,
         ease: [0.4, 0, 0.1, 1],
     };
@@ -33,7 +33,7 @@ Copyright (c) 2018 Framer B.V.
     import { onDestroy, onMount } from "svelte";
     import { axisBox } from "../../../utils/geometry"
     import { eachAxis } from "../../../utils/each-axis";
-    import { startAnimation } from "../../../animation/utils/transitions";
+    import { startAnimation, getValueTransition, } from "../../../animation/utils/transitions";
     import { tweenAxis } from "./utils";
     import { addScaleCorrection } from "../../../render/dom/projection/scale-correction"
     import { defaultScaleCorrectors } from "../../../render/dom/projection/default-scale-correctors"
@@ -157,7 +157,6 @@ Copyright (c) 2018 Framer B.V.
             ...config
         } = {}
     ) => {
-        
         /**
          * Early return if we've been instructed not to animate this render.
          */
@@ -299,13 +298,19 @@ Copyright (c) 2018 Framer B.V.
         };
 
         currentAnimationTarget[axis] = target
-        console.log(_transition,"\n",transition,"\n",defaultTransition)
+        
+        const layoutTransition =
+            _transition ||
+            visualElement.getDefaultTransition() ||
+            defaultLayoutTransition
+        console.log(_transition,"\n",transition,"\n",layoutTransition)
+        
         // Start the animation on this axis
         const animation = startAnimation(
             axis === "x" ? "layoutX" : "layoutY",
             layoutProgress,
             progressTarget,
-            _transition || transition || defaultTransition
+            layoutTransition && getValueTransition(layoutTransition, "layout")
         ).then(stopAxisAnimation[axis]);
 
         
