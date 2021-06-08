@@ -25,7 +25,7 @@ Copyright (c) 2018 Framer B.V.
     const layoutContext =
         getContext(SharedLayoutContext) || SharedLayoutContext();
 
-    $: isl = isSharedLayout($layoutContext);
+    $: (isl = isSharedLayout($layoutContext));
 
     $: forceRender = () => {
         if (isl) {
@@ -60,7 +60,7 @@ Copyright (c) 2018 Framer B.V.
             key: v.key,
         })),
     ];
-    
+
     $: if (!isInitialRender) {
         // If this is a subsequent render, deal with entering and exiting children
         childrenToRender = [
@@ -111,11 +111,15 @@ Copyright (c) 2018 Framer B.V.
                 const removeIndex = presentChildren.findIndex(
                     (presentChild) => presentChild.key === key
                 );
+
+                if (removeIndex < 0) {
+                    return;
+                }
                 presentChildren.splice(removeIndex, 1);
 
                 // Defer re-rendering until all exiting children have indeed left
                 if (!exiting.size) {
-                    presentChildren = filteredChildren;
+                    presentChildren = [...filteredChildren];
                     forceRender();
                     onExitComplete && onExitComplete();
                 }
@@ -151,7 +155,6 @@ Copyright (c) 2018 Framer B.V.
     } else {
         isInitialRender = false;
     }
-
 </script>
 
 {#each childrenToRender as child (getChildKey(child))}
@@ -160,7 +163,8 @@ Copyright (c) 2018 Framer B.V.
         initial={initial ? undefined : false}
         custom={child.onExit ? custom : undefined}
         {presenceAffectsLayout}
-        onExitComplete={child.onExit}>
+        onExitComplete={child.onExit}
+    >
         <slot item={child.item} />
     </PresenceChild>
 {/each}

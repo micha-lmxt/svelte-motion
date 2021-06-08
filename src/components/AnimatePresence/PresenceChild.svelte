@@ -1,5 +1,5 @@
 <script context="module">
-/** 
+    /** 
 based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
@@ -17,7 +17,7 @@ Copyright (c) 2018 Framer B.V.
 
 <script>
     import { afterUpdate, setContext, tick } from "svelte";
-    import { PresenceContext } from '../../context/PresenceContext.js';
+    import { PresenceContext } from "../../context/PresenceContext.js";
     export let isPresent,
         onExitComplete = undefined,
         initial,
@@ -26,12 +26,11 @@ Copyright (c) 2018 Framer B.V.
 
     const presenceChildren = new newChildrenMap();
     const id = getPresenceId();
-    
+
     $: refresh = presenceAffectsLayout ? undefined : isPresent;
 
     const memoContext = () => {
-
-        return ({
+        return {
             id,
             initial,
             isPresent,
@@ -49,17 +48,17 @@ Copyright (c) 2018 Framer B.V.
                 presenceChildren.set(childId, false);
                 return () => presenceChildren.delete(childId);
             },
-        });
+        };
     };
     let context = PresenceContext();
 
-    afterUpdate(()=>{
-        if (presenceAffectsLayout){
+    afterUpdate(() => {
+        if (presenceAffectsLayout) {
             context.set(memoContext());
         }
-    })
-    
-    $: ( context.set(memoContext(refresh)))
+    });
+
+    $: context.set(memoContext(refresh));
 
     const keyset = () => {
         presenceChildren.forEach((_, key) => presenceChildren.set(key, false));

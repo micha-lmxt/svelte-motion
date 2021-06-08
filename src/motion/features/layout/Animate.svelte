@@ -3,8 +3,8 @@
 based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
-    
-    const progressTarget = 1000
+
+    const progressTarget = 1000;
 
     function hasMoved(a, b) {
         return (
@@ -31,13 +31,15 @@ Copyright (c) 2018 Framer B.V.
 
 <script>
     import { onDestroy, onMount } from "svelte";
-    import { axisBox } from "../../../utils/geometry"
+    import { axisBox } from "../../../utils/geometry";
     import { eachAxis } from "../../../utils/each-axis";
-    import { startAnimation, getValueTransition, } from "../../../animation/utils/transitions";
+    import {
+        startAnimation,
+        getValueTransition,
+    } from "../../../animation/utils/transitions";
     import { tweenAxis } from "./utils";
-    import { addScaleCorrection } from "../../../render/dom/projection/scale-correction"
-    import { defaultScaleCorrectors } from "../../../render/dom/projection/default-scale-correctors"
-
+    import { addScaleCorrection } from "../../../render/dom/projection/scale-correction";
+    import { defaultScaleCorrectors } from "../../../render/dom/projection/default-scale-correctors";
 
     export let visualElement,
         //initial = undefined,
@@ -101,24 +103,24 @@ Copyright (c) 2018 Framer B.V.
         //custom = undefined,
         //inherit = undefined,
         safeToRemove;
-    
-        /**
+
+    /**
      * A mutable object that tracks the target viewport box
      * for the current animation frame.
      */
     let frameTarget = axisBox();
-     /**
+    /**
      * The current animation target, we use this to check whether to start
      * a new animation or continue the existing one.
      */
-    let currentAnimationTarget = axisBox()
+    let currentAnimationTarget = axisBox();
     /**
      * Track whether we're animating this axis.
      */
-     let isAnimating = {
+    let isAnimating = {
         x: false,
         y: false,
-    }
+    };
     let stopAxisAnimation = {
         x: undefined,
         y: undefined,
@@ -127,22 +129,21 @@ Copyright (c) 2018 Framer B.V.
     let unsubLayoutReady;
 
     let isAnimatingTree = false;
-    
+
     onMount(() => {
         visualElement.animateMotionValue = startAnimation;
         visualElement.enableLayoutProjection();
         unsubLayoutReady = visualElement.onLayoutUpdate(animateF);
-        visualElement.layoutSafeToRemove = () => safeToRemove();
+        visualElement.layoutSafeToRemove = function () {
+            safeToRemove();
+        };
 
-        addScaleCorrection(defaultScaleCorrectors)
-
+        addScaleCorrection(defaultScaleCorrectors);
     });
 
     onDestroy(() => {
-        
         unsubLayoutReady();
         eachAxis((axis) => stopAxisAnimation[axis]?.());
-
     });
 
     const animateF = (
@@ -164,7 +165,7 @@ Copyright (c) 2018 Framer B.V.
             isAnimatingTree = false;
             return safeToRemove();
         }
-        
+
         /**
          * Prioritise tree animations
          */
@@ -182,7 +183,6 @@ Copyright (c) 2018 Framer B.V.
         target = targetBox || target;
 
         const boxHasMoved = hasMoved(origin, target);
-        
 
         const animations = eachAxis((axis) => {
             /**
@@ -224,11 +224,9 @@ Copyright (c) 2018 Framer B.V.
          * have successfully finished.
          */
         return Promise.all(animations).then(() => {
-
             isAnimatingTree = false;
             onComplete && onComplete();
             visualElement.notifyLayoutAnimationComplete();
-
         });
     };
 
@@ -237,25 +235,29 @@ Copyright (c) 2018 Framer B.V.
      * values. It'd be preferable to amend the startLayoutAxisAnimation
      * API to accept more custom animations like
      */
-    const animateAxis = (axis, target, origin, { transition:_transition } = {}) => {
+    const animateAxis = (
+        axis,
+        target,
+        origin,
+        { transition: _transition } = {}
+    ) => {
         stopAxisAnimation[axis]?.();
-/**
+        /**
          * If we're not animating to a new target, don't run this animation
          */
         if (
             isAnimating[axis] &&
             axisIsEqual(target, currentAnimationTarget[axis])
         ) {
-            return
+            return;
         }
 
-        stopAxisAnimation[axis]?.()
-        isAnimating[axis] = true
+        stopAxisAnimation[axis]?.();
+        isAnimating[axis] = true;
 
         const _frameTarget = frameTarget[axis];
-        const layoutProgress = visualElement.getProjectionAnimationProgress()[
-            axis
-        ];
+        const layoutProgress =
+            visualElement.getProjectionAnimationProgress()[axis];
 
         /**
          * Set layout progress back to 0. We set it twice to hard-reset any velocity that might
@@ -297,13 +299,13 @@ Copyright (c) 2018 Framer B.V.
             unsubscribeProgress();
         };
 
-        currentAnimationTarget[axis] = target
-        
+        currentAnimationTarget[axis] = target;
+
         const layoutTransition =
             _transition ||
             visualElement.getDefaultTransition() ||
-            defaultLayoutTransition
-        
+            defaultLayoutTransition;
+
         // Start the animation on this axis
         const animation = startAnimation(
             axis === "x" ? "layoutX" : "layoutY",
@@ -311,8 +313,6 @@ Copyright (c) 2018 Framer B.V.
             progressTarget,
             layoutTransition && getValueTransition(layoutTransition, "layout")
         ).then(stopAxisAnimation[axis]);
-
-        
 
         return animation;
     };
