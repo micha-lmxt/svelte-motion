@@ -44,3 +44,5 @@ export { UseAnimation, useAnimation } from './animation/use-animation.js';
 export { useCycle } from './utils/use-cycle.js';
 export { DragControls, useDragControls } from './gestures/drag/use-drag-controls.js';
 export { useVelocity } from './value/use-velocity';
+
+export {default as Mdiv, default as MotionDiv} from './components/MotionDiv.svelte';

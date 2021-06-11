@@ -47,7 +47,7 @@ import { writable } from "svelte/store";
         export let features,
             strict=false;
     let _ = !isLazyBundle(features);
-    let loadedRenderer = undefinedM
+    let loadedRenderer = undefined
         /**
      * If this is a synchronous load, load features immediately
      */
