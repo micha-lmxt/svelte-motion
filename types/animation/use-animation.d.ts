@@ -12,40 +12,22 @@ import { AnimationControls } from "./types";
  *
  * These components can then be animated with the `start` method.
  *
- * @library
- *
- * ```jsx
- * import * as React from 'react'
- * import { Frame, useAnimation } from 'framer'
- *
- * export function MyComponent(props) {
- *    const controls = useAnimation()
- *
- *    controls.start({
- *        x: 100,
- *        transition: { duration: 0.5 },
- *    })
- *
- *    return <Frame animate={controls} />
- * }
- * ```
- *
  * @motion
  *
  * ```jsx
- * import * as React from 'react'
- * import { motion, useAnimation } from 'framer-motion'
+ * import { motion, useAnimation } from 'svelte-motion'
  *
- * export function MyComponent(props) {
- *    const controls = useAnimation()
+ * const controls = useAnimation()
  *
- *    controls.start({
- *        x: 100,
- *        transition: { duration: 0.5 },
- *    })
+ * onMount(()=>{
+ *     controls.start({
+ *         x: 100,
+ *         transition: { duration: 0.5 },
+ *     })
+ * })
  *
- *    return <MotionDiv animate={controls} />
- * }
+ * <MotionDiv animate={controls} />
+ * 
  * ```
  *
  * @returns Animation controller with `start` and `stop` methods

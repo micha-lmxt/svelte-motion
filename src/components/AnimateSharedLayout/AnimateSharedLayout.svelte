@@ -16,16 +16,10 @@ Copyright (c) 2018 Framer B.V.
     import { MotionContext } from "../../context/MotionContext/index.js";
     import { snapshotViewportBox } from "../../render/dom/projection/utils";
 
-    export let type = undefined,
-        update = undefined;
+    export let type = undefined;
 
     const context = getContext(MotionContext) || MotionContext();
-    const shouldComponentUpdate = () => {
-        //renderScheduled=true;
-        //setSyncContext();
-        //syncContext = { ...syncContext }
-    };
-    $: shouldComponentUpdate(type, update);
+
     /**
      * Track whether the component has mounted. If it hasn't, the presence of added children
      * are set to Present, whereas if it has they're considered Entering

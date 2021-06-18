@@ -5,7 +5,7 @@ Copyright (c) 2018 Framer B.V.
 /**
  * @public
  */
-export interface AnimatePresenceProps {
+export interface AnimatePresenceProps<T extends {key:any}> {
     /**
      * By passing `initial={false}`, `AnimatePresence` will disable any initial animations on children
      * that are present when the component is first rendered.
@@ -64,4 +64,16 @@ export interface AnimatePresenceProps {
      * @internal
      */
     presenceAffectsLayout?: boolean;
+    /**
+     * The data array for the items you want to render. Every Item needs a unique `key`.
+     * 
+     * Alternatively, you can leave this undefined and supply `show` prop.
+     */
+    list?:T[]
+    /**
+     * Render the child when this is set to `true`, exit it when changed to `false`.
+     * 
+     * Only used when list is undefined.
+     */
+    show?: boolean
 }

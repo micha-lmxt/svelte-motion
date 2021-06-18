@@ -41,7 +41,7 @@ export declare type AnimationOptions<V> = (Tween | Spring) & AnimationPlaybackLi
  * ```javascript
  * const x = useMotionValue(0)
  *
- * useEffect(() => {
+ * onMount(() => {
  *   const controls = animate(x, 100, {
  *     type: "spring",
  *     stiffness: 2000,
