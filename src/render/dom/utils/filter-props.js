@@ -10,7 +10,7 @@ var shouldForward = function (key) { return !isValidMotionProp(key); };
  * to dynamically generate CSS. They both use the `@emotion/is-prop-valid` package to determine which
  * of these should be passed to the underlying DOM node.
  *
- * However, when styling a Motion component `styled(motion.div)`, both packages pass through *all* props
+ * However, when styling a Motion component `styled(MotionDiv)`, both packages pass through *all* props
  * as it's seen as an arbitrary component rather than a DOM node. Motion only allows arbitrary props
  * passed through the `custom` prop so it doesn't *need* the payload or computational overhead of
  * `@emotion/is-prop-valid`, however to fix this problem we need to use it.

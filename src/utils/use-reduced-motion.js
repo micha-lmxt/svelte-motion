@@ -44,7 +44,7 @@ function initPrefersReducedMotion() {
 *   const closedX = shouldReduceMotion ? 0 : "-100%"
 *
 *   return (
-*     <motion.div animate={{
+*     <MotionDiv animate={{
 *       opacity: isOpen ? 1 : 0,
 *       x: isOpen ? 0 : closedX
 *     }} />

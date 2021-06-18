@@ -35,7 +35,7 @@ Copyright (c) 2018 Framer B.V.
  *   const [x, cycleX] = useCycle(0, 50, 100)
  *
  *   return (
- *     <motion.div
+ *     <MotionDiv
  *       animate={{ x: x }}
  *       onTap={() => cycleX()}
  *      />

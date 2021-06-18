@@ -12,7 +12,7 @@ npm install --save-dev svelte-motion
 
 ## Usage
 
-Corresponding to a `motion.div` in framer-motion is this:
+Corresponding to a `MotionDiv` in framer-motion is this:
 
 ```javascript
 import { Motion } from 'svelte-motion'
