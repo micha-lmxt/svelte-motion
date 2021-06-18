@@ -45,7 +45,7 @@ export declare class DragControls {
      *
      * @public
      */
-    start(event: React.MouseEvent | React.TouchEvent | React.PointerEvent | MouseEvent | TouchEvent | PointerEvent, options?: DragControlOptions): void;
+    start(event: MouseEvent | TouchEvent | PointerEvent, options?: DragControlOptions): void;
     updateConstraints(flush?: boolean): void;
 }
 /**

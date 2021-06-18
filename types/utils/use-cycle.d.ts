@@ -26,8 +26,11 @@ declare type CycleState<T> = [T, Cycle];
  * ```
  *
  * @param items - items to cycle through
- * @returns [currentState, cycleState]
+ * @returns Writable<T> & {next: (index?: number) => void}
  *
  * @public
  */
-export declare function useCycle<T>(...items: T[]): Writable<T> & {next: ( index?: number ) => void};
+export declare function useCycle<T>(...items: T[]): Writable<T> & {
+    /** Cycle through to next value or set the next value by index. */
+    next: ( index?: number ) => void
+};

@@ -18,7 +18,7 @@ import { AnimatePresenceProps } from "./types";
  * the tree.
  *
  * ```jsx
- * import { motion, AnimatePresence } from 'framer-motion'
+ * import { motion, AnimatePresence } from 'svelte-motion'
  * const items = [
  *  {key:1},
  *  {key:2},
@@ -42,4 +42,4 @@ import { AnimatePresenceProps } from "./types";
  *
  * @public
  */
-export declare class AnimatePresence<T extends {key:1}>  extends SvelteComponentTyped<AnimatePresenceProps<T>, {}, {default:{ item: T | { key: 1} }}>{} 
+export declare type AnimatePresence<T extends {key:any}> = SvelteComponentTyped<AnimatePresenceProps<T>, {}, {default:{ item: T | { key: 1} }}> 
