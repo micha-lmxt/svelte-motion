@@ -2,7 +2,6 @@
 based on framer-motion@4.1.17,
 Copyright (c) 2018 Framer B.V.
 */
-import * as React from "react";
 import { MotionProps } from "../types";
 import { VisualState } from "../utils/use-visual-state";
 import { CreateVisualElement, VisualElement } from "../../render/types";

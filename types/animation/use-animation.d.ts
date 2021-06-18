@@ -44,7 +44,7 @@ import { AnimationControls } from "./types";
  *        transition: { duration: 0.5 },
  *    })
  *
- *    return <motion.div animate={controls} />
+ *    return <MotionDiv animate={controls} />
  * }
  * ```
  *

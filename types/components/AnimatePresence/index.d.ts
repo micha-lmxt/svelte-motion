@@ -47,7 +47,7 @@ import { AnimatePresenceProps } from "./types";
  * export const Items = ({ items }) => (
  *   <AnimatePresence>
  *     {items.map(item => (
- *       <motion.div
+ *       <MotionDiv
  *         key={item.id}
  *         initial={{ opacity: 0 }}
  *         animate={{ opacity: 1 }}

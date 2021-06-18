@@ -13,41 +13,20 @@ import { ScrollMotionValues } from "./utils";
  *
  * This element must be set to `overflow: scroll` on either or both axes to report scroll offset.
  *
- * @library
- *
- * ```jsx
- * import * as React from "react"
- * import {
- *   Frame,
- *   useElementScroll,
- *   useTransform
- * } from "framer"
- *
- * export function MyComponent() {
- *   const ref = React.useRef()
- *   const { scrollYProgress } = useElementScroll(ref)
- *
- *   return (
- *     <Frame ref={ref}>
- *       <Frame scaleX={scrollYProgress} />
- *     </Frame>
- *   )
- * }
- * ```
- *
  * @motion
  *
  * ```jsx
- * export const MyComponent = () => {
- *   const ref = useRef()
- *   const { scrollYProgress } = useElementScroll(ref)
+ * <script>
+ *   import { useElementScroll, MotionDiv } from 'svelte-motion'
+
+ *   const scroll = useElementScroll()
  *
- *   return (
- *     <div ref={ref}>
- *       <motion.div style={{ scaleX: scrollYProgress }} />
- *     </div>
- *   )
- * }
+ *  </script>
+ * 
+ * <div bind:this={scroll.ref}>
+ *    <MotionDiv style={{ scaleX: scroll.scrollYProgress }} />
+ *  </div>
+ * 
  * ```
  *
  * @public

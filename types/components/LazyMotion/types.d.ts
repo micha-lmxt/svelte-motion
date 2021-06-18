@@ -46,7 +46,7 @@ export interface LazyProps {
      * function Component() {
      *   return (
      *     <LazyMotion features={domAnimation} strict>
-     *       <motion.div />
+     *       <MotionDiv />
      *     </LazyMotion>
      *   )
      * }

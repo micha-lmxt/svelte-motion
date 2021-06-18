@@ -67,10 +67,11 @@ export declare type MotionCSS = MakeMotion<Omit<CSSProperties, "rotate" | "scale
  * @public
  */
 export declare type MotionTransform = MakeMotion<TransformProperties>;
+
 /**
  * @public
  */
-export declare type MotionStyle = MotionCSS & MotionTransform & MakeMotion<SVGPathProperties> & MakeCustomValueType<CustomStyles>;
+export declare type MotionStyle = MotionCSS & MotionTransform & MakeMotion<SVGPathProperties> /* & MakeCustomValueType<CustomStyles>*/;
 export declare type OnUpdate = (v: Target) => void;
 /**
  * @public
@@ -94,36 +95,20 @@ export interface AnimationProps {
     /**
      * Values to animate to, variant label(s), or `AnimationControls`.
      *
-     * @library
-     *
-     * ```jsx
-     * // As values
-     * <Frame animate={{ opacity: 1 }} />
-     *
-     * // As variant
-     * <Frame animate="visible" variants={variants} />
-     *
-     * // Multiple variants
-     * <Frame animate={["visible", "active"]} variants={variants} />
-     *
-     * // AnimationControls
-     * <Frame animate={animation} />
-     * ```
-     *
      * @motion
      *
      * ```jsx
      * // As values
-     * <motion.div animate={{ opacity: 1 }} />
+     * <MotionDiv animate={{ opacity: 1 }} />
      *
      * // As variant
-     * <motion.div animate="visible" variants={variants} />
+     * <MotionDiv animate="visible" variants={variants} />
      *
      * // Multiple variants
-     * <motion.div animate={["visible", "active"]} variants={variants} />
+     * <MotionDiv animate={["visible", "active"]} variants={variants} />
      *
      * // AnimationControls
-     * <motion.div animate={animation} />
+     * <MotionDiv animate={animation} />
      * ```
      */
     animate?: AnimationControls | TargetAndTransition | VariantLabels | boolean;
@@ -135,44 +120,19 @@ export interface AnimationProps {
      * This limitation exists because React doesn't allow components to defer unmounting until after
      * an animation is complete. Once this limitation is fixed, the `AnimatePresence` component will be unnecessary.
      *
-     * @library
-     *
-     * ```jsx
-     * import { Frame, AnimatePresence } from 'framer'
-     *
-     * export function MyComponent(props) {
-     *   return (
-     *     <AnimatePresence>
-     *        {props.isVisible && (
-     *          <Frame
-     *            initial={{ opacity: 0 }}
-     *            animate={{ opacity: 1 }}
-     *            exit={{ opacity: 0 }}
-     *          />
-     *        )}
-     *     </AnimatePresence>
-     *   )
-     * }
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * import { AnimatePresence, motion } from 'framer-motion'
+     * import { AnimatePresence, motion } from 'svelte-motion'
      *
-     * export const MyComponent = ({ isVisible }) => {
-     *   return (
-     *     <AnimatePresence>
-     *        {isVisible && (
-     *          <motion.div
-     *            initial={{ opacity: 0 }}
-     *            animate={{ opacity: 1 }}
-     *            exit={{ opacity: 0 }}
-     *          />
-     *        )}
-     *     </AnimatePresence>
-     *   )
-     * }
+     *
+     * <AnimatePresence show={isVisible}>
+     *      <MotionDiv
+     *        initial={{ opacity: 0 }}
+     *        animate={{ opacity: 1 }}
+     *        exit={{ opacity: 0 }}
+     *      />
+     * </AnimatePresence>
      * ```
      */
     exit?: TargetAndTransition | VariantLabels;
@@ -182,25 +142,6 @@ export interface AnimationProps {
      *
      * Using `transition` options like `delayChildren` and `staggerChildren`, you can orchestrate
      * when children animations play relative to their parent.
-     *
-     * @library
-     *
-     * After passing variants to one or more `Frame`'s `variants` prop, these variants
-     * can be used in place of values on the `animate`, `initial`, `whileFocus`, `whileTap` and `whileHover` props.
-     *
-     * ```jsx
-     * const variants = {
-     *   active: {
-     *     backgroundColor: "#f00"
-     *   },
-     *   inactive: {
-     *     backgroundColor: "#fff",
-     *     transition: { duration: 2 }
-     *   }
-     * }
-     *
-     * <Frame variants={variants} animate="active" />
-     * ```
      *
      * @motion
      *
@@ -218,24 +159,12 @@ export interface AnimationProps {
      *   }
      * }
      *
-     * <motion.div variants={variants} animate="active" />
+     * <MotionDiv variants={variants} animate="active" />
      * ```
      */
     variants?: Variants;
     /**
      * Default transition. If no `transition` is defined in `animate`, it will use the transition defined here.
-     *
-     * @library
-     *
-     * ```jsx
-     * const spring = {
-     *   type: "spring",
-     *   damping: 10,
-     *   stiffness: 100
-     * }
-     *
-     * <Frame transition={spring} animate={{ scale: 1.2 }} />
-     * ```
      *
      * @motion
      *
@@ -246,7 +175,7 @@ export interface AnimationProps {
      *   stiffness: 100
      * }
      *
-     * <motion.div transition={spring} animate={{ scale: 1.2 }} />
+     * <MotionDiv transition={spring} animate={{ scale: 1.2 }} />
      * ```
      */
     transition?: Transition;
@@ -258,21 +187,6 @@ export interface MotionAdvancedProps {
     /**
      * Custom data to use to resolve dynamic variants differently for each animating component.
      *
-     * @library
-     *
-     * ```jsx
-     * const variants = {
-     *   visible: (custom) => ({
-     *     opacity: 1,
-     *     transition: { delay: custom * 0.2 }
-     *   })
-     * }
-     *
-     * <Frame custom={0} animate="visible" variants={variants} />
-     * <Frame custom={1} animate="visible" variants={variants} />
-     * <Frame custom={2} animate="visible" variants={variants} />
-     * ```
-     *
      * @motion
      *
      * ```jsx
@@ -283,9 +197,9 @@ export interface MotionAdvancedProps {
      *   })
      * }
      *
-     * <motion.div custom={0} animate="visible" variants={variants} />
-     * <motion.div custom={1} animate="visible" variants={variants} />
-     * <motion.div custom={2} animate="visible" variants={variants} />
+     * <MotionDiv custom={0} animate="visible" variants={variants} />
+     * <MotionDiv custom={1} animate="visible" variants={variants} />
+     * <MotionDiv custom={2} animate="visible" variants={variants} />
      * ```
      *
      * @public
@@ -308,79 +222,45 @@ export interface MotionProps extends AnimationProps, VisualElementLifecycles, Pa
      *
      * Set to `false` to initialise with the values in `animate` (disabling the mount animation)
      *
-     * @library
-     *
-     * ```jsx
-     * // As values
-     * <Frame initial={{ opacity: 1 }} />
-     *
-     * // As variant
-     * <Frame initial="visible" variants={variants} />
-     *
-     * // Multiple variants
-     * <Frame initial={["visible", "active"]} variants={variants} />
-     *
-     * // As false (disable mount animation)
-     * <Frame initial={false} animate={{ opacity: 0 }} />
-     * ```
-     *
      * @motion
      *
      * ```jsx
      * // As values
-     * <motion.div initial={{ opacity: 1 }} />
+     * <MotionDiv initial={{ opacity: 1 }} />
      *
      * // As variant
-     * <motion.div initial="visible" variants={variants} />
+     * <MotionDiv initial="visible" variants={variants} />
      *
      * // Multiple variants
-     * <motion.div initial={["visible", "active"]} variants={variants} />
+     * <MotionDiv initial={["visible", "active"]} variants={variants} />
      *
      * // As false (disable mount animation)
-     * <motion.div initial={false} animate={{ opacity: 0 }} />
+     * <MotionDiv initial={false} animate={{ opacity: 0 }} />
      * ```
      */
     initial?: boolean | Target | VariantLabels;
     /**
-     * @library
-     *
-     * The React DOM `style` prop, useful for setting CSS properties that aren't explicitly exposed by `Frame` props.
-     *
-     * ```jsx
-     * <Frame style={{ mixBlendMode: "difference" }}  />
-     * ```
-     *
      * @motion
      *
      * The React DOM `style` prop, enhanced with support for `MotionValue`s and separate `transform` values.
      *
      * ```jsx
-     * export const MyComponent = () => {
+     * <script>
      *   const x = useMotionValue(0)
-     *
-     *   return <motion.div style={{ x, opacity: 1, scale: 0.5 }} />
-     * }
+     * </script>
+     * 
+     * <MotionDiv style={{ x, opacity: 1, scale: 0.5 }} />
      * ```
      */
     style?: MotionStyle;
     /**
-     * By default, Framer Motion generates a `transform` property with a sensible transform order. `transformTemplate`
+     * By default, Svelte Motion generates a `transform` property with a sensible transform order. `transformTemplate`
      * can be used to create a different order, or to append/preprend the automatically generated `transform` property.
-     *
-     * @library
-     *
-     * ```jsx
-     * function transformTemplate({ x, rotate }) {
-     *   return `rotate(${rotate}deg) translateX(${x}px)`
-     * }
-     *
-     * <Frame x={0} rotate={180} transformTemplate={transformTemplate} />
-     * ```
      *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   style={{ x: 0, rotate: 180 }}
      *   transformTemplate={
      *     ({ x, rotate }) => `rotate(${rotate}deg) translateX(${x}px)`
@@ -394,20 +274,5 @@ export interface MotionProps extends AnimationProps, VisualElementLifecycles, Pa
      * @public
      */
     transformTemplate?(transform: TransformProperties, generatedTransform: string): string;
-    /**
-     * This allows values to be transformed before being animated or set as styles.
-     *
-     * For instance, this allows custom values in Framer Library like `size` to be converted into `width` and `height`.
-     * It also allows us a chance to take a value like `Color` and convert it to an animatable color string.
-     *
-     * A few structural typing changes need making before this can be a public property:
-     * - Allow `Target` values to be appended by user-defined types (delete `CustomStyles` - does `size` throw a type error?)
-     * - Extract `CustomValueType` as a separate user-defined type (delete `CustomValueType` and animate a `Color` - does this throw a type error?).
-     *
-     * @param values -
-     *
-     * @internal
-     */
-    transformValues?<V extends ResolvedValues>(values: V): V;
 }
 export declare type TransformTemplate = (transform: TransformProperties, generatedTransform: string) => string;

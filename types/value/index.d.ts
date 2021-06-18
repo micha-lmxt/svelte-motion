@@ -21,7 +21,8 @@ export declare type StartAnimation = (complete: () => void) => () => void;
  */
 export declare class MotionValue<V = any> implements Writable<V> {
     /**
-     * Subscribe method to make MotionValue compatible with Svelte store
+     * Subscribe method to make MotionValue compatible with Svelte store. Returns a unsubscribe function.
+     * Same as onChange.
      *      
      * @public
      */
@@ -116,68 +117,34 @@ export declare class MotionValue<V = any> implements Writable<V> {
      * `useEffect` hook. As it returns an unsubscribe function, this should be returned
      * from the `useEffect` function to ensure you don't add duplicate subscribers..
      *
-     * @library
-     *
-     * ```jsx
-     * function MyComponent() {
-     *   const x = useMotionValue(0)
-     *   const y = useMotionValue(0)
-     *   const opacity = useMotionValue(1)
-     *
-     *   useEffect(() => {
-     *     function updateOpacity() {
-     *       const maxXY = Math.max(x.get(), y.get())
-     *       const newOpacity = transform(maxXY, [0, 100], [1, 0])
-     *       opacity.set(newOpacity)
-     *     }
-     *
-     *     const unsubscribeX = x.onChange(updateOpacity)
-     *     const unsubscribeY = y.onChange(updateOpacity)
-     *
-     *     return () => {
-     *       unsubscribeX()
-     *       unsubscribeY()
-     *     }
-     *   }, [])
-     *
-     *   return <Frame x={x} />
-     * }
-     * ```
-     *
+     
      * @motion
      *
      * ```jsx
-     * export const MyComponent = () => {
+     * <script>
+     *   import { useMotionValue } from 'svelte-motion'
+     * 
      *   const x = useMotionValue(0)
      *   const y = useMotionValue(0)
      *   const opacity = useMotionValue(1)
      *
-     *   useEffect(() => {
-     *     function updateOpacity() {
+     *   
+     *   function updateOpacity() {
      *       const maxXY = Math.max(x.get(), y.get())
      *       const newOpacity = transform(maxXY, [0, 100], [1, 0])
      *       opacity.set(newOpacity)
-     *     }
-     *
-     *     const unsubscribeX = x.onChange(updateOpacity)
-     *     const unsubscribeY = y.onChange(updateOpacity)
-     *
-     *     return () => {
+     *   }
+     *   
+     *   // framer-motion style:
+     *   const unsubscribeX = x.onChange(updateOpacity)
+     *   onDestroy(()=>{
      *       unsubscribeX()
-     *       unsubscribeY()
-     *     }
-     *   }, [])
-     *
-     *   return <motion.div style={{ x }} />
-     * }
-     * ```
-     *
-     * @internalremarks
-     *
-     * We could look into a `useOnChange` hook if the above lifecycle management proves confusing.
-     *
-     * ```jsx
-     * useOnChange(x, () => {})
+     *   })
+     *   // equivalent Svelte style. Subscription and un-subscription is automatically handled:
+     *   $: updateOpacity($y)
+     * </script>
+     * 
+     * <Motion let:motion style={{ x }}><div use:motion/></Motion>
      * ```
      *
      * @param subscriber - A function that receives the latest value.

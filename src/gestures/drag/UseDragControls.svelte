@@ -36,7 +36,7 @@ Copyright (c) 2018 Framer B.V.
      * return (
      *   <>
      *     <div onPointerDown={startDrag} />
-     *     <motion.div drag="x" dragControls={dragControls} />
+     *     <MotionDiv drag="x" dragControls={dragControls} />
      *   </>
      * )
      * ```
@@ -131,7 +131,7 @@ Copyright (c) 2018 Framer B.V.
      * return (
      *   <>
      *     <div onPointerDown={startDrag} />
-     *     <motion.div drag="x" dragControls={dragControls} />
+     *     <MotionDiv drag="x" dragControls={dragControls} />
      *   </>
      * )
      * ```

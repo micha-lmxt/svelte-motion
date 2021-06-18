@@ -3,6 +3,7 @@ based on framer-motion@4.1.17,
 Copyright (c) 2018 Framer B.V.
 */
 import { PresenceContextProps } from "../../context/PresenceContext";
+import { Readable } from 'svelte/store'
 export declare type SafeToRemove = () => void;
 declare type AlwaysPresent = [true, null];
 declare type Present = [true];
@@ -14,12 +15,11 @@ declare type NotPresent = [false, SafeToRemove];
  * ```jsx
  * import { usePresence } from "framer-motion"
  *
- * export const Component = () => {
- *   const [isPresent, safeToRemove] = usePresence()
+ * const [isPresent, safeToRemove] = usePresence()
  *
- *   useEffect(() => {
- *     !isPresent && setTimeout(safeToRemove, 1000)
- *   }, [isPresent])
+ * 
+ *  $: !isPresent && setTimeout(safeToRemove, 1000)
+ * 
  *
  *   return <div />
  * }
@@ -30,7 +30,7 @@ declare type NotPresent = [false, SafeToRemove];
  *
  * @public
  */
-export declare function usePresence(): AlwaysPresent | Present | NotPresent;
+export declare function usePresence(): Readable<AlwaysPresent | Present | NotPresent>;
 /**
  * Similar to `usePresence`, except `useIsPresent` simply returns whether or not the component is present.
  * There is no `safeToRemove` function.
@@ -51,6 +51,6 @@ export declare function usePresence(): AlwaysPresent | Present | NotPresent;
  *
  * @public
  */
-export declare function useIsPresent(): boolean;
+export declare function useIsPresent(): Readable<boolean>;
 export declare function isPresent(context: PresenceContextProps | null): boolean;
 export {};

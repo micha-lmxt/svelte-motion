@@ -1,9 +1,10 @@
-/// <reference types="react" />
+
 /** 
 based on framer-motion@4.1.17,
 Copyright (c) 2018 Framer B.V.
 */
 import { VariantLabels } from "../motion/types";
+import { Writable } from 'svelte/store'
 /**
  * @public
  */
@@ -18,4 +19,4 @@ export interface PresenceContextProps {
 /**
  * @public
  */
-export declare const PresenceContext: import("react").Context<PresenceContextProps | null>;
+export declare const PresenceContext: () => Writable<PresenceContextProps | null>

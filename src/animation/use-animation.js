@@ -47,7 +47,7 @@ import { animationControls } from "./animation-controls"
  *        transition: { duration: 0.5 },
  *    })
  *
- *    return <motion.div animate={controls} />
+ *    return <MotionDiv animate={controls} />
  * }
  * ```
  *

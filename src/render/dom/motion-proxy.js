@@ -39,13 +39,13 @@ function createMotionProxy(defaultFeatures) {
         return custom(Component, { forwardMotionProps: true });
     }*/
     /**
-     * A cache of generated `motion` components, e.g `motion.div`, `motion.input` etc.
+     * A cache of generated `motion` components, e.g `MotionDiv`, `motion.input` etc.
      * Rather than generating them anew every render.
      */
     var componentCache = new Map();
     return new Proxy(custom, {
         /**
-         * Called when `motion` is referenced with a prop: `motion.div`, `motion.input` etc.
+         * Called when `motion` is referenced with a prop: `MotionDiv`, `motion.input` etc.
          * The prop name is passed through as `key` and we can use that to generate a `motion`
          * DOM component with that name.
          */

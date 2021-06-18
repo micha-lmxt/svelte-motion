@@ -38,36 +38,17 @@ export interface TransformOptions<T> {
  * can be any supported value type, such as numbers, colors, shadows, arrays, objects and more.
  * Every value in the output range must be of the same type and in the same format.
  *
- * @library
- *
- * ```jsx
- * import * as React from "react"
- * import { Frame, transform } from "framer"
- *
- * export function MyComponent() {
- *    const inputRange = [0, 200]
- *    const outputRange = [0, 1]
- *    const output = transform(100, inputRange, outputRange)
- *
- *    // Returns 0.5
- *    return <Frame>{output}</Frame>
- * }
- * ```
- *
  * @motion
  *
  * ```jsx
- * import * as React from "react"
- * import { transform } from "framer-motion"
+ * import { transform } from "svelte-motion"
  *
- * export function MyComponent() {
+ * 
  *    const inputRange = [0, 200]
  *    const outputRange = [0, 1]
  *    const output = transform(100, inputRange, outputRange)
- *
- *    // Returns 0.5
- *    return <div>{output}</div>
- * }
+ *    
+ *    console.log(output) // Returns 0.5
  * ```
  *
  * @param inputValue - A number to transform between the input and output ranges.
@@ -79,27 +60,6 @@ export interface TransformOptions<T> {
  */
 export declare function transform<T>(inputValue: number, inputRange: number[], outputRange: T[], options?: TransformOptions<T>): T;
 /**
- * @library
- *
- * For improved performance, `transform` can pre-calculate the function that will transform a value between two ranges.
- * Returns a function.
- *
- * ```jsx
- * import * as React from "react"
- * import { Frame, transform } from "framer"
- *
- * export function MyComponent() {
- *     const inputRange = [-200, -100, 100, 200]
- *     const outputRange = [0, 1, 1, 0]
- *     const convertRange = transform(inputRange, outputRange)
- *     const output = convertRange(-150)
- *
- *     // Returns 0.5
- *     return <Frame>{output}</Frame>
- * }
- *
- * ```
- *
  * @motion
  *
  * Transforms numbers into other values by mapping them from an input range to an output range.
@@ -111,19 +71,15 @@ export declare function transform<T>(inputValue: number, inputRange: number[], o
  * Every value in the output range must be of the same type and in the same format.
  *
  * ```jsx
- * import * as React from "react"
- * import { Frame, transform } from "framer"
+
+ * import { transform } from "svelte-motion"
  *
- * export function MyComponent() {
- *     const inputRange = [-200, -100, 100, 200]
- *     const outputRange = [0, 1, 1, 0]
- *     const convertRange = transform(inputRange, outputRange)
- *     const output = convertRange(-150)
+ * const inputRange = [-200, -100, 100, 200]
+ * const outputRange = [0, 1, 1, 0]
+ * const convertRange = transform(inputRange, outputRange)
+ * const output = convertRange(-150)
  *
- *     // Returns 0.5
- *     return <div>{output}</div>
- * }
- *
+ * console.log(output) // Returns 0.5
  * ```
  *
  * @param inputRange - A linear series of numbers (either all increasing or decreasing).

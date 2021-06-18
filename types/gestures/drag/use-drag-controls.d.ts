@@ -7,23 +7,6 @@ import { VisualElementDragControls, DragControlOptions } from "./VisualElementDr
 /**
  * Can manually trigger a drag gesture on one or more `drag`-enabled `motion` components.
  *
- * @library
- *
- * ```jsx
- * const dragControls = useDragControls()
- *
- * function startDrag(event) {
- *   dragControls.start(event, { snapToCursor: true })
- * }
- *
- * return (
- *   <>
- *     <Frame onTapStart={startDrag} />
- *     <Frame drag="x" dragControls={dragControls} />
- *   </>
- * )
- * ```
- *
  * @motion
  *
  * ```jsx
@@ -33,12 +16,8 @@ import { VisualElementDragControls, DragControlOptions } from "./VisualElementDr
  *   dragControls.start(event, { snapToCursor: true })
  * }
  *
- * return (
- *   <>
- *     <div onPointerDown={startDrag} />
- *     <motion.div drag="x" dragControls={dragControls} />
- *   </>
- * )
+ * <div onPointerDown={startDrag} />
+ * <MotionDiv drag="x" dragControls={dragControls} />
  * ```
  *
  * @public
@@ -78,23 +57,6 @@ export declare class DragControls {
  * the draggable component's `dragControls` prop. It exposes a `start` method
  * that can start dragging from pointer events on other components.
  *
- * @library
- *
- * ```jsx
- * const dragControls = useDragControls()
- *
- * function startDrag(event) {
- *   dragControls.start(event, { snapToCursor: true })
- * }
- *
- * return (
- *   <>
- *     <Frame onTapStart={startDrag} />
- *     <Frame drag="x" dragControls={dragControls} />
- *   </>
- * )
- * ```
- *
  * @motion
  *
  * ```jsx
@@ -107,7 +69,7 @@ export declare class DragControls {
  * return (
  *   <>
  *     <div onPointerDown={startDrag} />
- *     <motion.div drag="x" dragControls={dragControls} />
+ *     <MotionDiv drag="x" dragControls={dragControls} />
  *   </>
  * )
  * ```

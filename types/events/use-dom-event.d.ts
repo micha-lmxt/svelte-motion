@@ -2,20 +2,41 @@
 based on framer-motion@4.1.17,
 Copyright (c) 2018 Framer B.V.
 */
-import { RefObject } from "react";
+import { SvelteComponentTyped } from "svelte";
+import { VisualElement } from "..";
 export declare function addDomEvent(target: EventTarget, eventName: string, handler: EventListener, options?: AddEventListenerOptions): () => void;
+export declare interface UseDomEventProps {
+    /**
+     * Ref object that's been provided to the element you want to bind the listener to.
+     */
+    ref: {current:Node} | VisualElement<EventTarget>,
+    /**
+     * Name of the event you want listen for.
+     */
+    eventName: string,
+    /**
+     * Function to fire when receiving the event.
+     */
+    handler?: EventListener,
+    /**
+     * Options to pass to `Event.addEventListener`.
+     */
+    options?: AddEventListenerOptions
+}
 /**
  * Attaches an event listener directly to the provided DOM element.
  *
- * Bypassing React's event system can be desirable, for instance when attaching non-passive
+ * Bypassing Sveltes's event system can be desirable, for instance when attaching non-passive
  * event handlers.
  *
  * ```jsx
- * const ref = useRef(null)
+ * <script>
+ *  import { useDomEvent } from 'svelte-motion'
+ *  let ref;
+ * </script>
  *
- * useDomEvent(ref, 'wheel', onWheel, { passive: false })
- *
- * return <div ref={ref} />
+ * <UseDomEvent ref={{current:ref}} eventName="wheel" handler={onWheel} options={{passive: false}/>
+ * <div bind:this={ref}/>
  * ```
  *
  * @param ref - React.RefObject that's been provided to the element you want to bind the listener to.
@@ -25,4 +46,5 @@ export declare function addDomEvent(target: EventTarget, eventName: string, hand
  *
  * @public
  */
-export declare function useDomEvent(ref: RefObject<EventTarget>, eventName: string, handler?: EventListener | undefined, options?: AddEventListenerOptions): void;
+export declare class UseDomEvent extends SvelteComponentTyped<UseDomEventProps,{},{default:{}}>{}
+    

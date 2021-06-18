@@ -2,7 +2,6 @@
 based on framer-motion@4.1.17,
 Copyright (c) 2018 Framer B.V.
 */
-import * as React from "react";
 import { VisualElement } from "../../render/types";
 import { Transition } from "../../types";
 import { AxisBox2D } from "../../types/geometry";

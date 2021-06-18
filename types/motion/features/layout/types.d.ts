@@ -11,7 +11,7 @@ export interface LayoutProps {
      * its layout changes.
      *
      * ```jsx
-     * <motion.div layout />
+     * <MotionDiv layout />
      * ```
      *
      * This will perform a layout animation using performant transforms. Part of this technique
@@ -41,7 +41,7 @@ export interface LayoutProps {
      *   {items.map(item => (
      *      <motion.li layout>
      *         {item.name}
-     *         {item.isSelected && <motion.div layoutId="underline" />}
+     *         {item.isSelected && <MotionDiv layoutId="underline" />}
      *      </motion.li>
      *   ))}
      * </AnimateSharedLayout>

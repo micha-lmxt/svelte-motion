@@ -5,7 +5,7 @@ Copyright (c) 2018 Framer B.V.
 /**
  * Components
  */
-export { motion, createDomMotionComponent } from "./render/dom/motion";
+export { Motion, createDomMotionComponent } from "./render/dom/motion";
 export { m } from "./render/dom/motion-minimal";
 export { AnimatePresence } from "./components/AnimatePresence";
 export { AnimateSharedLayout } from "./components/AnimateSharedLayout";
@@ -47,7 +47,7 @@ export { transform } from "./utils/transform";
 export { isValidMotionProp } from "./motion/utils/valid-prop";
 export { usePresence, useIsPresent, } from "./components/AnimatePresence/use-presence";
 export { useDragControls, DragControls, } from "./gestures/drag/use-drag-controls";
-export { useDomEvent } from "./events/use-dom-event";
+export { UseDomEvent } from "./events/use-dom-event";
 export { createMotionComponent } from "./motion";
 export { addScaleCorrection } from "./render/dom/projection/scale-correction";
 export { snapshotViewportBox } from "./render/dom/projection/utils";
@@ -79,7 +79,7 @@ export { LayoutProps } from "./motion/features/layout/types";
 export { AnimatePresenceProps } from "./components/AnimatePresence/types";
 export { SharedLayoutProps } from "./components/AnimateSharedLayout/types";
 export { SharedLayoutAnimationConfig, VisibilityAction, SharedLayoutSyncMethods, SyncLayoutLifecycles, } from "./components/AnimateSharedLayout/types";
-export { SharedLayoutContext, FramerTreeLayoutContext, } from "./context/SharedLayoutContext";
+export { SharedLayoutContext } from "./context/SharedLayoutContext";
 export { createBatcher } from "./components/AnimateSharedLayout/utils/batcher";
 export * from "./types/geometry";
 export { MotionConfigProps } from "./components/MotionConfig";

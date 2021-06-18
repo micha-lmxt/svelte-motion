@@ -27,16 +27,6 @@ export interface FocusHandlers {
  * Passed in to tap event handlers like `onTap` the `TapInfo` object contains
  * information about the tap gesture such as it‘s location.
  *
- * @library
- *
- * ```jsx
- * function onTap(event, info) {
- *   console.log(info.point.x, info.point.y)
- * }
- *
- * <Frame onTap={onTap} />
- * ```
- *
  * @motion
  *
  * ```jsx
@@ -44,7 +34,7 @@ export interface FocusHandlers {
  *   console.log(info.point.x, info.point.y)
  * }
  *
- * <motion.div onTap={onTap} />
+ * <MotionDiv onTap={onTap} />
  * ```
  *
  * @public
@@ -54,16 +44,6 @@ export interface TapInfo {
      * Contains `x` and `y` values for the tap gesture relative to the
      * device or page.
      *
-     * @library
-     *
-     * ```jsx
-     * function onTapStart(event, info) {
-     *   console.log(info.point.x, info.point.y)
-     * }
-     *
-     * <Frame onTapStart={onTapStart} />
-     * ```
-     *
      * @motion
      *
      * ```jsx
@@ -71,7 +51,7 @@ export interface TapInfo {
      *   console.log(info.point.x, info.point.y)
      * }
      *
-     * <motion.div onTapStart={onTapStart} />
+     * <MotionDiv onTapStart={onTapStart} />
      * ```
      *
      * @public
@@ -85,16 +65,6 @@ export interface TapHandlers {
     /**
      * Callback when the tap gesture successfully ends on this element.
      *
-     * @library
-     *
-     * ```jsx
-     * function onTap(event, info) {
-     *   console.log(info.point.x, info.point.y)
-     * }
-     *
-     * <Frame onTap={onTap} />
-     * ```
-     *
      * @motion
      *
      * ```jsx
@@ -102,7 +72,7 @@ export interface TapHandlers {
      *   console.log(info.point.x, info.point.y)
      * }
      *
-     * <motion.div onTap={onTap} />
+     * <MotionDiv onTap={onTap} />
      * ```
      *
      * @param event - The originating pointer event.
@@ -112,16 +82,6 @@ export interface TapHandlers {
     /**
      * Callback when the tap gesture starts on this element.
      *
-     * @library
-     *
-     * ```jsx
-     * function onTapStart(event, info) {
-     *   console.log(info.point.x, info.point.y)
-     * }
-     *
-     * <Frame onTapStart={onTapStart} />
-     * ```
-     *
      * @motion
      *
      * ```jsx
@@ -129,7 +89,7 @@ export interface TapHandlers {
      *   console.log(info.point.x, info.point.y)
      * }
      *
-     * <motion.div onTapStart={onTapStart} />
+     * <MotionDiv onTapStart={onTapStart} />
      * ```
      *
      * @param event - The originating pointer event.
@@ -139,16 +99,6 @@ export interface TapHandlers {
     /**
      * Callback when the tap gesture ends outside this element.
      *
-     * @library
-     *
-     * ```jsx
-     * function onTapCancel(event, info) {
-     *   console.log(info.point.x, info.point.y)
-     * }
-     *
-     * <Frame onTapCancel={onTapCancel} />
-     * ```
-     *
      * @motion
      *
      * ```jsx
@@ -156,7 +106,7 @@ export interface TapHandlers {
      *   console.log(info.point.x, info.point.y)
      * }
      *
-     * <motion.div onTapCancel={onTapCancel} />
+     * <MotionDiv onTapCancel={onTapCancel} />
      * ```
      *
      * @param event - The originating pointer event.
@@ -166,16 +116,10 @@ export interface TapHandlers {
     /**
      * Properties or variant label to animate to while the component is pressed.
      *
-     * @library
-     *
-     * ```jsx
-     * <Frame whileTap={{ scale: 0.8 }} />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div whileTap={{ scale: 0.8 }} />
+     * <MotionDiv whileTap={{ scale: 0.8 }} />
      * ```
      */
     whileTap?: VariantLabels | TargetAndTransition;
@@ -192,16 +136,6 @@ export interface PanHandlers {
      * touch scrolling to be disabled on either x/y or both axis with the
      * [touch-action](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action) CSS rule.
      *
-     * @library
-     *
-     * ```jsx
-     * function onPan(event, info) {
-     *   console.log(info.point.x, info.point.y)
-     * }
-     *
-     * <Frame onPan={onPan} />
-     * ```
-     *
      * @motion
      *
      * ```jsx
@@ -209,7 +143,7 @@ export interface PanHandlers {
      *   console.log(info.point.x, info.point.y)
      * }
      *
-     * <motion.div onPan={onPan} />
+     * <MotionDiv onPan={onPan} />
      * ```
      *
      * @param event - The originating pointer event.
@@ -224,16 +158,6 @@ export interface PanHandlers {
     /**
      * Callback function that fires when the pan gesture begins on this element.
      *
-     * @library
-     *
-     * ```jsx
-     * function onPanStart(event, info) {
-     *   console.log(info.point.x, info.point.y)
-     * }
-     *
-     * <Frame onPanStart={onPanStart} />
-     * ```
-     *
      * @motion
      *
      * ```jsx
@@ -241,7 +165,7 @@ export interface PanHandlers {
      *   console.log(info.point.x, info.point.y)
      * }
      *
-     * <motion.div onPanStart={onPanStart} />
+     * <MotionDiv onPanStart={onPanStart} />
      * ```
      *
      * @param event - The originating pointer event.
@@ -257,16 +181,6 @@ export interface PanHandlers {
      * Callback function that fires when we begin detecting a pan gesture. This
      * is analogous to `onMouseStart` or `onTouchStart`.
      *
-     * @library
-     *
-     * ```jsx
-     * function onPanSessionStart(event, info) {
-     *   console.log(info.point.x, info.point.y)
-     * }
-     *
-     * <Frame onPanSessionStart={onPanSessionStart} />
-     * ```
-     *
      * @motion
      *
      * ```jsx
@@ -274,7 +188,7 @@ export interface PanHandlers {
      *   console.log(info.point.x, info.point.y)
      * }
      *
-     * <motion.div onPanSessionStart={onPanSessionStart} />
+     * <MotionDiv onPanSessionStart={onPanSessionStart} />
      * ```
      *
      * @param event - The originating pointer event.
@@ -286,16 +200,6 @@ export interface PanHandlers {
     /**
      * Callback function that fires when the pan gesture ends on this element.
      *
-     * @library
-     *
-     * ```jsx
-     * function onPanEnd(event, info) {
-     *   console.log(info.point.x, info.point.y)
-     * }
-     *
-     * <Frame onPanEnd={onPanEnd} />
-     * ```
-     *
      * @motion
      *
      * ```jsx
@@ -303,7 +207,7 @@ export interface PanHandlers {
      *   console.log(info.point.x, info.point.y)
      * }
      *
-     * <motion.div onPanEnd={onPanEnd} />
+     * <MotionDiv onPanEnd={onPanEnd} />
      * ```
      *
      * @param event - The originating pointer event.
@@ -323,56 +227,30 @@ export interface HoverHandlers {
     /**
      * Properties or variant label to animate to while the hover gesture is recognised.
      *
-     * @library
-     *
-     * ```jsx
-     * <Frame whileHover={{ scale: 1.2 }} />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div whileHover={{ scale: 1.2 }} />
+     * <MotionDiv whileHover={{ scale: 1.2 }} />
      * ```
      */
     whileHover?: VariantLabels | TargetAndTransition;
     /**
      * Callback function that fires when pointer starts hovering over the component.
      *
-     * @library
-     *
-     * ```jsx
-     * function onHoverStart(event) {
-     *   console.log("Hover starts")
-     * }
-     *
-     * <Frame onHoverStart={onHoverStart} />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div onHoverStart={() => console.log('Hover starts')} />
+     * <MotionDiv onHoverStart={() => console.log('Hover starts')} />
      * ```
      */
     onHoverStart?(event: MouseEvent, info: EventInfo): void;
     /**
      * Callback function that fires when pointer stops hovering over the component.
      *
-     * @library
-     *
-     * ```jsx
-     * function onHoverEnd(event) {
-     *   console.log("Hover ends")
-     * }
-     *
-     * <Frame onHoverEnd={onHoverEnd} />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div onHoverEnd={() => console.log("Hover ends")} />
+     * <MotionDiv onHoverEnd={() => console.log("Hover ends")} />
      * ```
      */
     onHoverEnd?(event: MouseEvent, info: EventInfo): void;

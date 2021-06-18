@@ -54,7 +54,7 @@ export declare type Props = {
  * @motion
  *
  * ```jsx
- * <motion.div
+ * <MotionDiv
  *   animate={{ opacity: 0 }}
  *   transition={{
  *     duration: 1,
@@ -105,31 +105,6 @@ export interface Orchestration {
      * starting children transitions, `"afterChildren"` to finish children
      * transitions before starting this transition.
      *
-     * @library
-     *
-     * ```jsx
-     * const container = {
-     *   hidden: {
-     *     opacity: 0,
-     *     transition: { when: "afterChildren" }
-     *   }
-     * }
-     *
-     * const item = {
-     *   hidden: {
-     *     opacity: 0,
-     *     transition: { duration: 2 }
-     *   }
-     * }
-     *
-     * return (
-     *   <Frame variants={container} animate="hidden">
-     *     <Frame variants={item} size={50} />
-     *     <Frame variants={item} size={50} />
-     *   </Frame>
-     * )
-     * ```
-     *
      * @motion
      *
      * ```jsx
@@ -147,11 +122,16 @@ export interface Orchestration {
      *   }
      * }
      *
-     * return (
-     *   <motion.ul variants={list} animate="hidden">
-     *     <motion.li variants={item} />
-     *     <motion.li variants={item} />
-     *   </motion.ul>
+     *  <Motion let:motion={ul} variants={list} animate="hidden">
+     *    <ul use:ul>
+     *      <Motion let:motion variants={item}>
+     *        <li use:motion />
+     *      </Motion>
+     *      <Motion let:motion variants={item}>
+     *        <li use:motion />
+     *      </Motion>
+     *     </ul>
+     *   </Motion>
      * )
      * ```
      *
@@ -161,36 +141,6 @@ export interface Orchestration {
     /**
      * When using variants, children animations will start after this duration
      * (in seconds). You can add the `transition` property to both the `Frame` and the `variant` directly. Adding it to the `variant` generally offers more flexibility, as it allows you to customize the delay per visual state.
-     *
-     * @library
-     *
-     * ```jsx
-     * const container = {
-     *   hidden: { opacity: 0 },
-     *   show: {
-     *     opacity: 1,
-     *     transition: {
-     *       delayChildren: 0.5
-     *     }
-     *   }
-     * }
-     *
-     * const item = {
-     *   hidden: { opacity: 0 },
-     *   show: { opacity: 1 }
-     * }
-     *
-     * return (
-     *   <Frame
-     *     variants={container}
-     *     initial="hidden"
-     *     animate="show"
-     *   >
-     *     <Frame variants={item} size={50} />
-     *     <Frame variants={item} size={50} />
-     *   </Frame>
-     * )
-     * ```
      *
      * @motion
      *
@@ -210,16 +160,19 @@ export interface Orchestration {
      *   show: { opacity: 1 }
      * }
      *
-     * return (
-     *   <motion.ul
-     *     variants={container}
-     *     initial="hidden"
-     *     animate="show"
-     *   >
-     *     <motion.li variants={item} />
-     *     <motion.li variants={item} />
-     *   </motion.ul>
-     * )
+     *  <Motion let:motion={ul} 
+     *      variants={container}
+     *      initial="hidden"
+     *      animate="show">
+     *    <ul use:ul>
+     *      <Motion let:motion variants={item}>
+     *        <li use:motion />
+     *      </Motion>
+     *      <Motion let:motion variants={item}>
+     *        <li use:motion />
+     *      </Motion>
+     *     </ul>
+     *   </Motion>
      * ```
      *
      * @public
@@ -235,36 +188,6 @@ export interface Orchestration {
      *
      * The calculated stagger delay will be added to `delayChildren`.
      *
-     * @library
-     *
-     * ```jsx
-     * const container = {
-     *   hidden: { opacity: 0 },
-     *   show: {
-     *     opacity: 1,
-     *     transition: {
-     *       staggerChildren: 0.5
-     *     }
-     *   }
-     * }
-     *
-     * const item = {
-     *   hidden: { opacity: 0 },
-     *   show: { opacity: 1 }
-     * }
-     *
-     * return (
-     *   <Frame
-     *     variants={container}
-     *     initial="hidden"
-     *     animate="show"
-     *   >
-     *     <Frame variants={item} size={50} />
-     *     <Frame variants={item} size={50} />
-     *   </Frame>
-     * )
-     * ```
-     *
      * @motion
      *
      * ```jsx
@@ -284,14 +207,19 @@ export interface Orchestration {
      * }
      *
      * return (
-     *   <motion.ol
-     *     variants={container}
-     *     initial="hidden"
-     *     animate="show"
-     *   >
-     *     <motion.li variants={item} />
-     *     <motion.li variants={item} />
-     *   </motion.ol>
+     *  <Motion let:motion={ul} 
+     *      variants={container}
+     *      initial="hidden"
+     *      animate="show">
+     *    <ol use:ul>
+     *      <Motion let:motion variants={item}>
+     *        <li use:motion />
+     *      </Motion>
+     *      <Motion let:motion variants={item}>
+     *        <li use:motion />
+     *      </Motion>
+     *     </ol>
+     *   </Motion>
      * )
      * ```
      *
@@ -304,37 +232,6 @@ export interface Orchestration {
      * A value of `1` staggers from the first to the last while `-1`
      * staggers from the last to the first.
      *
-     * @library
-     *
-     * ```jsx
-     * const container = {
-     *   hidden: { opacity: 0 },
-     *   show: {
-     *     opacity: 1,
-     *     transition: {
-     *       delayChildren: 0.5,
-     *       staggerDirection: -1
-     *     }
-     *   }
-     * }
-     *
-     * const item = {
-     *   hidden: { opacity: 0 },
-     *   show: { opacity: 1 }
-     * }
-     *
-     * return (
-     *   <Frame
-     *     variants={container}
-     *     initial="hidden"
-     *     animate="show"
-     *   >
-     *     <Frame variants={item} size={50} />
-     *     <Frame variants={item} size={50} />
-     *   </Frame>
-     * )
-     * ```
-     *
      * @motion
      *
      * ```jsx
@@ -354,16 +251,23 @@ export interface Orchestration {
      *   show: { opacity: 1 }
      * }
      *
-     * return (
-     *   <motion.ul
-     *     variants={container}
-     *     initial="hidden"
-     *     animate="show"
-     *   >
-     *     <motion.li variants={item} size={50} />
-     *     <motion.li variants={item} size={50} />
-     *   </motion.ul>
-     * )
+     *   <Motion let:motion={ul}
+     *      variants={container}
+     *      initial="hidden"
+     *      animate="show">
+     *      <ul use:ul>
+     *        <Motion let:motion 
+     *          variants={item} 
+     *          size={50}/>
+     *              <li use:motion/>
+     *        </Motion>
+     *        <Motion let:motion 
+     *          variants={item} 
+     *          size={50}/>
+     *              <li use:motion/>
+     *        </Motion>*   
+     *      </ul>
+     * </Motion>
      * ```
      *
      * @public
@@ -376,24 +280,10 @@ export interface Repeat {
      *
      * Without setting `repeatType`, this will loop the animation.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   repeat: Infinity,
-     *   duration: 2
-     * }
-     *
-     * <Frame
-     *   animate={{ rotate: 180 }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   animate={{ rotate: 180 }}
      *   transition={{ repeat: Infinity, duration: 2 }}
      * />
@@ -411,25 +301,10 @@ export interface Repeat {
      *
      * "mirror": Switches `from` and `to` alternately
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   repeat: 1,
-     *   repeatType: "reverse",
-     *   duration: 2
-     * }
-     *
-     * <Frame
-     *   animate={{ rotate: 180 }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   animate={{ rotate: 180 }}
      *   transition={{
      *     repeat: 1,
@@ -446,24 +321,10 @@ export interface Repeat {
      * When repeating an animation, `repeatDelay` will set the
      * duration of the time to wait, in seconds, between each repetition.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   repeat: Infinity,
-     *   repeatDelay: 1
-     * }
-     *
-     * <Frame
-     *   animate={{ rotate: 180 }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   animate={{ rotate: 180 }}
      *   transition={{ repeat: Infinity, repeatDelay: 1 }}
      * />
@@ -485,21 +346,14 @@ export interface Tween extends Repeat {
      * If any non-orchestration `transition` values are set without a `type` property,
      * this is used as the default animation.
      *
-     * @library
-     *
-     * ```jsx
-     * <Frame
-     *   animate={{ opacity: 0 }}
-     *   transition={{ duration: 2, type: "tween" }}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.path
+     * <Motion let:motion isSVG={true}
      *   animate={{ pathLength: 1 }}
-     *   transition={{ duration: 2, type: "tween" }}
+     *   transition={{ duration: 2, type: "tween" }}>
+     *  <path use:motion/>
+     * </Motion>     *   
      * />
      * ```
      *
@@ -508,15 +362,6 @@ export interface Tween extends Repeat {
     type?: "tween";
     /**
      * The duration of the tween animation. Set to `0.3` by default, 0r `0.8` if animating a series of keyframes.
-     *
-     * @library
-     *
-     * ```jsx
-     * <Frame
-     *   animate={{ opacity: 0 }}
-     *   transition={{ duration: 2 }}
-     * />
-     * ```
      *
      * @motion
      *
@@ -545,23 +390,10 @@ export interface Tween extends Repeat {
      * animation, `ease` can be set as an array of easing functions to set different easings between
      * each of those values.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   ease: [0.17, 0.67, 0.83, 0.67]
-     * }
-     *
-     * <Frame
-     *   animate={{ opacity: 0 }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   animate={{ opacity: 0 }}
      *   transition={{ ease: [0.17, 0.67, 0.83, 0.67] }}
      * />
@@ -584,23 +416,10 @@ export interface Tween extends Repeat {
      * There must be the same number of `times` as there are keyframes.
      * Defaults to an array of evenly-spread durations.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   times: [0, 0.1, 0.9, 1]
-     * }
-     *
-     * <Frame
-     *   animate={{ scale: [0, 1, 0.5, 1] }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   animate={{ scale: [0, 1, 0.5, 1] }}
      *   transition={{ times: [0, 0.1, 0.9, 1] }}
      * />
@@ -612,23 +431,10 @@ export interface Tween extends Repeat {
     /**
      * When animating keyframes, `easings` can be used to define easing functions between each keyframe. This array should be one item fewer than the number of keyframes, as these easings apply to the transitions between the keyframes.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   easings: ["easeIn", "easeOut"]
-     * }
-     *
-     * <Frame
-     *   animate={{ backgroundColor: ["#0f0", "#00f", "#f00"] }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   animate={{ backgroundColor: ["#0f0", "#00f", "#f00"] }}
      *   transition={{ easings: ["easeIn", "easeOut"] }}
      * />
@@ -641,24 +447,10 @@ export interface Tween extends Repeat {
      * The value to animate from.
      * By default, this is the current state of the animating value.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   from: 90,
-     *   duration: 2
-     * }
-     *
-     * <Frame
-     *   animate={{ rotate: 180 }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   animate={{ rotate: 180 }}
      *   transition={{ from: 90, duration: 2 }}
      * />
@@ -691,23 +483,10 @@ export interface Spring extends Repeat {
      * Set `type` to `"spring"` to animate using spring physics for natural
      * movement. Type is set to `"spring"` by default.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   type: "spring"
-     * }
-     *
-     * <Frame
-     *   animate={{ rotate: 180 }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   animate={{ rotate: 180 }}
      *   transition={{ type: 'spring' }}
      * />
@@ -720,24 +499,10 @@ export interface Spring extends Repeat {
      * Stiffness of the spring. Higher values will create more sudden movement.
      * Set to `100` by default.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   type: "spring",
-     *   stiffness: 50
-     * }
-     *
-     * <Frame
-     *   animate={{ rotate: 180 }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.section
+     * <MotionDiv
      *   animate={{ rotate: 180 }}
      *   transition={{ type: 'spring', stiffness: 50 }}
      * />
@@ -750,24 +515,10 @@ export interface Spring extends Repeat {
      * Strength of opposing force. If set to 0, spring will oscillate
      * indefinitely. Set to `10` by default.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   type: "spring",
-     *   damping: 300
-     * }
-     *
-     * <Frame
-     *   animate={{ rotate: 180 }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.a
+     * <MotionDiv
      *   animate={{ rotate: 180 }}
      *   transition={{ type: 'spring', damping: 300 }}
      * />
@@ -779,20 +530,6 @@ export interface Spring extends Repeat {
     /**
      * Mass of the moving object. Higher values will result in more lethargic
      * movement. Set to `1` by default.
-     *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   type: "spring",
-     *   mass: 0.5
-     * }
-     *
-     * <Frame
-     *   animate={{ rotate: 180 }}
-     *   transition={transition}
-     * />
-     * ```
      *
      * @motion
      *
@@ -813,24 +550,10 @@ export interface Spring extends Repeat {
      *
      * Note: `duration` and `bounce` will be overridden if `stiffness`, `damping` or `mass` are set.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   type: "spring",
-     *   duration: 0.8
-     * }
-     *
-     * <Frame
-     *   animate={{ rotate: 180 }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   animate={{ x: 100 }}
      *   transition={{ type: "spring", duration: 0.8 }}
      * />
@@ -848,24 +571,10 @@ export interface Spring extends Repeat {
      *
      * Note: `bounce` and `duration` will be overridden if `stiffness`, `damping` or `mass` are set.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   type: "spring",
-     *   bounce: 0.25
-     * }
-     *
-     * <Frame
-     *   animate={{ rotate: 180 }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   animate={{ x: 100 }}
      *   transition={{ type: "spring", bounce: 0.25 }}
      * />
@@ -878,24 +587,10 @@ export interface Spring extends Repeat {
      * End animation if absolute speed (in units per second) drops below this
      * value and delta is smaller than `restDelta`. Set to `0.01` by default.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   type: "spring",
-     *   restSpeed: 0.5
-     * }
-     *
-     * <Frame
-     *   animate={{ rotate: 180 }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   animate={{ rotate: 180 }}
      *   transition={{ type: 'spring', restSpeed: 0.5 }}
      * />
@@ -909,24 +604,10 @@ export interface Spring extends Repeat {
      * `restSpeed`. When animation ends, spring gets “snapped” to. Set to
      * `0.01` by default.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   type: "spring",
-     *   restDelta: 0.5
-     * }
-     *
-     * <Frame
-     *   animate={{ rotate: 180 }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   animate={{ rotate: 180 }}
      *   transition={{ type: 'spring', restDelta: 0.5 }}
      * />
@@ -939,24 +620,10 @@ export interface Spring extends Repeat {
      * The value to animate from.
      * By default, this is the initial state of the animating value.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   type: "spring",
-     *   from: 90
-     * }
-     *
-     * <Frame
-     *   animate={{ rotate: 180 }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   animate={{ rotate: 180 }}
      *   transition={{ type: 'spring', from: 90 }}
      * />
@@ -972,24 +639,10 @@ export interface Spring extends Repeat {
     /**
      * The initial velocity of the spring. By default this is the current velocity of the component.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   type: "spring",
-     *   velocity: 2
-     * }
-     *
-     * <Frame
-     *   animate={{ rotate: 180 }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   animate={{ rotate: 180 }}
      *   transition={{ type: 'spring', velocity: 2 }}
      * />
@@ -1024,24 +677,10 @@ export interface Inertia {
      * Set `type` to animate using the inertia animation. Set to `"tween"` by
      * default. This can be used for natural deceleration, like momentum scrolling.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   type: "inertia",
-     *   velocity: 50
-     * }
-     *
-     * <Frame
-     *   animate={{ rotate: 180 }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   animate={{ rotate: 180 }}
      *   transition={{ type: "inertia", velocity: 50 }}
      * />
@@ -1053,25 +692,10 @@ export interface Inertia {
     /**
      * A function that receives the automatically-calculated target and returns a new one. Useful for snapping the target to a grid.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   power: 0,
-     *   // Snap calculated target to nearest 50 pixels
-     *   modifyTarget: target => Math.round(target / 50) * 50
-     * }
-     *
-     * <Frame
-     *   drag
-     *   dragTransition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   drag
      *   dragTransition={{
      *     power: 0,
@@ -1089,25 +713,10 @@ export interface Inertia {
      * spring. Higher values will create more sudden movement. Set to `500` by
      * default.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   min: 0,
-     *   max: 100,
-     *   bounceStiffness: 100
-     * }
-     *
-     * <Frame
-     *   drag
-     *   dragTransition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   drag
      *   dragTransition={{
      *     min: 0,
@@ -1125,25 +734,10 @@ export interface Inertia {
      * If set to `0`, spring will oscillate indefinitely. Set to `10` by
      * default.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   min: 0,
-     *   max: 100,
-     *   bounceDamping: 8
-     * }
-     *
-     * <Frame
-     *   drag
-     *   dragTransition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   drag
      *   dragTransition={{
      *     min: 0,
@@ -1159,25 +753,10 @@ export interface Inertia {
     /**
      * A higher power value equals a further target. Set to `0.8` by default.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   min: 0,
-     *   max: 100,
-     *   power: 0.2
-     * }
-     *
-     * <Frame
-     *   drag
-     *   dragTransition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   drag
      *   dragTransition={{ power: 0.2 }}
      * />
@@ -1190,25 +769,10 @@ export interface Inertia {
      * Adjusting the time constant will change the duration of the
      * deceleration, thereby affecting its feel. Set to `700` by default.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   min: 0,
-     *   max: 100,
-     *   timeConstant: 200
-     * }
-     *
-     * <Frame
-     *   drag
-     *   dragTransition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   drag
      *   dragTransition={{ timeConstant: 200 }}
      * />
@@ -1222,25 +786,10 @@ export interface Inertia {
      * When the animation ends, the value gets snapped to the animation target. Set to `0.01` by default.
      * Generally the default values provide smooth animation endings, only in rare cases should you need to customize these.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   min: 0,
-     *   max: 100,
-     *   restDelta: 10
-     * }
-     *
-     * <Frame
-     *   drag
-     *   dragTransition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   drag
      *   dragTransition={{ restDelta: 10 }}
      * />
@@ -1252,19 +801,10 @@ export interface Inertia {
     /**
      * Minimum constraint. If set, the value will "bump" against this value (or immediately spring to it if the animation starts as less than this value).
      *
-     * @library
-     *
-     * ```jsx
-     * <Frame
-     *   drag
-     *   dragTransition={{ min: 0, max: 100 }}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   drag
      *   dragTransition={{ min: 0, max: 100 }}
      * />
@@ -1276,19 +816,10 @@ export interface Inertia {
     /**
      * Maximum constraint. If set, the value will "bump" against this value (or immediately snap to it, if the initial animation value exceeds this value).
      *
-     * @library
-     *
-     * ```jsx
-     * <Frame
-     *   drag
-     *   dragTransition={{ min: 0, max: 100 }}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   drag
      *   dragTransition={{ min: 0, max: 100 }}
      * />
@@ -1300,25 +831,10 @@ export interface Inertia {
     /**
      * The value to animate from. By default, this is the current state of the animating value.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   min: 0,
-     *   max: 100,
-     *   from: 50
-     * }
-     *
-     * <Frame
-     *   drag
-     *   dragTransition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <Frame
+     * <MotionDiv
      *   drag
      *   dragTransition={{ from: 50 }}
      * />
@@ -1331,24 +847,10 @@ export interface Inertia {
      * The initial velocity of the animation.
      * By default this is the current velocity of the component.
      *
-     * @library
-     *
-     * ```jsx
-     * const transition = {
-     *   type: "inertia",
-     *   velocity: 200
-     * }
-     *
-     * <Frame
-     *   animate={{ rotate: 180 }}
-     *   transition={transition}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
-     * <motion.div
+     * <MotionDiv
      *   animate={{ rotate: 180 }}
      *   transition={{ type: 'inertia', velocity: 200 }}
      * />
@@ -1433,7 +935,7 @@ export interface Keyframes {
      *   duration: 2
      * }
      *
-     * <Frame
+     * <MotionDiv
      *   animate={{ opacity: 0 }}
      *   transition={transition}
      * />
@@ -1521,7 +1023,7 @@ export declare type TransitionMap = Orchestration & {
 export declare type Transition = (Orchestration & Repeat & TransitionDefinition) | (Orchestration & Repeat & TransitionMap);
 export declare type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 declare type CSSPropertiesWithoutTransitionOrSingleTransforms = Omit<CSSProperties, "transition" | "rotate" | "scale" | "perspective">;
-declare type TargetProperties = CSSPropertiesWithoutTransitionOrSingleTransforms & SVGAttributes<SVGElement> & TransformProperties & CustomStyles & SVGPathProperties;
+declare type TargetProperties = CSSPropertiesWithoutTransitionOrSingleTransforms & SVGAttributes<SVGElement> & TransformProperties /*& CustomStyles*/ & SVGPathProperties;
 /**
  * @public
  */

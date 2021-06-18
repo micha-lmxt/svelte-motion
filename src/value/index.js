@@ -178,7 +178,7 @@ var MotionValue = /** @class */ (function () {
      *     }
      *   }, [])
      *
-     *   return <motion.div style={{ x }} />
+     *   return <MotionDiv style={{ x }} />
      * }
      * ```
      *

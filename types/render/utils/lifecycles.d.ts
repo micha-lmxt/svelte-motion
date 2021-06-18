@@ -32,16 +32,6 @@ export interface VisualElementLifecycles {
     /**
      * Callback with latest motion values, fired max once per frame.
      *
-     * @library
-     *
-     * ```jsx
-     * function onUpdate(latest) {
-     *   console.log(latest.x, latest.opacity)
-     * }
-     *
-     * <Frame animate={{ x: 100, opacity: 0 }} onUpdate={onUpdate} />
-     * ```
-     *
      * @motion
      *
      * ```jsx
@@ -49,23 +39,13 @@ export interface VisualElementLifecycles {
      *   console.log(latest.x, latest.opacity)
      * }
      *
-     * <motion.div animate={{ x: 100, opacity: 0 }} onUpdate={onUpdate} />
+     * <MotionDiv animate={{ x: 100, opacity: 0 }} onUpdate={onUpdate} />
      * ```
      */
     onUpdate?(latest: ResolvedValues): void;
     /**
      * Callback when animation defined in `animate` begins.
      *
-     * @library
-     *
-     * ```jsx
-     * function onStart() {
-     *   console.log("Animation started")
-     * }
-     *
-     * <Frame animate={{ x: 100 }} onAnimationStart={onStart} />
-     * ```
-     *
      * @motion
      *
      * ```jsx
@@ -73,7 +53,7 @@ export interface VisualElementLifecycles {
      *   console.log("Animation started")
      * }
      *
-     * <motion.div animate={{ x: 100 }} onAnimationStart={onStart} />
+     * <MotionDiv animate={{ x: 100 }} onAnimationStart={onStart} />
      * ```
      */
     onAnimationStart?(): void;
@@ -86,21 +66,6 @@ export interface VisualElementLifecycles {
      *
      * This way, it's possible to figure out which animation has completed.
      *
-     * @library
-     *
-     * ```jsx
-     * function onComplete() {
-     *   console.log("Animation completed")
-     * }
-     *
-     * <Frame
-     *   animate={{ x: 100 }}
-     *   onAnimationComplete={definition => {
-     *     console.log('Completed animating', definition)
-     *   }}
-     * />
-     * ```
-     *
      * @motion
      *
      * ```jsx
@@ -108,7 +73,7 @@ export interface VisualElementLifecycles {
      *   console.log("Animation completed")
      * }
      *
-     * <motion.div
+     * <MotionDiv
      *   animate={{ x: 100 }}
      *   onAnimationComplete={definition => {
      *     console.log('Completed animating', definition)

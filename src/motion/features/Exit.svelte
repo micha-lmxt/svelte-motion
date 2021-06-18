@@ -4,7 +4,7 @@ based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
 
-    import { UsePresence } from "../../components/AnimatePresence/use-presence";
+    import { usePresence } from "../../components/AnimatePresence/use-presence";
     import { getContext } from "svelte";
     import { PresenceContext } from "../../context/PresenceContext";
     import { AnimationType } from "../../render/utils/types";
@@ -13,8 +13,11 @@ Copyright (c) 2018 Framer B.V.
     $: ({ custom } = props);
 
     const presenceContext = getContext(PresenceContext) || PresenceContext();
+    const presence = usePresence();
 
-    const effect = (isPresent, onExitComplete) => {
+    const effect = (pres) => {
+        const [isPresent, onExitComplete] = pres;
+        
         const animation = visualElement.animationState?.setActive(
             AnimationType.Exit,
             !isPresent,
@@ -24,9 +27,8 @@ Copyright (c) 2018 Framer B.V.
         !isPresent && animation?.then(onExitComplete);
         return "";
     };
+    $: effect($presence)
 </script>
 
-<UsePresence let:presence>
-    {effect(presence[0], presence[1])}
-    <slot />
-</UsePresence>
+<slot />
+

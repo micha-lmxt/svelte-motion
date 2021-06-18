@@ -14,29 +14,16 @@ import { ScrollMotionValues } from "./utils";
  * **Warning:** Setting `body` or `html` to `height: 100%` or similar will break the `Progress`
  * values as this breaks the browser's capability to accurately measure the page length.
  *
- * @library
- *
- * ```jsx
- * import * as React from "react"
- * import {
- *   Frame,
- *   useViewportScroll,
- *   useTransform
- * } from "framer"
- *
- * export function MyComponent() {
- *   const { scrollYProgress } = useViewportScroll()
- *   return <Frame scaleX={scrollYProgress} />
- * }
- * ```
- *
  * @motion
  *
  * ```jsx
- * export const MyComponent = () => {
+ * <script>
+ *   import { useViewportScroll, MotionDiv} from 'svelte-motion'
+ * 
  *   const { scrollYProgress } = useViewportScroll()
- *   return <motion.div style={{ scaleX: scrollYProgress }} />
- * }
+ * <script>
+ * 
+ * <MotionDiv style={{ scaleX: scrollYProgress }} />
  * ```
  *
  * @public

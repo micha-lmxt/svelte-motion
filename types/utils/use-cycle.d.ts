@@ -2,47 +2,27 @@
 based on framer-motion@4.1.17,
 Copyright (c) 2018 Framer B.V.
 */
+import { Writable } from 'svelte/store'
 declare type Cycle = (i?: number) => void;
 declare type CycleState<T> = [T, Cycle];
 /**
- * Cycles through a series of visual properties. Can be used to toggle between or cycle through animations. It works similar to `useState` in React. It is provided an initial array of possible states, and returns an array of two arguments.
- *
- * @library
- *
- * ```jsx
- * import * as React from "react"
- * import { Frame, useCycle } from "framer"
- *
- * export function MyComponent() {
- *   const [x, cycleX] = useCycle(0, 50, 100)
- *
- *   return (
- *     <Frame
- *       animate={{ x: x }}
- *       onTap={() => cycleX()}
- *      />
- *    )
- * }
- * ```
+ * Cycles through a series of visual properties. Can be used to toggle between or cycle through animations. It is a custom store with a `next` method. Without input, `next` returns the next item in the array. Alternaively, you can set the current index.
  *
  * @motion
  *
  * An index value can be passed to the returned `cycle` function to cycle to a specific index.
  *
  * ```jsx
- * import * as React from "react"
- * import { motion, useCycle } from "framer-motion"
+ * <script>
+ *   import { MotionDiv, useCycle } from "svelte-motion"
  *
- * export const MyComponent = () => {
- *   const [x, cycleX] = useCycle(0, 50, 100)
- *
- *   return (
- *     <motion.div
- *       animate={{ x: x }}
- *       onTap={() => cycleX()}
+ *   const x = useCycle(0, 50, 100)
+ * </script>
+ * 
+ * <MotionDiv
+ *      animate={{ x: $x }}
+ *      onTap={() => x.next()}
  *      />
- *    )
- * }
  * ```
  *
  * @param items - items to cycle through
@@ -50,5 +30,4 @@ declare type CycleState<T> = [T, Cycle];
  *
  * @public
  */
-export declare function useCycle<T>(...items: T[]): CycleState<T>;
-export {};
+export declare function useCycle<T>(...items: T[]): Writable<T> & {next: ( index?: number ) => void};

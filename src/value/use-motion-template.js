@@ -16,7 +16,7 @@ import { useCombineMotionValues } from "./use-combine-values"
  *   const shadowY = useMotionValue(0)
  *   const shadow = useMotionTemplate`drop-shadow(${shadowX}px ${shadowY}px 20px rgba(0,0,0,0.3))`
  *
- *   return <motion.div style={{ filter: shadow }} />
+ *   return <MotionDiv style={{ filter: shadow }} />
  * }
  * ```
  *

@@ -1,14 +1,14 @@
-/// <reference types="react" />
 /** 
 based on framer-motion@4.1.17,
 Copyright (c) 2018 Framer B.V.
 */
+import { Writable } from "svelte/store";
 import { Transition } from "../types";
 import { TransformPoint2D } from "../types/geometry";
 /**
  * @public
  */
-export interface MotionConfigContext {
+export interface MotionConfigContextObject {
     /**
      * @internal
      */
@@ -30,4 +30,4 @@ export interface MotionConfigContext {
 /**
  * @public
  */
-export declare const MotionConfigContext: import("react").Context<MotionConfigContext>;
+export declare const MotionConfigContext: () => Writable<MotionConfigContextObject>

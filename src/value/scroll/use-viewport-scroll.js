@@ -68,7 +68,7 @@ function addEventListeners() {
  * ```jsx
  * export const MyComponent = () => {
  *   const { scrollYProgress } = useViewportScroll()
- *   return <motion.div style={{ scaleX: scrollYProgress }} />
+ *   return <MotionDiv style={{ scaleX: scrollYProgress }} />
  * }
  * ```
  *
