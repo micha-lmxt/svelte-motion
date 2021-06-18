@@ -5,8 +5,8 @@ Copyright (c) 2018 Framer B.V.
 /**
  * Components
  */
-export { Motion, createDomMotionComponent } from "./render/dom/motion";
-export { m } from "./render/dom/motion-minimal";
+export { Motion/*, createDomMotionComponent*/ } from "./render/dom/motion";
+//export { m } from "./render/dom/motion-minimal";
 export { AnimatePresence } from "./components/AnimatePresence";
 export { AnimateSharedLayout } from "./components/AnimateSharedLayout";
 export { MotionConfig } from "./components/MotionConfig";
