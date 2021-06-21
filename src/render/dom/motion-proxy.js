@@ -2,10 +2,9 @@
 based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
-import { createDomVisualElement } from './create-dom-visual-element.js';
-
-import { createMotionComponent } from '../../motion/index.js';
 import { isSVGComponent } from './utils/is-svg-component';
+import Mo from './M.svelte'
+
 
 /**
  * Convert any React component into a `motion` component. The provided component
@@ -23,17 +22,6 @@ import { isSVGComponent } from './utils/is-svg-component';
  */
 function createMotionProxy(defaultFeatures) {
     
-    function custom(Component, _a) {
-        var _b = (_a === void 0 ? {} : _a).forwardMotionProps, forwardMotionProps = _b === void 0 ? false : _b;
-        var config = {
-            defaultFeatures: defaultFeatures,
-            createVisualElement: createDomVisualElement(Component),
-            forwardMotionProps,
-            Component,
-        };
-        
-        return createMotionComponent(config);
-    }
     /*function deprecatedCustom(Component) {
         warning(false, "motion.custom() is deprecated. Use motion() instead.");
         return custom(Component, { forwardMotionProps: true });
@@ -42,8 +30,8 @@ function createMotionProxy(defaultFeatures) {
      * A cache of generated `motion` components, e.g `MotionDiv`, `motion.input` etc.
      * Rather than generating them anew every render.
      */
-    var componentCache = new Map();
-    return new Proxy(custom, {
+
+    return new Proxy({}, {
         /**
          * Called when `motion` is referenced with a prop: `MotionDiv`, `motion.input` etc.
          * The prop name is passed through as `key` and we can use that to generate a `motion`
@@ -62,14 +50,26 @@ function createMotionProxy(defaultFeatures) {
             if (key.slice(0, 1) === key.slice(0, 1).toLowerCase()) {
                 type = isSVGComponent(key) ? "SVG" : "DOM";
             }
+            const ret = new Proxy(Mo,{
+                construct(target, args) {
+                    if (!args || !args[0]){
+                        args.push({})
+                    }
+                    if (!args[0].props){
+                        args[0].props= {___tag:key,isSVG:type==="SVG"}
+                    }else{
+                        args[0].props.___tag = key;
+                        args[0].props.isSVG = type==="SVG"
+                    }                                    
+                    return new target(...args);
+                  }
+            })
             
-            if (!componentCache.has(type)) {
-                componentCache.set(type, custom(type));
-            }
-            
-            return componentCache.get(type);
+            return ret;
         },
     });
 }
 
-export { createMotionProxy };
+const M = createMotionProxy();
+
+export { createMotionProxy , M};

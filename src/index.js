@@ -25,6 +25,7 @@ export { UseTapGesture } from './gestures/use-tap-gesture.js';
 export { UseGestures } from './gestures/use-gestures.js';
 
 export { Motion } from './render/dom/motion.js';
+export { M } from './render/dom/motion-proxy.js';
 export { default as MotionSSR } from './motion/MotionSSR.svelte';
 
 export { AnimatePresence } from './components/AnimatePresence/index.js';
