@@ -3,7 +3,7 @@
     export let ___tag = "div";
     export let motion;
 
-    export const remove = () => {
+    const remove = () => {
         const parent = child.parentNode;
         if (!parent) return;
         const children = child.children;
@@ -15,25 +15,23 @@
         parent.appendChild(container);
     };
 
-    export const append = () => {
+    const append = () => {
         const parent = container.parentNode;
         if (!parent) return;
-        //Array.from(parent.children).indexOf(container)
-        
         childrenTo();
-
-        parent.insertBefore(child,container);
+        parent.insertBefore(child, container);
         parent.removeChild(container);
     };
     const childrenTo = () => {
-        //console.log(container.children,container.childNodes)
         // count the dummies, maybe some children were removed
-        const dummys = Array.from(container.childNodes).filter(v=>v.tagName==="SVMDUMMY")
-        const overhead = dummys.length - child.childNodes.length
-        if (overhead > 0){
+        const dummys = Array.from(container.childNodes).filter(
+            (v) => v.tagName === "SVMDUMMY"
+        );
+        const overhead = dummys.length - child.childNodes.length;
+        if (overhead > 0) {
             //remove all overhead dummies starting from top
-            for (let i=0;i<overhead;i++){
-                container.removeChild(dummys[i])
+            for (let i = 0; i < overhead; i++) {
+                container.removeChild(dummys[i]);
             }
         }
         // get a list of children
@@ -42,18 +40,16 @@
         if (children.length === 0 && child.childNodes.length === 0) {
             child.innerHTML = container.innerHTML;
         } else {
-            
             const le = children.length;
-            
+
             for (let i = 0; i < le; i++) {
-                if (children[i].tagName==="SVMDUMMY"){
+                if (children[i].tagName === "SVMDUMMY") {
                     continue;
                 }
                 const ch = children[i];
-                container.insertBefore(document.createElement("svmdummy"),ch)
-                child.insertBefore(ch,child.childNodes[i]);
+                container.insertBefore(document.createElement("svmdummy"), ch);
+                child.insertBefore(ch, child.childNodes[i]);
             }
-            
         }
     };
     let container;
@@ -61,22 +57,31 @@
     let mounted = false;
 
     onMount(() => {
+        if (___tag === "div") {
+            motion(container);
+            return;
+        }
         child = document.createElement(___tag);
         Object.keys($$restProps).forEach((v) => {
             child.setAttribute(v, $$restProps[v]);
         });
         append();
         motion(child);
-        console.log("mount ADD");
         mounted = true;
-        return remove
+        return remove;
     });
-
-    afterUpdate(() => {
-        childrenTo();
-    });
+    if (___tag !== "div") {
+        afterUpdate(() => {
+            childrenTo();
+        });
+    }
+    $: if (child) {
+        Object.keys($$restProps).forEach((v) => {
+            child.setAttribute(v, $$restProps[v]);
+        });
+    }
 </script>
 
-<exchange bind:this={container}>
+<div bind:this={container} {...$$restProps}>
     <slot />
-</exchange>
+</div>
