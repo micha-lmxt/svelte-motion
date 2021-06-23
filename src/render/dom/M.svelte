@@ -1,11 +1,14 @@
 <script>
-    import {MotionTag} from './motion-tag'
-    import Motion from '../../motion/MotionSSR.svelte'
+    import T from './Transformer.svelte';
+    import Motion from "../../motion/Motion.svelte";
+
     export let ___tag;
-    const ___t = ___tag;
+
 </script>
-<Motion let:motion {...$$restProps} let:props>
-    <MotionTag  {motion} ___tag={___t} {...props}>
-        <slot/>
-    </MotionTag>
+
+<Motion {...$$restProps} let:props let:motion>
+    <T {motion} ___tag={___tag} {...props}>
+        <slot />
+    </T>
 </Motion>
+
