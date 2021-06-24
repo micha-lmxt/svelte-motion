@@ -51,3 +51,4 @@ export declare class Motion extends SvelteComponentTyped<
  * @public
  */
 export declare function createDomMotionComponent<T extends keyof DOMMotionComponents>(key: T): DOMMotionComponents[T];
+export declare const M : {[key:string] : Motion}
