@@ -7,7 +7,7 @@ import {
     createScrollUpdater,
 } from "./utils"
 import { addDomEvent } from "../../events/use-dom-event"
-import { onDestroy, tick } from "svelte"
+
 
 const getElementScrollOffsets = (element) => () => {
     return {
@@ -19,14 +19,19 @@ const getElementScrollOffsets = (element) => () => {
 }
 
 export const useElementScroll = (ref) => {
-    
-    const values = createScrollMotionValues();
-    let cleanup;
-    const setScroll = ()=>{
-        cleanup?.();
 
-        if ( (!ref || !ref.current) && !values.ref ){
-            return;
+    const values = {}
+
+    const setScroll = async () => {
+        if (typeof window === "undefined") return ()=>{}
+
+        let times = 10
+        while ( (!ref || !ref.current) && !values.ref ){
+            if(times-- < 1){
+                return ()=>{};
+            };
+            
+            await new Promise(r=>setTimeout(()=>r(),200));
         }
         const element = (ref && ref.current) ? ref : values.ref;
 
@@ -47,21 +52,13 @@ export const useElementScroll = (ref) => {
             "resize",
             updateScrollValues
         )
-        cleanup = ()=>{
+        return ()=>{
             scrollListener && scrollListener()
             resizeListener && resizeListener()
         }
     }
+    Object.assign(values,createScrollMotionValues(setScroll));
 
-
-    if (ref && ref.current){
-        setScroll()
-    }else{
-        tick().then(setScroll)
-    }
-
-    onDestroy(()=>cleanup?.())
-    
     return values;
 }
 

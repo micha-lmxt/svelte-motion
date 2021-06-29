@@ -11,7 +11,7 @@ import { setValues } from '../render/utils/setters.js';
 /**
  * @public
  */
-function animationControls() {
+function animationControls(startStopNotifier) {
     /**
      * Track whether the host component has mounted.
      */
@@ -25,10 +25,19 @@ function animationControls() {
      * A collection of linked component animation controls.
      */
     var subscribers = new Set();
+    var stopNotification;
     var controls = {
         subscribe: function (visualElement) {
+            if (subscribers.size === 0){
+                stopNotification = startStopNotifier?.();
+            }
             subscribers.add(visualElement);
-            return function () { return void subscribers.delete(visualElement); };
+            return function () { 
+                subscribers.delete(visualElement); 
+                if (subscribers.size===0){
+                    stopNotification?.()
+                }
+            };
         },
         start: function (definition, transitionOverride) {
             /**

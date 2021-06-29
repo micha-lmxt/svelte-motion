@@ -101,13 +101,14 @@ export declare class MotionValue<V = any> implements Writable<V> {
     private canTrackVelocity;
     /**
      * @param init - The initiating value
-     * @param config - Optional configuration options
+     * @param startStopNotifier - a function that is called, once the first subscriber is added to this motion value.
+     *                            The return function is called, when the last subscriber unsubscribes. 
      *
      * -  `transformer`: A function to transform incoming values with.
      *
      * @internal
      */
-    constructor(init: V);
+    constructor(init: V, startStopNotifier: ()=>()=>void);
     /**
      * Adds a function that will be notified when the `MotionValue` is updated.
      *

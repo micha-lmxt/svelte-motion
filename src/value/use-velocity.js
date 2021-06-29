@@ -2,7 +2,6 @@
 based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
-import { onDestroy } from "svelte";
 import { useMotionValue } from "./use-motion-value"
 /**
  * Creates a `MotionValue` that updates when the velocity of the provided `MotionValue` changes.
@@ -16,22 +15,27 @@ import { useMotionValue } from "./use-motion-value"
  * @public
  */
 export const useVelocity = (value) => {
-    const velocity = useMotionValue(value.getVelocity());
-
+    let val = value;
     let cleanup;
-    const reset = (val) => {
+    
+    const velocity = useMotionValue(value.getVelocity(),()=>{
         cleanup?.();
-        
+        cleanup = val.velocityUpdateSubscribers.add((newVelocity) => {
+            velocity.set(newVelocity);
+        })
+        return ()=>{
+            cleanup?.()     
+        }
+    });
+
+    
+    const reset = (valu) => {
+        cleanup?.();
+        val = valu
         cleanup = val.velocityUpdateSubscribers.add((newVelocity) => {
             velocity.set(newVelocity);
         })
     }
-
-    reset(value);
-    
-    onDestroy(()=>{
-        cleanup?.()
-    })
 
     velocity.reset = reset;
 

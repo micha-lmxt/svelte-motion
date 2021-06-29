@@ -32,25 +32,5 @@ export default [{
     })
   ],
   external
-},
-{
-  input: 'src/custom/motion-base.js',
-  output: [
-    { dir:"./lib", format: 'iife',exports: "named" }
-  ],
-  plugins: [
-    svelte({
-    }),
-    resolve(),
-    replace({
-        "process.env.NODE_ENV": JSON.stringify("development"),
-    }),
-    resolve({
-			browser: true,
-			dedupe: ['svelte']
-		}),
-		commonjs(),
-  ],
-  external
 }
 ]

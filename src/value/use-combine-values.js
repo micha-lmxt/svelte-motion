@@ -3,39 +3,43 @@ based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
 import sync from 'framesync';
-import { onDestroy } from 'svelte';
 import { motionValue } from '.';
 
 export const useCombineMotionValues = (values, combineValues) => {
 
-  const value = motionValue(combineValues());
+  let subscriptions = [];
+  let vals = values;
+
+  
+  const unsubscribe = ()=>{
+    subscriptions.forEach((unsubscribe) => unsubscribe())
+  }
+  const subscribe = () => {
+    subscriptions = vals.map((val) => val.onChange(handler))
+    updateValue();
+  }
+  const value = motionValue(combineValues(), () => {
+    unsubscribe()
+    subscribe()
+    return unsubscribe;
+  });
 
   let updateValue = () => {
     value.set(combineValues());
   }
 
-
   const handler = () => {
-
     sync.update(updateValue, false, true);
   }
 
-  let subscriptions = values.map((val) => val.onChange(handler))
-
-
-  onDestroy(() => {
-
-    subscriptions.forEach((unsubscribe) => unsubscribe())
-  })
-
   value.reset = (_values, _combineValues) => {
+    vals=_values;
     //cleanup and reset
-    subscriptions.forEach((unsubscribe) => unsubscribe())
-    updateValue = ()=>{
+    unsubscribe()
+    updateValue = () => {
       value.set(_combineValues())
     }
-    subscriptions = _values.map((val) => val.onChange(handler));
-    updateValue();
+    subscribe()
   }
 
   return value;

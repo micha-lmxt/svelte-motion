@@ -6,4 +6,4 @@ import { AnimationControls } from "./types";
 /**
  * @public
  */
-export declare function animationControls(): AnimationControls;
+export declare function animationControls(startStopNotifier?: ()=>()=>void): AnimationControls;

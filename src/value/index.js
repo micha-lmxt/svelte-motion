@@ -1,8 +1,9 @@
+
 /** 
 based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
-import {fixed} from '../utils/fix-process-env';
+import { fixed } from '../utils/fix-process-env';
 import sync, { getFrameData } from 'framesync';
 import { velocityPerSecond } from 'popmotion';
 import { SubscriptionManager } from '../utils/subscription-manager.js';
@@ -24,7 +25,7 @@ var MotionValue = /** @class */ (function () {
      *
      * @internal
      */
-    function MotionValue(init) {
+    function MotionValue(init, startStopNotifier) {
         var _this = this;
         /**
          * Duration, in milliseconds, since last updating frame.
@@ -116,6 +117,25 @@ var MotionValue = /** @class */ (function () {
         this.hasAnimated = false;
         this.prev = this.current = init;
         this.canTrackVelocity = isFloat(this.current);
+        this.onSubscription = () => { }
+        this.onUnsubscription = () => { }
+        if (startStopNotifier) {
+            this.onSubscription = () => {
+                if (this.updateSubscribers.getSize() + this.velocityUpdateSubscribers.getSize() + this.renderSubscribers.getSize() === 0) {
+
+                    const unsub = startStopNotifier()
+                    this.onUnsubscription = () => { }
+                    if (unsub) {
+                        this.onUnsubscription = () => {
+                            if (this.updateSubscribers.getSize() + this.velocityUpdateSubscribers.getSize() + this.renderSubscribers.getSize() === 0) {
+                                unsub()
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
     }
     /**
      * Adds a function that will be notified when the `MotionValue` is updated.
@@ -125,34 +145,6 @@ var MotionValue = /** @class */ (function () {
      * When calling `onChange` inside a React component, it should be wrapped with the
      * `useEffect` hook. As it returns an unsubscribe function, this should be returned
      * from the `useEffect` function to ensure you don't add duplicate subscribers..
-     *
-     * @library
-     *
-     * ```jsx
-     * function MyComponent() {
-     *   const x = useMotionValue(0)
-     *   const y = useMotionValue(0)
-     *   const opacity = useMotionValue(1)
-     *
-     *   useEffect(() => {
-     *     function updateOpacity() {
-     *       const maxXY = Math.max(x.get(), y.get())
-     *       const newOpacity = transform(maxXY, [0, 100], [1, 0])
-     *       opacity.set(newOpacity)
-     *     }
-     *
-     *     const unsubscribeX = x.onChange(updateOpacity)
-     *     const unsubscribeY = y.onChange(updateOpacity)
-     *
-     *     return () => {
-     *       unsubscribeX()
-     *       unsubscribeY()
-     *     }
-     *   }, [])
-     *
-     *   return <Frame x={x} />
-     * }
-     * ```
      *
      * @motion
      *
@@ -196,7 +188,13 @@ var MotionValue = /** @class */ (function () {
      * @public
      */
     MotionValue.prototype.onChange = function (subscription) {
-        return this.updateSubscribers.add(subscription);
+        this.onSubscription();
+        const unsub = this.updateSubscribers.add(subscription);
+        return () => {
+            unsub()
+            this.onUnsubscription()
+
+        }
     };
     /** Add subscribe method for Svelte store interface */
     MotionValue.prototype.subscribe = function (subscription) {
@@ -205,6 +203,7 @@ var MotionValue = /** @class */ (function () {
 
     MotionValue.prototype.clearListeners = function () {
         this.updateSubscribers.clear();
+        this.onUnsubscription()
     };
     /**
      * Adds a function that will be notified when the `MotionValue` requests a render.
@@ -215,9 +214,14 @@ var MotionValue = /** @class */ (function () {
      * @internal
      */
     MotionValue.prototype.onRenderRequest = function (subscription) {
+        this.onSubscription()
         // Render immediately
         subscription(this.get());
-        return this.renderSubscribers.add(subscription);
+        const unsub = this.renderSubscribers.add(subscription);
+        return () => {
+            unsub()
+            this.onUnsubscription()
+        }
     };
     /**
      * Attaches a passive effect to the `MotionValue`.
@@ -252,7 +256,7 @@ var MotionValue = /** @class */ (function () {
         }
     };
     /** Add update method for Svelte Store behavior */
-    MotionValue.prototype.update = function(v){
+    MotionValue.prototype.update = function (v) {
         this.set(v(this.get()));
     }
     /**
@@ -263,7 +267,10 @@ var MotionValue = /** @class */ (function () {
      * @public
      */
     MotionValue.prototype.get = function () {
-        return this.current;
+        this.onSubscription()
+        const curr = this.current;
+        this.onUnsubscription()
+        return curr
     };
     /**
      * @public
@@ -280,11 +287,14 @@ var MotionValue = /** @class */ (function () {
      */
     MotionValue.prototype.getVelocity = function () {
         // This could be isFloat(this.prev) && isFloat(this.current), but that would be wasteful
-        return this.canTrackVelocity
+        this.onSubscription()
+        const vel = this.canTrackVelocity
             ? // These casts could be avoided if parseFloat would be typed better
-                velocityPerSecond(parseFloat(this.current) -
-                    parseFloat(this.prev), this.timeDelta)
+            velocityPerSecond(parseFloat(this.current) -
+                parseFloat(this.prev), this.timeDelta)
             : 0;
+        this.onUnsubscription()
+        return vel;
     };
     /**
      * Registers a new animation to control this `MotionValue`. Only one
@@ -340,14 +350,16 @@ var MotionValue = /** @class */ (function () {
         this.updateSubscribers.clear();
         this.renderSubscribers.clear();
         this.stop();
+        this.onUnsubscription()
     };
     return MotionValue;
 }());
 /**
  * @internal
  */
-function motionValue(init) {
-    return new MotionValue(init);
+function motionValue(init, startStopNotifier) {
+    return new MotionValue(init, startStopNotifier);
 }
 
 export { MotionValue, motionValue };
+
