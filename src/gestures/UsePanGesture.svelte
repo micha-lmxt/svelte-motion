@@ -12,12 +12,13 @@ Copyright (c) 2018 Framer B.V.
     
     
     export let props,
-        visualElement;
+        visualElement,
+        isCustom;
     let { onPan, onPanStart, onPanEnd, onPanSessionStart } = props;
     $: ({ onPan, onPanStart, onPanEnd, onPanSessionStart } = props);
     $:( hasPanEvents = onPan || onPanStart || onPanEnd || onPanSessionStart)
     let panSession = null;
-    const mcc = getContext(MotionConfigContext)||MotionConfigContext();
+    const mcc = getContext(MotionConfigContext)||MotionConfigContext(isCustom);
     let {transformPagePoint} = get(mcc);
     $: ({transformPagePoint} = $mcc);
     let handlers = {

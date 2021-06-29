@@ -30,9 +30,9 @@ import { animate } from "popmotion"
  *
  * @public
  */
-export const useSpring = (source, config = {}) => {
+export const useSpring = (source, config = {}, isCustom=false) => {
 
-    const mcc = getContext(MotionConfigContext) || MotionConfigContext();
+    const mcc = getContext(MotionConfigContext) || MotionConfigContext(isCustom);
 
     let activeSpringAnimation = null;
 

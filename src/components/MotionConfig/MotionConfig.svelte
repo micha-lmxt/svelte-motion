@@ -6,14 +6,16 @@ Copyright (c) 2018 Framer B.V.
 
     import { getContext, setContext } from "svelte";
     import { writable, get} from "svelte/store";
+import { setDomContext } from "../../context/DOMcontext.js";
     import { MotionConfigContext } from "../../context/MotionConfigContext.js";
     import {provideScaleCorrection} from '../../context/ScaleCorrectionProvider.svelte'
     import { scaleCorrection } from './MotionConfigScaleCorrection.js'
 
     export let transformPagePoint = undefined,
         isStatic = undefined,
-        transition = undefined;
-    const mcc = getContext(MotionConfigContext) || MotionConfigContext();
+        transition = undefined,
+        isCustom = false;
+    const mcc = getContext(MotionConfigContext) || MotionConfigContext(isCustom);
     /**
      * Inherit props from any parent MotionConfig components
      */
@@ -39,6 +41,7 @@ Copyright (c) 2018 Framer B.V.
 
     let context = writable(config);
     setContext(MotionConfigContext, context);
+    setDomContext("Motion",isCustom,context);
     const memo = () => config;
     const scaleCorrector = scaleCorrection()
     $: {

@@ -6,10 +6,10 @@ Copyright (c) 2018 Framer B.V.
     
     import { getContext } from "svelte";
     import { LayoutGroupContext } from "../../context/LayoutGroupContext"
-    export let props;
+    export let props,isCustom;
     $: ({ layoutId } = props);
     const layoutGroupId =
-        getContext(LayoutGroupContext) || LayoutGroupContext();
+        getContext(LayoutGroupContext) || LayoutGroupContext(isCustom);
 </script>
 
 <slot

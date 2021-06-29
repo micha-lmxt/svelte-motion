@@ -19,16 +19,17 @@ Copyright (c) 2018 Framer B.V.
     export let createVisualElement=undefined,
         props,
         Component,
-        visualState;
+        visualState,
+        isCustom;
 
-    const config = getContext(MotionConfigContext) || MotionConfigContext();
-    const presenceContext = getContext(PresenceContext) || PresenceContext();
-    const lazyContext = getContext(LazyContext) || LazyContext();
-    const mc = getContext(MotionContext) || MotionContext();
+    const config = getContext(MotionConfigContext) || MotionConfigContext(isCustom);
+    const presenceContext = getContext(PresenceContext) || PresenceContext(isCustom);
+    const lazyContext = getContext(LazyContext) || LazyContext(isCustom);
+    const mc = getContext(MotionContext) || MotionContext(isCustom);
     let parent = get(mc).visualElement;
     $: (parent = $mc.visualElement);
     const layoutGroupId =
-        getContext(LayoutGroupContext) || LayoutGroupContext();
+        getContext(LayoutGroupContext) || LayoutGroupContext(isCustom);
     let layoutId = $layoutGroupId && props.layoutId !== undefined
             ? $layoutGroupId + "-" + props.layoutId
             : props.layoutId;

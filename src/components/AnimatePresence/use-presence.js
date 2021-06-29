@@ -14,14 +14,14 @@ function isPresent(context) {
     return context === null ? true : context.isPresent
 }
 
-export const useIsPresent = () => {
-    let presenceContext = getContext(PresenceContext) || PresenceContext();
+export const useIsPresent = (isCustom=false) => {
+    let presenceContext = getContext(PresenceContext) || PresenceContext(isCustom);
     return derived(presenceContext, $v => $v === null ? true : $v.isPresent)
 }
 
-export const usePresence = () => {
+export const usePresence = (isCustom=false) => {
 
-    const context = getContext(PresenceContext)||PresenceContext();
+    const context = getContext(PresenceContext)||PresenceContext(isCustom);
     const id = get(context) === null ? undefined : incrementId();
     onMount(()=>{
         if (get(context)!==null){

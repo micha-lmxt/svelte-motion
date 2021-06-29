@@ -17,13 +17,14 @@ Copyright (c) 2018 Framer B.V.
         onExitComplete = undefined,
         exitBeforeEnter = undefined,
         presenceAffectsLayout = true,
-        show = undefined;
+        show = undefined,
+        isCustom=false;
 
     let _list = list !== undefined ? list : show ? [{ key: 1 }] : [];
     $: _list = list !== undefined ? list : show ? [{ key: 1 }] : [];
 
     const layoutContext =
-        getContext(SharedLayoutContext) || SharedLayoutContext();
+        getContext(SharedLayoutContext) || SharedLayoutContext(isCustom);
 
     $: (isl = isSharedLayout($layoutContext));
 
@@ -157,14 +158,14 @@ Copyright (c) 2018 Framer B.V.
     }
 </script>
 
-{#each childrenToRender as child (getChildKey(child))}
-    <PresenceChild
+{#each childrenToRender as child (getChildKey(child))
+}<PresenceChild
         isPresent={child.present}
         initial={initial ? undefined : false}
         custom={child.onExit ? custom : undefined}
         {presenceAffectsLayout}
         onExitComplete={child.onExit}
-    >
-        <slot item={child.item} />
-    </PresenceChild>
-{/each}
+        {isCustom}
+    ><slot item={child.item} 
+    /></PresenceChild
+    >{/each}

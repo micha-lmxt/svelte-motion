@@ -7,13 +7,17 @@ import { UseSVGProps } from "../svg/use-props"
 import { UseHTMLProps } from "../html/use-props"
 import { filterProps } from "./utils/filter-props"
 
+
+
     export let props,
         visualState,
         Component,
         forwardMotionProps = false,
         isStatic,
-        ref;
+        ref,
+        targetEl=undefined;
     const motion = (node)=>{
+        
         ref(node)
     }
     $: (filteredProps = filterProps(
@@ -21,7 +25,9 @@ import { filterProps } from "./utils/filter-props"
             typeof Component === "string",
             forwardMotionProps
         ))
-    
+    $: if (targetEl){
+            motion(targetEl)
+    }
 </script>
 
 <svelte:component
@@ -30,8 +36,10 @@ import { filterProps } from "./utils/filter-props"
     {isStatic}
     {props}
     let:visualProps>
+
     <slot
         motion={motion}
         props={{...filteredProps,...visualProps}} />
+
 </svelte:component>
 

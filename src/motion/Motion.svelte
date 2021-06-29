@@ -19,9 +19,9 @@ Copyright (c) 2018 Framer B.V.
 
 
     export let isSVG = false,
-        isCustom = false,
         forwardMotionProps = false,
-        externalRef = undefined;/*
+        externalRef = undefined,
+        targetEl=undefined;/*
         initial = undefined,
         style = undefined,
         transformTemplate = undefined,
@@ -148,8 +148,8 @@ Copyright (c) 2018 Framer B.V.
         inherit,
         ...(isSVG ? $$restProps : {}),
     };*/
-    
-    let Component = isSVG ? "SVG" : isCustom ? "Custom" : "DOM";
+    const isCustom = targetEl;
+    let Component = isSVG ? "SVG" : "DOM";
     let createVisualElement = createDomVisualElement;
     let visualStateConfig = isSVG ? svgMotionConfig : htmlMotionConfig;
 
@@ -159,7 +159,7 @@ Copyright (c) 2018 Framer B.V.
      * If this component or any ancestor is static, we disable hardware acceleration
      * and don't load any additional functionality.
      */
-    const a = getContext(MotionConfigContext) || MotionConfigContext();
+    const a = getContext(MotionConfigContext) || MotionConfigContext(isCustom);
     $: ({ isStatic } = $a || {});
    
     let mounted = false;
@@ -170,24 +170,26 @@ Copyright (c) 2018 Framer B.V.
     onMount(() => (mounted = true));
 </script>
 
-<ScaleCorrectionProvider>
-    <UseCreateMotionContext props={motionProps} {isStatic} let:value={context}>
+<ScaleCorrectionProvider {isCustom}>
+    <UseCreateMotionContext props={motionProps} {isStatic} let:value={context} {isCustom}>
         <UseVisualState
             config={visualStateConfig}
             props={motionProps}
             {isStatic}
+            {isCustom}
             let:state={visualState}>
             <UseVisualElement
                 {Component}
                 {visualState}
                 {createVisualElement}
                 props={motionProps}
+                {isCustom}
                 let:visualElement>
                 <UseFeatures
                     visualElement={setContext(context, visualElement)}
                     props={motionProps}
                     let:features={_features}>
-                    <MotionContextProvider value={context}>
+                    <MotionContextProvider value={context} {isCustom}>
                         <UseRender
                             {Component}
                             props={motionProps}
@@ -207,6 +209,7 @@ Copyright (c) 2018 Framer B.V.
                                 this={feat.Component}
                                 props={feat.props}
                                 visualElement={feat.visualElement}
+                                {isCustom}
                                 />
                         {/each}
                     {/if}

@@ -11,13 +11,13 @@ Copyright (c) 2018 Framer B.V.
     } from "../../../context/SharedLayoutContext.js";
     import Measure from "./Measure.svelte";
 
-    export let visualElement, props;
+    export let visualElement, props, isCustom;
 
     $: ({ update } = props);
-    const syncLayout = getContext(SharedLayoutContext) || SharedLayoutContext();
+    const syncLayout = getContext(SharedLayoutContext) || SharedLayoutContext(isCustom);
 
     const framerSyncLayout =
-        getContext(FramerTreeLayoutContext) || FramerTreeLayoutContext();
+        getContext(FramerTreeLayoutContext) || FramerTreeLayoutContext(isCustom);
 </script>
 
 <Measure

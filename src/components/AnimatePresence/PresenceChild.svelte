@@ -17,12 +17,14 @@ Copyright (c) 2018 Framer B.V.
 
 <script>
     import { afterUpdate, setContext, tick } from "svelte";
+import { setDomContext } from "../../context/DOMcontext.js";
     import { PresenceContext } from "../../context/PresenceContext.js";
     export let isPresent,
         onExitComplete = undefined,
         initial,
         custom = undefined,
-        presenceAffectsLayout;
+        presenceAffectsLayout,
+        isCustom;
 
     const presenceChildren = new newChildrenMap();
     const id = getPresenceId();
@@ -68,6 +70,7 @@ Copyright (c) 2018 Framer B.V.
         !isPresent && !presenceChildren.size && onExitComplete?.();
     });
     setContext(PresenceContext, context);
+    setDomContext("Presence",isCustom,context)
 </script>
 
 <slot />

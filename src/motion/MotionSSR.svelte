@@ -20,9 +20,9 @@ Copyright (c) 2018 Framer B.V.
     import { loadFeatures } from "./features/definitions";
 
     export let isSVG = false,
-        isCustom = false,
         forwardMotionProps = false,
-        externalRef = undefined;/*
+        externalRef = undefined,
+        targetEl = undefined; /*
         initial = undefined,
         style = undefined,
         transformTemplate = undefined,
@@ -86,7 +86,7 @@ Copyright (c) 2018 Framer B.V.
         update=undefined;
 */
     //layout=undefined;
-    $: motionProps = $$restProps/*{
+    $: motionProps = $$restProps; /*{
         initial,
         style,
         transformTemplate,
@@ -154,7 +154,8 @@ Copyright (c) 2018 Framer B.V.
     // The SSR component needs to load this here
     loadFeatures(featureBundle);
 
-    let Component = isSVG ? "SVG" : isCustom ? "Custom" : "DOM";
+    let Component = isSVG ? "SVG" : "DOM";
+    let isCustom = targetEl || false;
     let createVisualElement = createDomVisualElement;
     let visualStateConfig = isSVG ? svgMotionConfig : htmlMotionConfig;
 
@@ -164,44 +165,58 @@ Copyright (c) 2018 Framer B.V.
      * If this component or any ancestor is static, we disable hardware acceleration
      * and don't load any additional functionality.
      */
-    const a = getContext(MotionConfigContext) || MotionConfigContext();
-    
+    const a = getContext(MotionConfigContext) || MotionConfigContext(isCustom);
+
     $: ({ isStatic } = $a || {});
     let mounted = false;
     const setContext = (c, v) => {
         c.visualElement = v;
         return v;
     };
-    onMount(() => (mounted = true));
+
+    onMount(() => {
+        mounted = true;
+    });
 </script>
 
-<ScaleCorrectionProvider>
+<ScaleCorrectionProvider {isCustom}>
     <UseCreateMotionContext props={motionProps} {isStatic} let:value={context}>
         <UseVisualState
             config={visualStateConfig}
             props={motionProps}
             {isStatic}
-            let:state={visualState}>
+            {isCustom}
+            let:state={visualState}
+        >
             <UseVisualElement
                 {Component}
                 {visualState}
                 {createVisualElement}
                 props={motionProps}
-                let:visualElement>
+                {isCustom}
+                let:visualElement
+            >
                 <UseFeatures
                     visualElement={setContext(context, visualElement)}
                     props={motionProps}
-                    let:features={_features}>
-                    <MotionContextProvider value={context}>
+                    let:features={_features}
+                >
+                    <MotionContextProvider value={context} {isCustom}>
                         <UseRender
                             {Component}
                             props={motionProps}
-                            ref={useMotionRef(visualState, context.visualElement, externalRef)}
+                            ref={useMotionRef(
+                                visualState,
+                                context.visualElement,
+                                externalRef
+                            )}
                             {visualState}
                             {isStatic}
                             {forwardMotionProps}
                             let:motion
-                            let:props={renderProps}>
+                            let:props={renderProps}
+                            {targetEl}
+                        >
                             <slot {motion} props={renderProps} />
                         </UseRender>
                     </MotionContextProvider>
@@ -212,7 +227,8 @@ Copyright (c) 2018 Framer B.V.
                                 this={feat.Component}
                                 props={feat.props}
                                 visualElement={feat.visualElement}
-                                />
+                                {isCustom}
+                            />
                         {/each}
                     {/if}
                 </UseFeatures>

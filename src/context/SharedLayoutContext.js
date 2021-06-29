@@ -5,8 +5,9 @@ Copyright (c) 2018 Framer B.V.
 
 import { writable } from 'svelte/store';
 import { createBatcher } from '../components/AnimateSharedLayout/utils/batcher.js';
+import { getDomContext } from './DOMcontext.js';
 
-var SharedLayoutContext = () => writable(createBatcher());
+var SharedLayoutContext = (custom) => getDomContext("SharedLayout",custom)||writable(createBatcher());
 /**
  * @internal
  */

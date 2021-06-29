@@ -9,9 +9,9 @@ Copyright (c) 2018 Framer B.V.
     import { getContext, onDestroy, onMount } from "svelte";
     import { get } from "svelte/store";
 
-    export let visualElement, props;
+    export let visualElement, props, isCustom;
 
-    const mcc = getContext(MotionConfigContext) || MotionConfigContext();
+    const mcc = getContext(MotionConfigContext) || MotionConfigContext(isCustom);
 
     let dragControls = new VisualElementDragControls({
         visualElement,

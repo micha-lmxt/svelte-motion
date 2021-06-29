@@ -6,6 +6,7 @@ Copyright (c) 2018 Framer B.V.
 
 import { onMount } from "svelte";
 import { writable } from "svelte/store";
+import { setDomContext } from "../../context/DOMcontext";
 
     import { LazyContext } from "../../context/LazyContext";
     import { loadFeatures } from "../../motion/features/definitions";
@@ -45,7 +46,8 @@ import { writable } from "svelte/store";
      * @public
      */
         export let features,
-            strict=false;
+            strict=false,
+            isCustom=false;
     let _ = !isLazyBundle(features);
     let loadedRenderer = undefined
         /**
@@ -70,6 +72,7 @@ import { writable } from "svelte/store";
     })
     let context = writable({ renderer: loadedRenderer.current, strict })
     setContext(LazyContext,context);
+    setDomContext("Lazy",isCustom,context)
     $: context.set({ renderer: loadedRenderer.current, strict })
 </script>
 <slot/>

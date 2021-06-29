@@ -9,8 +9,9 @@ Copyright (c) 2018 Framer B.V.
     import { getCurrentTreeVariants } from './utils.js';
 
     export let props, 
-        isStatic;
-        let mc = getContext(MotionContext)||MotionContext();
+        isStatic,
+        isCustom;
+        let mc = getContext(MotionContext)||MotionContext(isCustom);
         let {initial, animate} = getCurrentTreeVariants(props, get(mc));
         $: ({initial,animate} = getCurrentTreeVariants(props, $mc));
 

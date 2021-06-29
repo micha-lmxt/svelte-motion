@@ -92,10 +92,10 @@ Copyright (c) 2018 Framer B.V.
     import { PresenceContext } from "../../context/PresenceContext";
     import {MotionContext} from "../../context/MotionContext/index.js";
 
-    export let config, props, isStatic;
+    export let config, props, isStatic, isCustom;
 
-    const context = getContext(MotionContext) || MotionContext();
-    const presenceContext = getContext(PresenceContext) || PresenceContext();
+    const context = getContext(MotionContext) || MotionContext(isCustom);
+    const presenceContext = getContext(PresenceContext) || PresenceContext(isCustom);
     let state = makeState(config, props, get(context), get(presenceContext));
     const ms = makeState;
     $: if (isStatic) {    

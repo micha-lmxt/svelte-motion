@@ -15,10 +15,11 @@ Copyright (c) 2018 Framer B.V.
     import { writable } from "svelte/store";
     import { MotionContext } from "../../context/MotionContext/index.js";
     import { snapshotViewportBox } from "../../render/dom/projection/utils";
+import { setDomContext } from "../../context/DOMcontext";
 
-    export let type = undefined;
+    export let type = undefined,isCustom=false;
 
-    const context = getContext(MotionContext) || MotionContext();
+    const context = getContext(MotionContext) || MotionContext(isCustom);
 
     /**
      * Track whether the component has mounted. If it hasn't, the presence of added children
@@ -216,6 +217,7 @@ Copyright (c) 2018 Framer B.V.
     };
     //$: sc.set(syncContext)
     setContext(SharedLayoutContext, sc);
+    setDomContext("SharedLayout",isCustom,sc)
 
     onMount(() => {
         hasMounted = true;
