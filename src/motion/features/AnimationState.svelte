@@ -9,7 +9,7 @@ Copyright (c) 2018 Framer B.V.
     import { createAnimationState } from "../../render/utils/animation-state";
     import { isAnimationControls } from "../../animation/utils/is-animation-controls.js";
     export let visualElement, props;
-    export let isCustom;
+
     let {animate} = props;
     $: ({animate} = props);
     /**

@@ -3,7 +3,7 @@
 based on framer-motion@4.0.3,
 Copyright (c) 2018 Framer B.V.
 */
-    import { setContext } from "svelte";
+    import { onDestroy, setContext } from "svelte";
     import { writable } from "svelte/store";
 import { setDomContext } from "../DOMcontext.js";
     import { MotionContext } from "./index.js";
@@ -13,5 +13,11 @@ import { setDomContext } from "../DOMcontext.js";
     $: store.set(value);
     setContext(MotionContext,store);
     setDomContext("Motion",isCustom,store)
+
+    // Since useMotionRef is not called on destroy, the visual element is unmounted here
+    onDestroy(()=>{
+
+        value?.visualElement?.unmount()
+    })
 </script>
 <slot/>
