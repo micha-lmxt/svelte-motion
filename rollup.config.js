@@ -1,10 +1,8 @@
- 
 import svelte from 'rollup-plugin-svelte'
 import resolve from '@rollup/plugin-node-resolve'
 import autoPreprocess from 'svelte-preprocess';
 import replace from "@rollup/plugin-replace";
 import pkg from './package.json'
-import commonjs from '@rollup/plugin-commonjs';
 
 const name = pkg.name
   .replace(/^(@\S+\/)?(svelte-)?(\S+)/, '$3')
