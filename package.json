@@ -15,12 +15,11 @@
     "@types/react": "^17.0.11",
     "framesync": "5.3.0",
     "popmotion": "9.3.5",
-    "style-value-types": "4.1.4",
+    "style-value-types": "5.0.0",
     "tslib": "^2.2.0"
   },
   "devDependencies": {
     "@emotion/is-prop-valid": "^1.1.0",
-    "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
     "@rollup/plugin-replace": "^2.4.2",
     "@tsconfig/svelte": "^1.0.10",
