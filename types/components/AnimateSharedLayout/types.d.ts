@@ -28,7 +28,7 @@ export interface SharedLayoutProps {
     /**
      * @public
      */
-    children: React.ReactNode;
+    //children: React.ReactNode;
     /**
      * When combined with `AnimatePresence`, `SharedLayoutProps` can customise how to visually switch
      * between `layoutId` components as new ones enter and leave the tree.
