@@ -1,10 +1,8 @@
 {
   "name": "svelte-motion",
-  "version": "0.11.3",
+  "version": "0.11.4",
   "description": "Svelte animstion library baded on the React library framer-motion.",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "svelte": "src/index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rollup -c"
@@ -31,7 +29,7 @@
   "peerDependencies": {
     "svelte": "^3.35.0"
   },
-  "type": "svelte",
+  "type": "module",
   "types": "types/index.d.ts",
   "repository": "https://github.com/micha-lmxt/svelte-motion/",
   "sideEffects": false,
