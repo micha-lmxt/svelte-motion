@@ -42,4 +42,5 @@ import { AnimatePresenceProps } from "./types";
  *
  * @public
  */
-export declare class AnimatePresence<T extends {key:any}> extends SvelteComponentTyped<AnimatePresenceProps<T>, {}, {default:{ item: T | { key: 1} }}> {}
+type ConditionalGeneric<T> = T extends {key:any} ? T : { key: 1};
+export declare class AnimatePresence<T extends {key:any}> extends SvelteComponentTyped<AnimatePresenceProps<T>, {}, {default:{ item: ConditionalGeneric<T> }}> {}
