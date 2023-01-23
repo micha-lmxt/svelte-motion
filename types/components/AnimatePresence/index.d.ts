@@ -42,4 +42,4 @@ import { AnimatePresenceProps } from "./types";
  *
  * @public
  */
-export declare type AnimatePresence<T extends {key:any}> = SvelteComponentTyped<AnimatePresenceProps<T>, {}, {default:{ item: T | { key: 1} }}> 
+export declare class AnimatePresence<T extends {key:any}> extends SvelteComponentTyped<AnimatePresenceProps<T>, {}, {default:{ item: T | { key: 1} }}> {}
