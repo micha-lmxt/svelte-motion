@@ -11,7 +11,6 @@ export interface ScrollMotionValues {
     scrollY: MotionValue<number>;
     scrollXProgress: MotionValue<number>;
     scrollYProgress: MotionValue<number>;
-    ref: HTMLElement;
 }
 export interface ScrollOffsets {
     xOffset: number;

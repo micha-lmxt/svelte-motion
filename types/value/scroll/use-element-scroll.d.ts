@@ -31,4 +31,4 @@ import { ScrollMotionValues } from "./utils";
  *
  * @public
  */
-export declare function useElementScroll(ref?: RefObject<HTMLElement>): ScrollMotionValues;
+export declare function useElementScroll(ref: RefObject<HTMLElement>): ScrollMotionValues;

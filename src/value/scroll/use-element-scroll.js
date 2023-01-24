@@ -20,9 +20,7 @@ const getElementScrollOffsets = (element) => () => {
 
 export const useElementScroll = (ref) => {
 
-    const values = {
-        ref: undefined,
-    }
+    const values = {}
 
     const setScroll = async () => {
         if (typeof window === "undefined") return ()=>{}
@@ -36,7 +34,6 @@ export const useElementScroll = (ref) => {
             await new Promise(r=>setTimeout(()=>r(),200));
         }
         const element = (ref && ref.current) ? ref : values.ref;
-        values.ref = element;
 
         const updateScrollValues = createScrollUpdater(
             values,
