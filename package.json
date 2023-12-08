@@ -27,7 +27,7 @@
     "svelte-preprocess": "^5.1.1"
   },
   "peerDependencies": {
-    "svelte": "^3.35.0"
+    "svelte": ">=3.35.0"
   },
   "type": "module",
   "types": "types/index.d.ts",
