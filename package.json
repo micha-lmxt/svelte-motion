@@ -4,7 +4,7 @@
   "description": "Svelte animation library based on the React library framer-motion.",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest --typecheck.only",
     "build": "rollup -c"
   },
   "author": "Michael Lucht <micha-lmxt@gradientdescent.de> (https://svelte-motion.gradientdescent.de)",
@@ -21,10 +21,13 @@
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.5",
     "@tsconfig/svelte": "^5.0.2",
-    "rollup": "^4.0.0",
+    "rollup": "^4.9.2",
     "rollup-plugin-css-porter": "^1.0.2",
     "rollup-plugin-svelte": "^7.1.6",
-    "svelte-preprocess": "^5.1.1"
+    "svelte-preprocess": "^5.1.1",
+    "tsc": "^2.0.4",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.1"
   },
   "peerDependencies": {
     "svelte": ">=3.35.0"

@@ -4,10 +4,10 @@ Copyright (c) 2018 Framer B.V.
 */
 
 import { SharedLayoutProps } from "./types";
-import { SvelteComponentTyped } from "svelte";
+import { SvelteComponent } from "svelte";
 /**
  * Wrap several [#Motion] components with the \`layout\` or \`layoutId\` prop with this component, so that all react smoothly to the change of a single component.
  * @public
  */
-export declare class AnimateSharedLayout extends SvelteComponentTyped<SharedLayoutProps, {}, {default:{}}> {
+export declare class AnimateSharedLayout extends SvelteComponent<SharedLayoutProps, {}, {default:{}}> {
 }

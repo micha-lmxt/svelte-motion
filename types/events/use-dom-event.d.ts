@@ -2,7 +2,7 @@
 based on framer-motion@4.1.17,
 Copyright (c) 2018 Framer B.V.
 */
-import { SvelteComponentTyped } from "svelte";
+import { SvelteComponent } from "svelte";
 import { VisualElement } from "..";
 export declare function addDomEvent(target: EventTarget, eventName: string, handler: EventListener, options?: AddEventListenerOptions): () => void;
 export declare interface UseDomEventProps {
@@ -46,5 +46,5 @@ export declare interface UseDomEventProps {
  *
  * @public
  */
-export declare class UseDomEvent extends SvelteComponentTyped<UseDomEventProps,{},{default:{}}>{}
+export declare class UseDomEvent extends SvelteComponent<UseDomEventProps,{},{default:{}}>{}
     

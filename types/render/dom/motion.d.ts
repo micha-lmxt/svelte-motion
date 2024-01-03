@@ -2,7 +2,7 @@
 based on framer-motion@4.1.17,
 Copyright (c) 2018 Framer B.V.
 */
-import { SvelteComponentTyped } from "svelte";
+import { SvelteComponent } from "svelte";
 import { DOMMotionComponents } from "./types";
 import { CustomMotionComponentConfig} from './motion-proxy'
 import { MotionProps } from "../../motion/types";
@@ -17,7 +17,7 @@ export declare interface IsSVG{
  *
  * @public
  */
-export declare class Motion extends SvelteComponentTyped<
+export declare class Motion extends SvelteComponent<
     CustomMotionComponentConfig & MotionProps & IsSVG,
     {}, 
     {
@@ -32,7 +32,7 @@ export declare class Motion extends SvelteComponentTyped<
              *     <div use:motion/>
              * </Motion>
              */
-            motion: (node)=>void };
+            motion: import('svelte/action').Action };
     }
 >{}
 /**
