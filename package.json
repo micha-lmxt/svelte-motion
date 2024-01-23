@@ -18,11 +18,14 @@
     "tslib": "^2.6.2"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.5.0",
+    "@changesets/cli": "^2.27.1",
     "@emotion/is-prop-valid": "^1.2.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.5",
     "@sveltejs/vite-plugin-svelte": "^3.0.1",
     "@tsconfig/svelte": "^5.0.2",
+    "publint": "^0.2.7",
     "rollup": "^4.9.2",
     "rollup-plugin-css-porter": "^1.0.2",
     "rollup-plugin-svelte": "^7.1.6",
@@ -31,8 +34,7 @@
     "tsc": "2.0.4",
     "typescript": "5.3.3",
     "vite": "^5.0.12",
-    "vitest": "1.1.1",
-    "publint": "^0.2.7"
+    "vitest": "1.1.1"
   },
   "peerDependencies": {
     "svelte": ">=3.35.0 || ^4.0.0 || ^5.0.0 || ^5.0.0-next.0"
