@@ -6,7 +6,9 @@
   "scripts": {
     "test": "vitest --typecheck.only",
     "build": "rollup -c",
-    "build:svelte": "svelte-package --input ./src && publint --strict"
+    "build:svelte": "svelte-package --input ./src && publint --strict",
+    "changeset:version": "changeset version && pnpm -r generate:version && git add --all",
+    "changeset:publish": "changeset publish"
   },
   "author": "Michael Lucht <micha-lmxt@gradientdescent.de> (https://svelte-motion.gradientdescent.de)",
   "license": "MIT",
@@ -41,26 +43,6 @@
   },
   "type": "module",
   "types": "types/index.d.ts",
-  "svelte": "src/index.js",
-  "exports": {
-    ".": {
-      "types": "./types/index.d.ts",
-      "svelte": "./src/index.js",
-      "import": "./src/index.js"
-    },
-    "./package.json": "./package.json"
-  },
-  // vite build
-  // "types": "./dist/index.d.ts",
-  // "svelte": "./dist/index.js",
-  // "exports": {
-  //   ".": {
-  //     "types": "./dist/index.d.ts",
-  //     "svelte": "./dist/index.js",
-  //     "import": "./dist/index.js"
-  //   },
-  //   "./package.json": "./package.json"
-  // },
   "repository": "https://github.com/micha-lmxt/svelte-motion/",
   "sideEffects": false,
   "keywords": [
