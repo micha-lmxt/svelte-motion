@@ -39,26 +39,6 @@
   },
   "type": "module",
   "types": "types/index.d.ts",
-  "svelte": "src/index.js",
-  "exports": {
-    ".": {
-      "types": "./types/index.d.ts",
-      "svelte": "./src/index.js",
-      "import": "./src/index.js"
-    },
-    "./package.json": "./package.json"
-  },
-  // vite build
-  // "types": "./dist/index.d.ts",
-  // "svelte": "./dist/index.js",
-  // "exports": {
-  //   ".": {
-  //     "types": "./dist/index.d.ts",
-  //     "svelte": "./dist/index.js",
-  //     "import": "./dist/index.js"
-  //   },
-  //   "./package.json": "./package.json"
-  // },
   "repository": "https://github.com/micha-lmxt/svelte-motion/",
   "sideEffects": false,
   "keywords": [
